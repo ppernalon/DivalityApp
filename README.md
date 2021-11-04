@@ -6,3 +6,7 @@ Suivre les instructions de la documentation officielle pour installer l'envrionn
 https://reactnative.dev/docs/environment-setup
 
 Pour obtenir le jdk8, passer par ce lien : https://adoptium.net/?variant=openjdk8
+
+# Bonnes pratiques de code
+
+* Un composant par fichier
