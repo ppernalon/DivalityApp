@@ -1,5 +1,8 @@
 # Installation
 
-Suivre les instructions de cette doc pour installer l'app https://reactnative.dev/docs/environment-setup
+Si émulation android : penser à accepter la licence d'utilisation.
+
+Suivre les instructions de la documentation officielle pour installer l'envrionnement
+https://reactnative.dev/docs/environment-setup
 
 Pour obtenir le jdk8, passer par ce lien : https://adoptium.net/?variant=openjdk8
