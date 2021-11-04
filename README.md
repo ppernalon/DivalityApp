@@ -9,4 +9,5 @@ Pour obtenir le jdk8, passer par ce lien : https://adoptium.net/?variant=openjdk
 
 # Bonnes pratiques de code
 
-* Un composant par fichier
+* Ne pas dépasser un composant par fichier
+* Éviter d'utiliser des composants class et favoriser les composants function
