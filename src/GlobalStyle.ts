@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 export const globalStyle = StyleSheet.create({
     appBackground: {
         flex: 1,
-        backgroundColor: 'blue',
+        backgroundColor: 'white',
         padding: 30
     }
 })
