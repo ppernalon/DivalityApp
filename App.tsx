@@ -7,15 +7,17 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import paperTheme from './src/PaperTheme'
 import { Provider as StoreProvider } from 'react-redux'
 import store from './src/store'
+import SignIn from './src/pages/SignIn/SignIn'
 
 const App = () => {
   return (
-    <StoreProvider store={store}>
+    // <StoreProvider store={store}>
       <PaperProvider theme={paperTheme}>
         <View style={globalStyle.appBackground}>
+          <SignIn/>
         </View>
       </PaperProvider>
-    </StoreProvider>
+    // </StoreProvider>
   )
 }
 
