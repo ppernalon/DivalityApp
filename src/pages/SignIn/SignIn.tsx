@@ -15,7 +15,7 @@ const SignIn = ({navigation} : SignInProps) => {
         formName: "Inscription",
         items: [
             {id: "pseudo" ,label: "Pseudo", type: "text"},
-            {id: "password", label: "Mot de passe", type: "password"},
+            {id: "password", label: "Mot de passe", type: "text"},
             {id: "confirmedPassword", label: "Confirmation du mot de passe", type: "password"}
         ],
         onSubmit: (formState: any) => (navigation.navigate('Logo'))
