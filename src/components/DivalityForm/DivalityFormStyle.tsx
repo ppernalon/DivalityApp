@@ -4,9 +4,6 @@ import { colors } from "../../GlobalStyle"
 export const divalityFormStyle = StyleSheet.create({
     formInput: {
         marginTop: 30,
-        backgroundColor: 'white',
-        borderBottomColor: colors.blue,
-        borderBottomWidth: 1,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,

@@ -9,7 +9,6 @@ export type formField = {
     id: string
     label: string
     type: string
-    toCheck: boolean
     placeholder?: string
     checkBeforeSubmit?: checkBeforeSubmitFunction
     shouldMatchWith?: string

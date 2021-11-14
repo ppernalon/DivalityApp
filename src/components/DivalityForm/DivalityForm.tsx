@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import ReactIf from "../ReactIf"
 import { Button, TextInput, Title } from 'react-native-paper'
 import { divalityFormStyle as style} from './DivalityFormStyle'
-import { formField } from "./DivalityFormTypes"
+import { checkBeforeSubmitFunction, formField } from "./DivalityFormTypes"
+import { colors } from "../../GlobalStyle"
 
 type DivalityFormProps = {
     formName: string
@@ -27,7 +28,7 @@ const DivalityForm = ({
         cancelButtonText = "Annuler"
     }: DivalityFormProps) => {
     
-    let [formState, setFormState] = useState<any>(DivalityForm.initFormState(fields))  
+    let [formState, setFormState] = useState<any>(DivalityForm.initFormState(fields))
 
     return (
         <View>
@@ -38,7 +39,7 @@ const DivalityForm = ({
             </ReactIf>
 
             <View>
-                { DivalityForm.buildForms(formState, setFormState) }
+                { DivalityForm.buildForms(fields, formState, setFormState) }
             </View>
 
             <View style={style.buttonRow}>
@@ -65,37 +66,42 @@ const DivalityForm = ({
 DivalityForm.initFormState = (fields: formField[]) => {
     let newFormState: any = {}
     
-    fields.forEach(field => {    
+    fields.forEach(field => {
         const newInput = {
             label: field.label,
             type: field.type,
             placeholder: field.placeholder,
             value: "",
-            toCheck: field.toCheck,
-            checkBeforeSubmit: field.checkBeforeSubmit
+            error: false,
+            checkBeforeSubmit: field.checkBeforeSubmit,
+            shouldMatchWith: field.shouldMatchWith
         }
         newFormState[field.id] = newInput
     })
-        
     return newFormState
 }
 
-DivalityForm.buildForms = (formState: any, setFormState: Function) => {
+DivalityForm.buildForms = (fields: formField[], formState: any, setFormState: Function) => {
+    const formStateKeys = Object.keys(formState)
     return (
-        Object.keys(formState).map((inputKey: string) => {
+        formStateKeys.map((inputKey: string) => {
+            const field = formState[inputKey]
+            const checkBeforeSubmit = fields.filter(value => value.id === inputKey)[0].checkBeforeSubmit
             let inputToRender
-            switch (formState[inputKey].type) {
+            switch (field.type) {
                 case 'password':
                     inputToRender = <TextInput
                         style={style.formInput}
                         key={inputKey}
                         mode={'flat'}
-                        underlineColor={"#fff"}
+                        underlineColor={colors.blue}
                         secureTextEntry={true}
-                        label={formState[inputKey].label}
-                        value={formState[inputKey].value}
-                        placeholder={formState[inputKey].placeholder}
-                        onChangeText={newValue => DivalityForm.OnValueChange(inputKey, newValue, formState, setFormState)}/>
+                        error={field.error}
+                        label={field.label}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        onBlur={() => DivalityForm.checkField(inputKey, checkBeforeSubmit, formState, setFormState)}
+                        onChangeText={newValue => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState)}/>
                     break;
 
                 case 'text':
@@ -103,11 +109,13 @@ DivalityForm.buildForms = (formState: any, setFormState: Function) => {
                         style={style.formInput}
                         key={inputKey}
                         mode={'flat'}
-                        underlineColor={"#fff"}
-                        label={formState[inputKey].label}
-                        value={formState[inputKey].value}
-                        placeholder={formState[inputKey].placeholder}
-                        onChangeText={newValue => DivalityForm.OnValueChange(inputKey, newValue, formState, setFormState)}/>
+                        underlineColor={colors.blue}
+                        error={field.error}
+                        label={field.label}
+                        value={field.value}
+                        placeholder={field.placeholder}
+                        onBlur={() => DivalityForm.checkField(inputKey, checkBeforeSubmit, formState, setFormState)}
+                        onChangeText={newValue => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState)}/>
                     break;
             }
 
@@ -116,7 +124,41 @@ DivalityForm.buildForms = (formState: any, setFormState: Function) => {
     )
 }
 
-DivalityForm.OnValueChange = (key: string, newValue: string, formState: any, setFormState: Function) => {
+DivalityForm.checkField = (
+        key: string, 
+        checkBeforeSubmit: checkBeforeSubmitFunction | undefined,
+        formState: any, 
+        setFormState: Function
+    ) => {    
+
+    const newSateForm = {...formState}
+
+    let errorValue
+    const shouldMatchWithKey = newSateForm[key].shouldMatchWith as string
+
+    if ( shouldMatchWithKey && checkBeforeSubmit ) {
+        const targetValue = formState[shouldMatchWithKey].value
+        errorValue = !checkBeforeSubmit(newSateForm[key].value).isValid
+        if (targetValue.length > 0) {
+            errorValue = errorValue && targetValue !== newSateForm[key].value
+            newSateForm[shouldMatchWithKey].error = errorValue
+        }
+    } else if ( checkBeforeSubmit && !shouldMatchWithKey) {
+        errorValue = !checkBeforeSubmit(newSateForm[key].value).isValid
+    } else if ( shouldMatchWithKey && !checkBeforeSubmit) {
+        const targetValue = formState[shouldMatchWithKey].value
+        errorValue = targetValue.length > 0 && targetValue !== newSateForm[key].value
+        newSateForm[shouldMatchWithKey].error = errorValue
+    } else {
+        errorValue = false
+    }
+
+    newSateForm[key].error = errorValue
+    
+    setFormState(newSateForm)
+}
+
+DivalityForm.onValueChange = (key: string, newValue: string, formState: any, setFormState: Function) => {
     const newSateForm = JSON.parse(JSON.stringify(formState))
     newSateForm[key].value = newValue
     setFormState(newSateForm)

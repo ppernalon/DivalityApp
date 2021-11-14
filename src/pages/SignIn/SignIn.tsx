@@ -5,6 +5,7 @@ import {
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
 import DivalityButtonTextured from "../../components/DivalityButtonTextured/DivalityButtonTextured"
 import { 
+    checkBeforeSubmitFunction,
     checkFormAnswer, 
     formField 
 } from "../../components/DivalityForm/DivalityFormTypes"
@@ -23,26 +24,26 @@ const SignIn = ({navigation} : SignInProps) => {
                 label: "Pseudo", 
                 type: "text",
                 placeholder: "Pseudo",
-                toCheck: true, 
-                checkBeforeSubmit: SignIn.checkPseudo
+                checkBeforeSubmit: SignIn.checkPseudo as checkBeforeSubmitFunction
             } as formField,
             {
                 id: "password", 
                 label: "Mot de passe", 
                 type: "password",
                 placeholder: "Mot de passe",
-                toCheck: false
+                shouldMatchWith: "confirmedPassword"
             } as formField,
             {
                 id: "confirmedPassword", 
                 label: "Confirmation du mot de passe", 
                 type: "password",
-                placeholder: "Mot de passe", 
-                toCheck: false
+                placeholder: "Mot de passe",
+                shouldMatchWith: "password"
             } as formField,
         ],
         onSubmit: (formState: any) => (navigation.navigate('Logo'))
     }
+    
     return (
         <View>
             <DivalityForm 
@@ -63,7 +64,12 @@ const SignIn = ({navigation} : SignInProps) => {
 }
 
 SignIn.checkPseudo = (value: string) : checkFormAnswer => {
-    if (value.split("").includes(" ")){
+    let authorizedChar = "AZERTYUIOPQSDFGHJKLMWXCVBN"
+    authorizedChar += authorizedChar.toLocaleLowerCase()
+    authorizedChar += "0123456789"
+    const valueChar = value.split("")
+    const unauthorizedValues = valueChar.filter(char => !authorizedChar.includes(char))
+    if (unauthorizedValues.length > 0){
         return {
             isValid: false,
             message: ""
