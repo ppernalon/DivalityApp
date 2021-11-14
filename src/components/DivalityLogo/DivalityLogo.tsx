@@ -1,14 +1,15 @@
 import React from "react"
 import { 
     Text,
-    View 
+    View,
+    Image
 } from "react-native"
 import { divalityLogoStyle } from "./DivalityLogoStyle"
 
 const DivilityLogo = () => {
     return (
         <View style={divalityLogoStyle.container}>
-            <Text> Logo Divality </Text>
+            <Image source={require('@images/logo.png')} style={divalityLogoStyle.logoImage}/>
         </View>
     )
 }
