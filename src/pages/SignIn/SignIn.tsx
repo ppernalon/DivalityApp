@@ -1,10 +1,14 @@
 import React from "react"
 import {
-    View
+    View, Button
 } from "react-native"
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
 
-const SignIn = () => {
+type SignInProps = {
+    navigation: any
+}
+
+const SignIn = ({navigation} : SignInProps) => {
 
     const formEntries = {
         formName: "Inscription",
@@ -13,7 +17,7 @@ const SignIn = () => {
             {id: "password", label: "Mot de passe", type: "password"},
             {id: "confirmedPassword", label: "Confirmation du mot de passe", type: "password"}
         ],
-        onSubmit: (formState: any) => (console.log(formState))
+        onSubmit: (formState: any) => (navigation.navigate('Logo'))
     }
     return (
         <View>

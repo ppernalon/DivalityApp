@@ -4,21 +4,30 @@ import {
 } from 'react-native'
 import { globalStyle } from './src/GlobalStyle'
 import { Provider as PaperProvider } from 'react-native-paper'
-import paperTheme from './src/PaperTheme'
-import { Provider as StoreProvider } from 'react-redux'
-import store from './src/store'
+import {paperTheme, appTheme} from './src/PaperTheme'
 import SignIn from './src/pages/SignIn/SignIn'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import DivalityLogo from './src/components/DivalityLogo/DivalityLogo'
+
+
 
 const App = () => {
+  const Stack = createNativeStackNavigator()
   return (
     // <StoreProvider store={store}>
       <PaperProvider theme={paperTheme}>
-        <View style={globalStyle.appBackground}>
-          <SignIn/>
-        </View>
+        <NavigationContainer theme={appTheme}>
+          <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
+            <Stack.Screen name="SignIn" component={SignIn}/>
+            <Stack.Screen name="Logo" component={DivalityLogo}/>
+          </Stack.Navigator>
+        </NavigationContainer>
       </PaperProvider>
     // </StoreProvider>
   )
 }
+
+
 
 export default App
