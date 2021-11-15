@@ -95,10 +95,7 @@ describe("DivivalityForm should", () => {
         const field_2 = getByLabelText('field_2')
 
         fireEvent(field_1, 'onChangeText', 'a')
-        fireEvent(field_1, 'onBlur')
-        
         fireEvent(field_2, 'onChangeText', 'b')
-        fireEvent(field_2, 'onBlur')
         
         expect(field_1.props.value).toStrictEqual("a")
         expect(field_2.props.value).toStrictEqual("b")
@@ -106,7 +103,7 @@ describe("DivivalityForm should", () => {
         expect(field_2.props.selectionColor).toStrictEqual(RedError) // this make us able to be sure about error
 
         fireEvent(field_2, 'onChangeText', 'a')
-        fireEvent(field_2, 'onBlur')
+
         expect(field_1.props.selectionColor).toStrictEqual(BlueNoError) // the prop "error" is not accessible, so testing
         expect(field_2.props.selectionColor).toStrictEqual(BlueNoError) // this make us able to be sure about error
     })
