@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 import renderer from 'react-test-renderer'
 import DivalityForm from '../../src/components/DivalityForm/DivalityForm'
-import { formField } from '../../src/components/DivalityForm/DivalityFormTypes'
+import { formField, formStateType } from '../../src/components/DivalityForm/DivalityFormTypes'
 
 const minimalEntries = {
     formName: "formName",
@@ -27,8 +27,8 @@ describe("DivivalityForm should", () => {
     })
 
     test("init a formState using minimal fields", () => {
-        const formState: any = DivalityForm.initFormState(minimalEntries.fields)
-        const expectedFormState: any = {}
+        const formState: formStateType = DivalityForm.initFormState(minimalEntries.fields)
+        const expectedFormState: formStateType = {}
         expectedFormState[minimalEntries.fields[0].id] = {
             label: minimalEntries.fields[0].label,
             type: minimalEntries.fields[0].type,

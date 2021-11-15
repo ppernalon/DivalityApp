@@ -66,7 +66,7 @@ SignUp.checkPseudo = (value: string) : checkFormAnswer => {
     return {
         isValid: true,
         message: ""
-    } as checkFormAnswer
+    }
 }
 
 export default SignUp

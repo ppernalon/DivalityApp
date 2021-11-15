@@ -3,19 +3,8 @@ import { View } from "react-native"
 import ReactIf from "../ReactIf"
 import { Button, TextInput, Title, Text } from 'react-native-paper'
 import { divalityFormStyle as style} from './DivalityFormStyle'
-import { checkBeforeSubmitFunction, formField } from "./DivalityFormTypes"
+import { checkBeforeSubmitFunction, divalityFormProps, formField, formStateType } from "./DivalityFormTypes"
 import { colors } from "../../GlobalStyle"
-
-type DivalityFormProps = {
-    formName: string
-    fields: formField[]
-    onSubmit: Function
-    submitButtonText?: string
-    formNameIsDisplay?: boolean
-    cancelButtonText?: string
-    onCancel?: Function
-    showCancelButton?: boolean
-}
 
 const DivalityForm = ({
         formName,
@@ -26,9 +15,9 @@ const DivalityForm = ({
         showCancelButton = false,
         submitButtonText = "Valider",
         cancelButtonText = "Annuler"
-    }: DivalityFormProps) => {
+    }: divalityFormProps) => {
     
-    let [formState, setFormState] = useState<any>(DivalityForm.initFormState(fields))
+    let [formState, setFormState] = useState<formStateType>(DivalityForm.initFormState(fields))
     let [formError, setFormError] = useState<string>("")
 
     return (
@@ -71,7 +60,7 @@ const DivalityForm = ({
 }
 
 DivalityForm.initFormState = (fields: formField[]) => {
-    let newFormState: any = {}
+    let newFormState: formStateType = {}
     
     fields.forEach(field => {
         const newInput = {
@@ -90,7 +79,7 @@ DivalityForm.initFormState = (fields: formField[]) => {
 
 DivalityForm.buildForms = (
         fields: formField[], 
-        formState: any, 
+        formState: formStateType, 
         setFormState: Function, 
         setFormError: Function
     ) => {
@@ -138,7 +127,7 @@ DivalityForm.buildForms = (
 
 DivalityForm.checkField = (
         key: string,
-        formState: any, 
+        formState: formStateType, 
         setFormState: Function,
         setFormError: Function
     ) => {
@@ -183,7 +172,7 @@ DivalityForm.checkField = (
     setFormState(newSateForm)
 }
 
-DivalityForm.onValueChange = (key: string, newValue: string, formState: any, setFormState: Function) => {
+DivalityForm.onValueChange = (key: string, newValue: string, formState: formStateType, setFormState: Function) => {
     const newSateForm = {...formState}
     newSateForm[key].value = newValue
     setFormState(newSateForm)
