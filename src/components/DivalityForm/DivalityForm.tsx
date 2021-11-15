@@ -142,12 +142,15 @@ DivalityForm.checkField = (
     if ( shouldMatchWithKey && checkBeforeSubmit ) {
         const targetValue = newSateForm[shouldMatchWithKey].value
         const checkFormAnswer = checkBeforeSubmit(newSateForm[key].value)
-        errorValue = !checkFormAnswer.isValid
         errorMessage = checkFormAnswer.message
-        if (targetValue.length > 0) {
-            errorValue = errorValue && targetValue !== newSateForm[key].value
-            newSateForm[shouldMatchWithKey].error = errorValue
+        if (targetValue === newSateForm[key].value && checkFormAnswer.isValid) {
+            errorValue = false
+        } else if (targetValue !== newSateForm[key].value && checkFormAnswer.isValid) {
+            errorValue = targetValue.length > 0
+        } else {
+            errorValue = true
         }
+        newSateForm[shouldMatchWithKey].error = errorValue
         if (errorValue){
             errorMessage = `${newSateForm[shouldMatchWithKey].label} et ${newSateForm[key].label} doivent être identiques`
         }
