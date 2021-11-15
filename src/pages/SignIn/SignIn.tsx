@@ -69,6 +69,6 @@ SignIn.fadeOut = (fadeAnim:any, setIsAnimated: any) => {
         duration: 3000,
         useNativeDriver: true
       }).start(() => { setIsAnimated(false) });
-}; 
+}
 
 export default SignIn
