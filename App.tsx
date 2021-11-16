@@ -1,8 +1,4 @@
 import React from 'react'
-import {
-  View,
-} from 'react-native'
-import { globalStyle } from './src/GlobalStyle'
 import { Provider as PaperProvider } from 'react-native-paper'
 import {paperTheme, appTheme} from './src/PaperTheme'
 import SignIn from './src/pages/SignIn/SignIn'

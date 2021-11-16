@@ -1,10 +1,8 @@
 import React from "react"
 import {
-    ImageBackground,
     View
 } from "react-native"
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
-import { Button } from 'react-native-paper'
 import DivalityButtonTextured from "../../components/DivalityButtonTextured/DivalityButtonTextured"
 
 type SignInProps = {
@@ -23,7 +21,7 @@ const SignIn = ({navigation} : SignInProps) => {
         onSubmit: (formState: any) => (navigation.navigate('Logo'))
     }
     return (
-        <View style={{paddingHorizontal:20}}>
+        <View>
             <DivalityForm 
                 formName={formEntries.formName}
                 formNameIsDisplay={false}

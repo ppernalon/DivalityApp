@@ -4,7 +4,6 @@ import { divalityFormStyle } from "./DivalityButtonTexturedStyle"
 import { withTheme } from 'react-native-paper'
 import { useTheme } from "react-native-paper"
 
-
 type DivalityButtonTexturedProps = {
     label: string
     onSubmit: Function
