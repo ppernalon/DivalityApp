@@ -5,8 +5,6 @@ import {
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
 import DivalityButtonTextured from "../../components/DivalityButtonTextured/DivalityButtonTextured"
 import { 
-    checkBeforeSubmitFunction,
-    checkFormAnswer, 
     formField 
 } from "../../components/DivalityForm/DivalityFormTypes"
 

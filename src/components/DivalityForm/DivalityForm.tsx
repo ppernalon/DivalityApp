@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { View } from "react-native"
 import ReactIf from "../ReactIf"
 import { Button, TextInput, Title, Text } from 'react-native-paper'
@@ -86,7 +86,7 @@ DivalityForm.buildForms = (
     return (
         formStateKeys.map((inputKey: string) => {
             const field = formState[inputKey]
-            let inputToRender
+            let inputToRender: JSX.Element
             switch (field.type) {
                 case 'password':
                     inputToRender = <TextInput
