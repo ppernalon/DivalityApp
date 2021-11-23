@@ -10,10 +10,7 @@ export const colors = {
 export const globalStyle = StyleSheet.create({
     appBackground: {
         flex: 1,
-<<<<<<< HEAD
         backgroundColor: 'white',
-=======
-        padding: 50
->>>>>>> 09fffd3 (Form get styled)
+        padding: 0
     }
 })
