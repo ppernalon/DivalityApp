@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native"
 import { divalityFormStyle } from "./DivalityButtonTexturedStyle"
 import { withTheme } from 'react-native-paper'
