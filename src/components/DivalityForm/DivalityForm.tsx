@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import ReactIf from "../ReactIf"
-import { Button, TextInput, Title } from 'react-native-paper'
+import { Button, TextInput, Title, Text } from 'react-native-paper'
 import { divalityFormStyle as style} from './DivalityFormStyle'
 import { checkBeforeSubmitFunction, formField } from "./DivalityFormTypes"
 import { colors } from "../../GlobalStyle"
@@ -29,6 +29,7 @@ const DivalityForm = ({
     }: DivalityFormProps) => {
     
     let [formState, setFormState] = useState<any>(DivalityForm.initFormState(fields))
+    let [formError, setFormError] = useState<string>("")
 
     return (
         <View>
@@ -39,7 +40,13 @@ const DivalityForm = ({
             </ReactIf>
 
             <View>
-                { DivalityForm.buildForms(fields, formState, setFormState) }
+                { DivalityForm.buildForms(fields, formState, setFormState, setFormError) }
+            </View>
+
+            <View style={formError.length > 0 ? style.formError : null}>
+                <Text style={style.formError.text}> 
+                    {formError}
+                </Text>
             </View>
 
             <View style={style.buttonRow}>
@@ -81,7 +88,12 @@ DivalityForm.initFormState = (fields: formField[]) => {
     return newFormState
 }
 
-DivalityForm.buildForms = (fields: formField[], formState: any, setFormState: Function) => {
+DivalityForm.buildForms = (
+        fields: formField[], 
+        formState: any, 
+        setFormState: Function, 
+        setFormError: Function
+    ) => {
     const formStateKeys = Object.keys(formState)
     return (
         formStateKeys.map((inputKey: string) => {
@@ -94,13 +106,13 @@ DivalityForm.buildForms = (fields: formField[], formState: any, setFormState: Fu
                         style={style.formInput}
                         key={inputKey}
                         mode={'flat'}
-                        underlineColor={colors.blue}
+                        underlineColor={colors.primaryBlue}
                         secureTextEntry={true}
                         error={field.error}
                         label={field.label}
                         value={field.value}
                         placeholder={field.placeholder}
-                        onBlur={() => DivalityForm.checkField(inputKey, checkBeforeSubmit, formState, setFormState)}
+                        onBlur={() => DivalityForm.checkField(inputKey, formState, setFormState, setFormError)}
                         onChangeText={newValue => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState)}/>
                     break;
 
@@ -109,12 +121,12 @@ DivalityForm.buildForms = (fields: formField[], formState: any, setFormState: Fu
                         style={style.formInput}
                         key={inputKey}
                         mode={'flat'}
-                        underlineColor={colors.blue}
+                        underlineColor={colors.primaryBlue}
                         error={field.error}
                         label={field.label}
                         value={field.value}
                         placeholder={field.placeholder}
-                        onBlur={() => DivalityForm.checkField(inputKey, checkBeforeSubmit, formState, setFormState)}
+                        onBlur={() => DivalityForm.checkField(inputKey, formState, setFormState, setFormError)}
                         onChangeText={newValue => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState)}/>
                     break;
             }
@@ -125,41 +137,54 @@ DivalityForm.buildForms = (fields: formField[], formState: any, setFormState: Fu
 }
 
 DivalityForm.checkField = (
-        key: string, 
-        checkBeforeSubmit: checkBeforeSubmitFunction | undefined,
+        key: string,
         formState: any, 
-        setFormState: Function
-    ) => {    
-
+        setFormState: Function,
+        setFormError: Function
+    ) => {
+    
     const newSateForm = {...formState}
 
-    let errorValue
+    let errorMessage: string = ""
+    let errorValue: boolean
     const shouldMatchWithKey = newSateForm[key].shouldMatchWith as string
+    const checkBeforeSubmit = newSateForm[key].checkBeforeSubmit as checkBeforeSubmitFunction
 
     if ( shouldMatchWithKey && checkBeforeSubmit ) {
-        const targetValue = formState[shouldMatchWithKey].value
-        errorValue = !checkBeforeSubmit(newSateForm[key].value).isValid
+        const targetValue = newSateForm[shouldMatchWithKey].value
+        const checkFormAnswer = checkBeforeSubmit(newSateForm[key].value)
+        errorValue = !checkFormAnswer.isValid
+        errorMessage = checkFormAnswer.message
         if (targetValue.length > 0) {
             errorValue = errorValue && targetValue !== newSateForm[key].value
             newSateForm[shouldMatchWithKey].error = errorValue
         }
+        if (!errorValue){
+            errorMessage = `${newSateForm[shouldMatchWithKey].label} et ${newSateForm[key].label} doivent être identiques`
+        }
     } else if ( checkBeforeSubmit && !shouldMatchWithKey) {
-        errorValue = !checkBeforeSubmit(newSateForm[key].value).isValid
+        const checkFormAnswer = checkBeforeSubmit(newSateForm[key].value)
+        errorValue = !checkFormAnswer.isValid
+        errorMessage = checkFormAnswer.message
     } else if ( shouldMatchWithKey && !checkBeforeSubmit) {
         const targetValue = formState[shouldMatchWithKey].value
         errorValue = targetValue.length > 0 && targetValue !== newSateForm[key].value
         newSateForm[shouldMatchWithKey].error = errorValue
+        if (!errorValue){
+            errorMessage = `${newSateForm[key].label} et ${newSateForm[shouldMatchWithKey].label} doivent être identiques`
+        }
     } else {
         errorValue = false
     }
 
     newSateForm[key].error = errorValue
     
+    setFormError(errorMessage)
     setFormState(newSateForm)
 }
 
 DivalityForm.onValueChange = (key: string, newValue: string, formState: any, setFormState: Function) => {
-    const newSateForm = JSON.parse(JSON.stringify(formState))
+    const newSateForm = {...formState}
     newSateForm[key].value = newValue
     setFormState(newSateForm)
 }    

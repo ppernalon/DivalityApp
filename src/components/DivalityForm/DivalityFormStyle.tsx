@@ -4,6 +4,7 @@ import { colors } from "../../GlobalStyle"
 export const divalityFormStyle = StyleSheet.create({
     formInput: {
         marginTop: 30,
+        backgroundColor: "#fff",
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -14,8 +15,14 @@ export const divalityFormStyle = StyleSheet.create({
         elevation: 10
     },
     buttonRow: {
-        marginTop: 40,
+        marginTop: 30,
         flexDirection: "row",
         justifyContent: "space-between"
+    },
+    formError: {
+        marginTop: 30,
+        text: {
+            color: colors.errorRed
+        }
     }
 })

@@ -43,7 +43,7 @@ const SignIn = ({navigation} : SignInProps) => {
         ],
         onSubmit: (formState: any) => (navigation.navigate('Logo'))
     }
-    
+
     return (
         <View>
             <DivalityForm 
@@ -72,7 +72,7 @@ SignIn.checkPseudo = (value: string) : checkFormAnswer => {
     if (unauthorizedValues.length > 0){
         return {
             isValid: false,
-            message: ""
+            message: "Caratères non autorisés dans le pseudo"
         } as checkFormAnswer
     }
     return {
