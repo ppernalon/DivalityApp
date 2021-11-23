@@ -11,18 +11,12 @@ const App = () => {
   return (
     // <StoreProvider store={store}>
       <PaperProvider theme={paperTheme}>
-<<<<<<< HEAD
         <NavigationContainer theme={appTheme}>
           <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
             <Stack.Screen name="SignIn" component={SignIn}/>
             <Stack.Screen name="Logo" component={DivalityLogo}/>
           </Stack.Navigator>
         </NavigationContainer>
-=======
-        <LinearGradient colors={[colors.blueSky, colors.lightBlueSky]} style={globalStyle.appBackground}>
-          <SignIn/>
-        </LinearGradient>
->>>>>>> 6549614 (merging ...)
       </PaperProvider>
     // </StoreProvider>
   )
