@@ -4,20 +4,21 @@ import {
     View
 } from "react-native"
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
-import DivalityButtonTextured from "../../components/DivalityButtonTextured/DivalityButtonTextured"
 import { 
     formField 
 } from "../../components/DivalityForm/DivalityFormTypes"
 import LoadingHome from "@components/LoadingHome/LoadingHome"
 import { signInStyles } from "./SignInStyle"
 import ReactIf from "@components/ReactIf"
+import LinearGradient from "react-native-linear-gradient"
+import DivilityLogo from "@components/DivalityLogo/DivalityLogo"
 
 type SignInProps = {
     navigation: any
 }
 
 const SignIn = ({navigation} : SignInProps) => {
-    
+
     let fadeAnim = useRef(new Animated.Value(1)).current;
     const [isAnimated, setIsAnimated] = useState(true);
     SignIn.fadeOut(fadeAnim, setIsAnimated)
@@ -41,7 +42,10 @@ const SignIn = ({navigation} : SignInProps) => {
     }
 
     return (
-        <View style={signInStyles.container}>
+        <LinearGradient 
+            colors={['#49C5FF', '#8DD1EE']}
+            style={signInStyles.container}
+        >
             <ReactIf condition={isAnimated}>
                 <View style={signInStyles.LoadingHomeContainer}>
                     <Animated.View style={{opacity: fadeAnim}}>
@@ -50,6 +54,7 @@ const SignIn = ({navigation} : SignInProps) => {
                 </View>
             </ReactIf>
             <View style={signInStyles.DivalityFormContainer}>
+                <DivilityLogo/>
                 <DivalityForm 
                     formName={formEntries.formName}
                     formNameIsDisplay={false}
@@ -58,7 +63,7 @@ const SignIn = ({navigation} : SignInProps) => {
                     submitButtonText={"Se connecter"} 
                 />
             </View>
-        </View>
+        </LinearGradient>
     )
 }
 

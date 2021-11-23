@@ -14,6 +14,7 @@ export const signInStyles = StyleSheet.create({
         height: '100%'
     },
     DivalityFormContainer: {
+        padding: 30,
         zIndex: 1
     }
 })

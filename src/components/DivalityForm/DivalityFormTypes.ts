@@ -1,5 +1,3 @@
-import DivalityForm from "./DivalityForm"
-
 export type checkFormAnswer = {
     isValid: boolean
     message: string
