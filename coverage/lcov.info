@@ -1,4 +1,5 @@
 TN:
+<<<<<<< HEAD
 SF:App.tsx
 FN:14,(anonymous_0)
 FNF:1
@@ -196,6 +197,8 @@ BRF:0
 BRH:0
 end_of_record
 TN:
+=======
+>>>>>>> 09fffd3 (Form get styled)
 SF:src\components\DivalityLogo\DivalityLogo.tsx
 FN:8,(anonymous_0)
 FNF:1
@@ -218,6 +221,7 @@ LH:1
 BRF:0
 BRH:0
 end_of_record
+<<<<<<< HEAD
 TN:
 SF:src\pages\SignIn\SignIn.tsx
 FN:12,(anonymous_0)
@@ -267,3 +271,5 @@ BRDA:60,0,1,1
 BRF:2
 BRH:2
 end_of_record
+=======
+>>>>>>> 09fffd3 (Form get styled)

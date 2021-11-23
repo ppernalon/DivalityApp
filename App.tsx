@@ -6,8 +6,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import DivalityLogo from './src/components/DivalityLogo/DivalityLogo'
 
-
-
 const App = () => {
   const Stack = createNativeStackNavigator()
   return (
@@ -23,7 +21,5 @@ const App = () => {
     // </StoreProvider>
   )
 }
-
-
 
 export default App

@@ -3,15 +3,7 @@ import { View } from "react-native"
 import ReactIf from "../ReactIf"
 import { Button, TextInput, Title } from 'react-native-paper'
 import { divalityFormStyle as style} from './DivalityFormStyle'
-
-type formField = {
-    id: string
-    label: string
-    type: string
-    toCheck: boolean
-    placeholder?: string
-    checkBeforeSubmit?: Function
-}
+import { formField } from "./DivalityFormTypes"
 
 type DivalityFormProps = {
     formName: string
@@ -95,8 +87,10 @@ DivalityForm.buildForms = (formState: any, setFormState: Function) => {
             switch (formState[inputKey].type) {
                 case 'password':
                     inputToRender = <TextInput
-                        style={style.formInput}  
+                        style={style.formInput}
                         key={inputKey}
+                        mode={'flat'}
+                        underlineColor={"#fff"}
                         secureTextEntry={true}
                         label={formState[inputKey].label}
                         value={formState[inputKey].value}
@@ -106,8 +100,10 @@ DivalityForm.buildForms = (formState: any, setFormState: Function) => {
 
                 case 'text':
                     inputToRender = <TextInput
-                        style={style.formInput} 
+                        style={style.formInput}
                         key={inputKey}
+                        mode={'flat'}
+                        underlineColor={"#fff"}
                         label={formState[inputKey].label}
                         value={formState[inputKey].value}
                         placeholder={formState[inputKey].placeholder}
