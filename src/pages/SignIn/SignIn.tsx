@@ -7,6 +7,7 @@ import DivalityButtonTextured from "../../components/DivalityButtonTextured/Diva
 import { 
     formField 
 } from "../../components/DivalityForm/DivalityFormTypes"
+import LoadingHome from "@components/LoadingHome/LoadingHome"
 
 type SignInProps = {
     navigation: any
@@ -35,6 +36,7 @@ const SignIn = ({navigation} : SignInProps) => {
 
     return (
         <View>
+            <LoadingHome/>
             <DivalityForm 
                 formName={formEntries.formName}
                 formNameIsDisplay={false}
