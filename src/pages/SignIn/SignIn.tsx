@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useRef, useState } from "react"
 import {
+    Animated,
     View
 } from "react-native"
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
@@ -8,13 +9,18 @@ import {
     formField 
 } from "../../components/DivalityForm/DivalityFormTypes"
 import LoadingHome from "@components/LoadingHome/LoadingHome"
+import { signInStyles } from "./SignInStyle"
+import ReactIf from "@components/ReactIf"
 
 type SignInProps = {
     navigation: any
 }
 
 const SignIn = ({navigation} : SignInProps) => {
-
+    
+    let fadeAnim = useRef(new Animated.Value(1)).current;
+    const [isAnimated, setIsAnimated] = useState(true);
+    SignIn.fadeOut(fadeAnim, setIsAnimated)
     const formEntries = {
         formName: "Inscription",
         fields: [
@@ -35,23 +41,35 @@ const SignIn = ({navigation} : SignInProps) => {
     }
 
     return (
-        <View>
-            <LoadingHome/>
-            <DivalityForm 
-                formName={formEntries.formName}
-                formNameIsDisplay={false}
-                fields={formEntries.fields}
-                onSubmit={formEntries.onSubmit}
-            />
-            <View style={{alignItems:'center'}}>
-                <DivalityButtonTextured
-                    width= "50%"
-                    label="Yolo" 
-                    onSubmit={()=>{console.log("r")}}
+        <View style={signInStyles.container}>
+            <ReactIf condition={isAnimated}>
+                <View style={signInStyles.LoadingHomeContainer}>
+                    <Animated.View
+                        style={{opacity: fadeAnim}}>
+                        <LoadingHome/>
+                    </Animated.View>
+                </View>
+            </ReactIf>
+            <View style={signInStyles.DivalityFormContainer}>
+                <DivalityForm 
+                    formName={formEntries.formName}
+                    formNameIsDisplay={false}
+                    fields={formEntries.fields}
+                    onSubmit={formEntries.onSubmit} 
+                    submitButtonText={"Se connecter"} 
                 />
             </View>
         </View>
     )
 }
+
+SignIn.fadeOut = (fadeAnim:any, setIsAnimated: any) => {
+    Animated.timing(fadeAnim, {
+        toValue: 0,
+        delay: 2000,
+        duration: 3000,
+        useNativeDriver: true
+      }).start(() => { setIsAnimated(false) });
+}; 
 
 export default SignIn
