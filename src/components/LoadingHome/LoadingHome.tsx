@@ -1,8 +1,5 @@
 import React, {useRef} from "react"
-import { 
-    View,
-    Animated,
-} from "react-native"
+import { View, Animated } from "react-native"
 import DivalityLogo from "@components/DivalityLogo/DivalityLogo"
 import { loadingHomeStyle } from "./LoadingHomeStyle"
 import LinearGradient from "react-native-linear-gradient"
@@ -17,10 +14,12 @@ const LoadingHome = () => {
     LoadingHome.startAnimation(animation)
     return (
         <View>
-             <LinearGradient colors={['#49C5FF', '#8DD1EE']} style={loadingHomeStyle.background}>
-                <View style={loadingHomeStyle.containerLogo}>
-                    <DivalityLogo/>
-                </View>
+             <LinearGradient 
+                colors={['#49C5FF', '#8DD1EE']} 
+                style={loadingHomeStyle.background}>
+                    <View style={loadingHomeStyle.containerLogo}>
+                        <DivalityLogo/>
+                    </View>
                 <Animated.Image 
                     source={require('@images/earthImage.png')}
                     style={[loadingHomeStyle.earthImage, animatedStyles]}/>

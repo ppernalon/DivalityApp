@@ -44,8 +44,7 @@ const SignIn = ({navigation} : SignInProps) => {
         <View style={signInStyles.container}>
             <ReactIf condition={isAnimated}>
                 <View style={signInStyles.LoadingHomeContainer}>
-                    <Animated.View
-                        style={{opacity: fadeAnim}}>
+                    <Animated.View style={{opacity: fadeAnim}}>
                         <LoadingHome/>
                     </Animated.View>
                 </View>

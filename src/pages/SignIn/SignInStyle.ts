@@ -16,5 +16,4 @@ export const signInStyles = StyleSheet.create({
     DivalityFormContainer: {
         zIndex: 1
     }
-
 })
