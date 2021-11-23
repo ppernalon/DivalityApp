@@ -21,13 +21,8 @@ export const paperTheme = {
     ...DefaultPaperTheme,
     roundness: 2,
     colors: {
-<<<<<<< HEAD
       ...DefaultPaperTheme.colors,
       primary: '#3498db',
-=======
-      ...DefaultTheme.colors,
-      primary: colors.primaryBlue,
->>>>>>> 7080b1d (one error can be displayed)
       accent: '#f1c40f',
     },
     fonts: configureFonts(fontConfig)
