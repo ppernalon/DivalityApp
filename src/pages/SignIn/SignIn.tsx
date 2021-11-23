@@ -13,10 +13,10 @@ const SignIn = ({navigation} : SignInProps) => {
 
     const formEntries = {
         formName: "Inscription",
-        items: [
-            {id: "pseudo" ,label: "Pseudo", type: "text"},
-            {id: "password", label: "Mot de passe", type: "password"},
-            {id: "confirmedPassword", label: "Confirmation du mot de passe", type: "password"}
+        fields: [
+            {id: "pseudo" ,label: "Pseudo", type: "text", toCheck: false},
+            {id: "password", label: "Mot de passe", type: "password", toCheck: false},
+            {id: "confirmedPassword", label: "Confirmation du mot de passe", type: "password", toCheck: false},
         ],
         onSubmit: (formState: any) => (navigation.navigate('Logo'))
     }
@@ -25,7 +25,7 @@ const SignIn = ({navigation} : SignInProps) => {
             <DivalityForm 
                 formName={formEntries.formName}
                 formNameIsDisplay={false}
-                items={formEntries.items}
+                fields={formEntries.fields}
                 onSubmit={formEntries.onSubmit}
             />
             <View style={{alignItems:'center'}}>

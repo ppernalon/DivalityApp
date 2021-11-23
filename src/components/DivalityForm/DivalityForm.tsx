@@ -4,9 +4,18 @@ import ReactIf from "../ReactIf"
 import { Button, TextInput, Title } from 'react-native-paper'
 import { divalityFormStyle as style} from './DivalityFormStyle'
 
+type formField = {
+    id: string
+    label: string
+    type: string
+    toCheck: boolean
+    placeholder?: string
+    checkBeforeSubmit?: Function
+}
+
 type DivalityFormProps = {
     formName: string
-    items: {id: string, label: string, type: string, placeholder?: string}[]
+    fields: formField[]
     onSubmit: Function
     submitButtonText?: string
     formNameIsDisplay?: boolean
@@ -17,7 +26,7 @@ type DivalityFormProps = {
 
 const DivalityForm = ({
         formName,
-        items,
+        fields,
         onSubmit,
         formNameIsDisplay = false,
         onCancel = () => console.error("no cancel function given"),
@@ -26,7 +35,7 @@ const DivalityForm = ({
         cancelButtonText = "Annuler"
     }: DivalityFormProps) => {
     
-    let [formState, setFormState] = useState<any>(DivalityForm.initFormState(items))  
+    let [formState, setFormState] = useState<any>(DivalityForm.initFormState(fields))  
 
     return (
         <View>
@@ -61,17 +70,19 @@ const DivalityForm = ({
     )
 }
 
-DivalityForm.initFormState = (items: {id: string, label: string, type: string, placeholder?: string}[]) => {
+DivalityForm.initFormState = (fields: formField[]) => {
     let newFormState: any = {}
     
-    items.forEach(input => {    
+    fields.forEach(field => {    
         const newInput = {
-            label: input.label,
-            type: input.type,
-            placeholder: input.placeholder,
-            value: ""
+            label: field.label,
+            type: field.type,
+            placeholder: field.placeholder,
+            value: "",
+            toCheck: field.toCheck,
+            checkBeforeSubmit: field.checkBeforeSubmit
         }
-        newFormState[input.id] = newInput
+        newFormState[field.id] = newInput
     })
         
     return newFormState

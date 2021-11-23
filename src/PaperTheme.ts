@@ -1,4 +1,5 @@
-import { configureFonts, DefaultTheme } from 'react-native-paper'
+import { configureFonts, DefaultTheme as DefaultPaperTheme } from 'react-native-paper'
+import { DefaultTheme as DefaultNavigationTheme } from '@react-navigation/native'
 
 const fontConfig: any = {
   default: {
@@ -16,13 +17,23 @@ const fontConfig: any = {
 fontConfig.ios = fontConfig.default
 fontConfig.android = fontConfig.default
 
-export default {
-    ...DefaultTheme,
+export const paperTheme = {
+    ...DefaultPaperTheme,
     roundness: 2,
     colors: {
-      ...DefaultTheme.colors,
+      ...DefaultPaperTheme.colors,
       primary: '#3498db',
       accent: '#f1c40f',
     },
     fonts: configureFonts(fontConfig)
 }
+
+export const appTheme = {
+  ...DefaultNavigationTheme, 
+  colors: {
+    ...DefaultNavigationTheme.colors,
+     background: 'white'
+  }
+}
+
+ 
