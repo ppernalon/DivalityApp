@@ -15,7 +15,7 @@ const SignIn = ({navigation} : SignInProps) => {
         formName: "Inscription",
         items: [
             {id: "pseudo" ,label: "Pseudo", type: "text"},
-            {id: "password", label: "Mot de passe", type: "text"},
+            {id: "password", label: "Mot de passe", type: "password"},
             {id: "confirmedPassword", label: "Confirmation du mot de passe", type: "password"}
         ],
         onSubmit: (formState: any) => (navigation.navigate('Logo'))
@@ -32,8 +32,7 @@ const SignIn = ({navigation} : SignInProps) => {
                 <DivalityButtonTextured
                     width= "50%"
                     label="Yolo" 
-                    onSubmit={()=>{console.log("r")
-                }}
+                    onSubmit={()=>{console.log("r")}}
                 />
             </View>
         </View>

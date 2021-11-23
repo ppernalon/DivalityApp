@@ -7,6 +7,6 @@ export const divalityFormStyle = StyleSheet.create({
     buttonRow: {
         marginTop: 20,
         flexDirection: "row",
-        justifyContent: "space-evenly"
+        justifyContent: "space-between"
     }
 })
