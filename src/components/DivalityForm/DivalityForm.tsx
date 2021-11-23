@@ -29,7 +29,7 @@ const DivalityForm = ({
             </ReactIf>
 
             <View>
-                { DivalityForm.buildForms(fields, formState, setFormState, setFormError) }
+                { DivalityForm.buildForms(formState, setFormState, setFormError) }
             </View>
 
             <View style={formError.length > 0 ? style.formError : null}>
@@ -78,7 +78,6 @@ DivalityForm.initFormState = (fields: formField[]) => {
 }
 
 DivalityForm.buildForms = (
-        fields: formField[], 
         formState: formStateType, 
         setFormState: Function, 
         setFormError: Function
@@ -87,11 +86,11 @@ DivalityForm.buildForms = (
     return (
         formStateKeys.map((inputKey: string) => {
             const field = formState[inputKey]
-            const checkBeforeSubmit = fields.filter(value => value.id === inputKey)[0].checkBeforeSubmit
             let inputToRender
             switch (field.type) {
                 case 'password':
                     inputToRender = <TextInput
+                        accessibilityLabel={inputKey}
                         style={style.formInput}
                         key={inputKey}
                         mode={'flat'}
@@ -107,6 +106,7 @@ DivalityForm.buildForms = (
 
                 case 'text':
                     inputToRender = <TextInput
+                        accessibilityLabel={inputKey}
                         style={style.formInput}
                         key={inputKey}
                         mode={'flat'}
@@ -148,7 +148,7 @@ DivalityForm.checkField = (
             errorValue = errorValue && targetValue !== newSateForm[key].value
             newSateForm[shouldMatchWithKey].error = errorValue
         }
-        if (!errorValue){
+        if (errorValue){
             errorMessage = `${newSateForm[shouldMatchWithKey].label} et ${newSateForm[key].label} doivent être identiques`
         }
     } else if ( checkBeforeSubmit && !shouldMatchWithKey) {
@@ -159,7 +159,7 @@ DivalityForm.checkField = (
         const targetValue = formState[shouldMatchWithKey].value
         errorValue = targetValue.length > 0 && targetValue !== newSateForm[key].value
         newSateForm[shouldMatchWithKey].error = errorValue
-        if (!errorValue){
+        if (errorValue){
             errorMessage = `${newSateForm[key].label} et ${newSateForm[shouldMatchWithKey].label} doivent être identiques`
         }
     } else {
