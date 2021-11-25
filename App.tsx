@@ -2,10 +2,10 @@ import React from 'react'
 import { Provider as PaperProvider } from 'react-native-paper'
 import {paperTheme, appTheme} from './src/PaperTheme'
 import SignIn from './src/pages/SignIn/SignIn'
+import Menu from 'pages/Menu/Menu'
 import SignUp from 'pages/SignUp/SignUp'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import DivalityLogo from './src/components/DivalityLogo/DivalityLogo'
 
 const App = () => {
   const Stack = createNativeStackNavigator()
@@ -15,7 +15,12 @@ const App = () => {
         <NavigationContainer theme={appTheme}>
           <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
             <Stack.Screen name="SignIn" component={SignIn}/>
-            <Stack.Screen name="Logo" component={DivalityLogo}/>
+            <Stack.Screen name="Menu" component={Menu}/>
+            <Stack.Screen name="SearchGame" component={Menu}/>
+            <Stack.Screen name="Collection" component={Menu}/>
+            <Stack.Screen name="Teams" component={Menu}/>
+            <Stack.Screen name="Trade" component={Menu}/>
+            <Stack.Screen name="Ranking" component={Menu}/>
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

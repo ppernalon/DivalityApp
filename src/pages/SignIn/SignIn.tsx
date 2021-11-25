@@ -38,7 +38,7 @@ const SignIn = ({navigation} : SignInProps) => {
                 placeholder: "Mot de passe"
             } as formField
         ],
-        onSubmit: (formState: any) => (navigation.navigate('Logo'))
+        onSubmit: (formState: any) => (navigation.navigate('Menu'))
     }
 
     return (

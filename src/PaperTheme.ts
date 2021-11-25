@@ -7,7 +7,7 @@ const fontConfig: any = {
       fontFamily: 'Merienda-Regular',
       fontWeight: 'normal'
     },
-    bold: {
+    medium: {
       fontFamily: 'Merienda-Bold',
       fontWeight: 'normal'
     }
@@ -33,7 +33,8 @@ export const appTheme = {
   colors: {
     ...DefaultNavigationTheme.colors,
      background: 'white'
-  }
+  },
+  fonts: configureFonts(fontConfig)
 }
 
  

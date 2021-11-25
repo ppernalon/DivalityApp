@@ -19,13 +19,14 @@ const DivalityButtonTextured = ({
     const {fonts} = useTheme()
     const fontStyle = { 
         color:"white",
-        fontFamily: fonts.regular.fontFamily,
-        fontWeight: fonts.regular.fontWeight,
+        fontFamily: fonts.medium.fontFamily,
+        fontWeight: fonts.medium.fontWeight,
+        fontSize: 18,
         paddingHorizontal: 20,
-        paddingVertical: 10
+        paddingVertical: 15,
     }
     return (
-        <View style={[divalityFormStyle.containerView, {width:width}]} >
+        <View style={[divalityFormStyle.containerView, {width: width}]} >
             <TouchableOpacity style={divalityFormStyle.containerButton} onPress={() => onSubmit()}>
                 <ImageBackground 
                     source={require("../../../assets/images/texturebouton.png")} 
