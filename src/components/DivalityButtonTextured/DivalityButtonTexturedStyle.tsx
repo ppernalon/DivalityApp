@@ -8,7 +8,7 @@ export const divalityFormStyle = StyleSheet.create({
     },
     containerButton:{
         width:'100%',
-        margin: 30
+        margin: 5
     },
     
     backgroundButton:{
@@ -17,7 +17,6 @@ export const divalityFormStyle = StyleSheet.create({
         borderRadius: 5,
         overflow:"hidden",
         shadowColor: '#000',
-        backgroundColor:"white",
         shadowOffset: {
             width: 0,
             height: 2

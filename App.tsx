@@ -16,7 +16,6 @@ const App = () => {
           <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
             <Stack.Screen name="SignIn" component={SignIn}/>
             <Stack.Screen name="Menu" component={Menu}/>
-            <Stack.Screen name="SearchGame" component={Menu}/>
             <Stack.Screen name="Collection" component={Menu}/>
             <Stack.Screen name="Teams" component={Menu}/>
             <Stack.Screen name="Trade" component={Menu}/>

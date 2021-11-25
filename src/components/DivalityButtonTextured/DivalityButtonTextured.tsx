@@ -29,7 +29,7 @@ const DivalityButtonTextured = ({
         <View style={[divalityFormStyle.containerView, {width: width}]} >
             <TouchableOpacity style={divalityFormStyle.containerButton} onPress={() => onSubmit()}>
                 <ImageBackground 
-                    source={require("../../../assets/images/texturebouton.png")} 
+                    source={require("@images/texturebouton.png")} 
                     style={divalityFormStyle.backgroundButton}>
                     <Text style={fontStyle}>{label}</Text>
                 </ImageBackground>
