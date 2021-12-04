@@ -6,11 +6,14 @@ import Menu from 'pages/Menu/Menu'
 import SignUp from 'pages/SignUp/SignUp'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { Provider } from 'react-redux'
+import store from './src/store/store'
+
 
 const App = () => {
   const Stack = createNativeStackNavigator()
   return (
-    // <StoreProvider store={store}>
+    <Provider store={store}>
       <PaperProvider theme={paperTheme}>
         <NavigationContainer theme={appTheme}>
           <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
@@ -23,7 +26,7 @@ const App = () => {
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
-    // </StoreProvider>
+   </Provider>
   )
 }
 
