@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Provider } from 'react-redux'
 import store from './src/store/store'
+import Card from '@components/Card/Card'
 
 
 const App = () => {
@@ -16,8 +17,10 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider theme={paperTheme}>
         <NavigationContainer theme={appTheme}>
+          <Card name="Anubis" minimal={false} />
           <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
             <Stack.Screen name="SignIn" component={SignIn}/>
+            <Stack.Screen name="SignUp" component={SignUp}/>
             <Stack.Screen name="Menu" component={Menu}/>
             <Stack.Screen name="Collection" component={Menu}/>
             <Stack.Screen name="Teams" component={Menu}/>
