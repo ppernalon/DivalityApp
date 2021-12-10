@@ -12,6 +12,7 @@ import { signInStyles } from "./SignInStyle"
 import ReactIf from "@components/ReactIf"
 import LinearGradient from "react-native-linear-gradient"
 import DivilityLogo from "@components/DivalityLogo/DivalityLogo"
+import { Text } from "react-native-paper"
 
 type SignInProps = {
     navigation: any
@@ -21,7 +22,9 @@ const SignIn = ({navigation} : SignInProps) => {
 
     let fadeAnim = useRef(new Animated.Value(1)).current;
     const [isAnimated, setIsAnimated] = useState(true);
-    SignIn.fadeOut(fadeAnim, setIsAnimated)
+    if (isAnimated){
+        SignIn.fadeOut(fadeAnim, setIsAnimated)
+    }
     const formEntries = {
         formName: "Inscription",
         fields: [
@@ -62,6 +65,16 @@ const SignIn = ({navigation} : SignInProps) => {
                     onSubmit={formEntries.onSubmit} 
                     submitButtonText={"Se connecter"} 
                 />
+                <View style={signInStyles.ContainerLink}>
+                    <Text style={signInStyles.TextNoLink}>
+                        Pas encore de compte ? 
+                    </Text>
+                    <Text style={signInStyles.TextLink}
+                onPress={() => navigation.navigate('SignUp')}>
+                     Inscrivez-vous 
+                </Text>
+                </View>
+                
             </View>
         </LinearGradient>
     )

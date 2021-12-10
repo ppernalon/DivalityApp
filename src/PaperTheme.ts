@@ -4,7 +4,7 @@ import { DefaultTheme as DefaultNavigationTheme } from '@react-navigation/native
 const fontConfig: any = {
   default: {
     regular: {
-      fontFamily: 'Merienda-Regular',
+      fontFamily: 'Merienda-Bold',
       fontWeight: 'normal'
     },
     medium: {

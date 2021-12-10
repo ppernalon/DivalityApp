@@ -1,15 +1,23 @@
+import DivilityLogo from "components/DivalityLogo/DivalityLogo"
 import React from "react"
 import {
     View
 } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
+import { Text } from "react-native-paper"
 import DivalityForm from "../../components/DivalityForm/DivalityForm"
 import { 
     checkBeforeSubmitFunction,
     checkFormAnswer, 
     formField 
 } from "../../components/DivalityForm/DivalityFormTypes"
+import { signUpStyles } from "./SignUpStyles"
 
-const SignUp = () => {
+type SignUpProps = {
+    navigation: any
+}
+
+const SignUp = ({navigation} : SignUpProps) => {
 
     const formEntries = {
         formName: "Inscription",
@@ -40,14 +48,28 @@ const SignUp = () => {
     }
 
     return (
-        <View>
-            <DivalityForm 
-                formName={formEntries.formName}
-                formNameIsDisplay={false}
-                fields={formEntries.fields}
-                onSubmit={formEntries.onSubmit} 
-                submitButtonText={"S'inscrire"} />
-        </View>
+        <LinearGradient 
+        colors={['#49C5FF', '#8DD1EE']}
+        style={signUpStyles.container}>
+            <View style={signUpStyles.DivalityFormContainer}>
+                <DivilityLogo/>
+                <DivalityForm 
+                    formName={formEntries.formName}
+                    formNameIsDisplay={false}
+                    fields={formEntries.fields}
+                    onSubmit={formEntries.onSubmit} 
+                    submitButtonText={"S'inscrire"} />
+                <View style={signUpStyles.ContainerLink}>
+                        <Text style={signUpStyles.TextNoLink}>
+                            Vous possedez déjà un compte ?
+                        </Text>
+                        <Text style={signUpStyles.TextLink}
+                        onPress={() => navigation.navigate('SignIn')}>
+                            Connectez-vous
+                        </Text>
+                    </View>
+            </View>
+        </LinearGradient>
     )
 }
 
