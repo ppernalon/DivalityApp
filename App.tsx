@@ -16,7 +16,7 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider theme={paperTheme}>
         <NavigationContainer theme={appTheme}>
-          <Stack.Navigator initialRouteName="Menu" screenOptions={{headerShown: false}}>
+          <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
             <Stack.Screen name="SignIn" component={SignIn}/>
             <Stack.Screen name="SignUp" component={SignUp}/>
             <Stack.Screen name="Menu" component={Menu}/>
