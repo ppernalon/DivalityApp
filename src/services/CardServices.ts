@@ -35,7 +35,6 @@ CardServices.getCardByName = (name: string) => {
         power: 40,
         speed: 98,
         ability: "Mommifie ses voisins directes pour leur permettre de vivre plus longtemps, +10% de vie",
-        abilityType: "defensive",
         uri: CardServices.getImageByName(name)
     }
 

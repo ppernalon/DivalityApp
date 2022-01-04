@@ -45,5 +45,51 @@ export const cardStyle = StyleSheet.create({
     },
     name: {
         textAlign: 'center',
+    },
+    square: {
+        backgroundColor: '#41BAF1', 
+        width: 20, 
+        height: 20, 
+        transform: [{rotate: "45deg"}]
+    },
+    arrowRight: {
+        width: 0, 
+        height: 0,         
+        borderStyle: 'solid',
+        borderLeftWidth: 17, 
+        borderLeftColor: 'red', 
+        borderTopWidth: 12, 
+        borderTopColor:'transparent',
+        borderBottomWidth: 12, 
+        borderBottomColor:'transparent'
+    },
+    arrowUp: {
+        width: 0, 
+        height: 0,         
+        borderStyle: 'solid',
+        borderLeftWidth: 12, 
+        borderLeftColor: 'transparent', 
+        borderRightWidth: 12, 
+        borderRightColor:'transparent',
+        borderBottomWidth: 17, 
+        borderBottomColor:'purple'
+    },
+    dot: {
+        backgroundColor: 'green', 
+        width: 20, 
+        height: 20, 
+        borderRadius: 100
+    },
+    cardAttributes: {
+        flexDirection: "row",
+        marginTop: 5,
+        width: 60
+    },
+    cardAttributesContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: "space-between",
+        width: 175,
+        
     }
 })

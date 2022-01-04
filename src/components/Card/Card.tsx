@@ -14,13 +14,12 @@ type cardProps = {
 
 const Card = ({name, minimal = false}: cardProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [image, setImage] = useState<NodeRequire>({} as NodeRequire)
+    const [image, setImage] = useState<any>({} as any)
     const [life, setLife] = useState<number>(0)
     const [armor, setArmor] = useState<number>(0)
     const [power, setPower] = useState<number>(0)
     const [speed, setSpeed] = useState<number>(0)
     const [ability, setAbility] = useState<string>("")
-    const [abilityType, setAbilityType] = useState<string>("")
     
     useEffect(() => {
         CardServices.getCardByName(name).then((data: any) => {
@@ -30,14 +29,13 @@ const Card = ({name, minimal = false}: cardProps) => {
             setSpeed(data.speed)
             setImage(data.uri)
             setAbility(data.ability)
-            setAbilityType(data.abilityType)
             setIsLoading(false)
         })
     }, [name])
 
     let loadingCircleColor: string = colors.egyptianYellow
     const pantheon: string = CardServices.getPantheonByName(name)
-    const globalCardStyle = [cardStyle.card]
+    const globalCardStyle: any[] = [cardStyle.card]
     if (minimal) globalCardStyle.push(cardStyle.minimalDim)
     if (!minimal) globalCardStyle.push(cardStyle.notMinimalDim)
     if (isLoading) globalCardStyle.push(cardStyle.cardIsLoading)
@@ -70,27 +68,35 @@ const Card = ({name, minimal = false}: cardProps) => {
                     />
                     <Title style={cardStyle.name}> {name} </Title>
                     <ReactIf condition={!minimal}>
-                        <React.Fragment>
-                            <View>
-                                <View>
-                                    <View style={{backgroundColor: 'green', width: 20, height: 20, borderRadius: 100}}/>
+                        <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 20, paddingRight: 20}}>
+                            <View style={cardStyle.cardAttributesContainer}>
+                                <View style={cardStyle.cardAttributes}>
+                                    <View style={{height: 40, width: 40}}>
+                                        <View style={cardStyle.dot}/>
+                                    </View>
                                     <Text> {life} </Text>
                                 </View>
-                                <View>
-                                    <View style={{backgroundColor: '#41BAF1', width: 20, height: 20, transform: [{rotate: "45deg"}] }}/>
+                                <View style={cardStyle.cardAttributes}>
+                                <View style={{height: 40, width: 40}}>
+                                        <View style={cardStyle.square}/>
+                                    </View>
                                     <Text> {armor} </Text>
                                 </View> 
-                                <View>
-                                    <View style={{backgroundColor: 'green', width: 10, height: 10, borderRadius: 100}}/>
+                                <View style={cardStyle.cardAttributes}>
+                                    <View style={{height: 40, width: 40}}>
+                                        <View style={cardStyle.arrowRight}/>
+                                    </View>
                                     <Text> {power} </Text>
                                 </View> 
-                                <View>
-                                    <View style={{backgroundColor: 'green', width: 10, height: 10, borderRadius: 100}}/>
+                                <View style={cardStyle.cardAttributes}>
+                                    <View style={{height: 40, width: 40}}>
+                                        <View style={cardStyle.arrowUp}/>
+                                    </View>
                                     <Text> {speed} </Text>
                                 </View>
                             </View>
                             <Text> {ability} </Text>
-                        </React.Fragment>
+                        </View>
                     </ReactIf>
                 </React.Fragment>
             </ReactIf>
