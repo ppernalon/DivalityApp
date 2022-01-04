@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View } from "react-native"
 import ReactIf from "../ReactIf"
-import { Button, TextInput, Title, Text } from 'react-native-paper'
+import { Button, TextInput, Title, Text, useTheme, withTheme } from 'react-native-paper'
 import { divalityFormStyle as style} from './DivalityFormStyle'
 import { checkBeforeSubmitFunction, divalityFormProps, formField, formStateType } from "./DivalityFormTypes"
 import { colors } from "../../GlobalStyle"
@@ -14,12 +14,18 @@ const DivalityForm = ({
         onCancel = () => console.error("no cancel function given"),
         showCancelButton = false,
         submitButtonText = "Valider",
-        cancelButtonText = "Annuler"
+        cancelButtonText = "Annuler",
     }: divalityFormProps) => {
     
     let [formState, setFormState] = useState<formStateType>(DivalityForm.initFormState(fields))
     let [formError, setFormError] = useState<string>("")
 
+    const {fonts} = useTheme()
+    const fontStyle = { 
+        color:"white",
+        fontFamily: fonts.medium.fontFamily,
+        fontWeight: fonts.medium.fontWeight,
+    }
     return (
         <View>
             <ReactIf condition={formNameIsDisplay}>
@@ -49,10 +55,10 @@ const DivalityForm = ({
                 </ReactIf>
 
                 <Button
-                    style={{width: showCancelButton ? "47%" : "100%"}}
+                    style={[{width: showCancelButton ? "47%" : "100%"}]}
                     mode="contained" 
                     onPress={() => onSubmit(formState)}> 
-                    {submitButtonText}
+                     <Text style={fontStyle}>{submitButtonText}</Text>
                 </Button>
             </View>      
         </View>
@@ -181,4 +187,4 @@ DivalityForm.onValueChange = (key: string, newValue: string, formState: formStat
     setFormState(newSateForm)
 }    
 
-export default DivalityForm
+export default withTheme(DivalityForm);
