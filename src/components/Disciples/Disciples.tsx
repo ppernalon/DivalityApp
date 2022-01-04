@@ -8,11 +8,15 @@ import {
   selectDisciples
 } from './DisciplesSlice'
 
-const HeaderTextured = () => {
+type HeaderTexturedProps = {
+    fontColor?: string
+}
+
+const HeaderTextured = ({fontColor = "white"}: HeaderTexturedProps) => {
     const nberDisciples = useSelector(selectDisciples)
     const {fonts} = useTheme()
     const fontStyle = { 
-        color:"white",
+        color: fontColor,
         fontFamily: fonts.medium.fontFamily,
         fontWeight: fonts.medium.fontWeight,
         fontSize: 27,
