@@ -1,4 +1,5 @@
 import DivilityLogo from "components/DivalityLogo/DivalityLogo"
+import SignUpHttpService from "http-services/SignUpHttpService"
 import React from "react"
 import {
     View
@@ -44,7 +45,20 @@ const SignUp = ({navigation} : SignUpProps) => {
                 shouldMatchWith: "password"
             } as formField,
         ],
-        onSubmit: (formState: any) => (console.log(formState))
+        onSubmit: (formState: any) => {
+            let formStateApi={
+                username: formState.pseudo.value,
+                password: formState.password.value
+            }
+            SignUpHttpService
+            .signUp(formStateApi)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err,'error')
+            } )
+        }
     }
 
     return (

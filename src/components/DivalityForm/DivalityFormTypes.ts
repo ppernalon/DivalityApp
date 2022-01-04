@@ -29,6 +29,7 @@ export type formStateType = {
 }
 
 export type divalityFormProps = {
+    theme: any
     formName: string
     fields: formField[]
     onSubmit: Function
