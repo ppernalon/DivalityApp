@@ -6,6 +6,7 @@ export const divalityLogoStyle = StyleSheet.create({
     },
     logoImage: {
         resizeMode: "contain",
-        width: '100%'
+        width: '100%',
+        height: 150
     }
 })
