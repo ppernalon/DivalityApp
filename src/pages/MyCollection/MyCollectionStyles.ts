@@ -6,5 +6,11 @@ export const myCollectionStyles = StyleSheet.create({
         flex:1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    iconButtonCloseDialog: {
+        position: 'absolute',
+        top: -20,
+        right: -20,
+        backgroundColor: 'white',
     }
 })

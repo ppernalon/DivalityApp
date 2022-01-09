@@ -13,12 +13,15 @@ import ReactIf from "@components/ReactIf"
 import LinearGradient from "react-native-linear-gradient"
 import DivilityLogo from "@components/DivalityLogo/DivalityLogo"
 import { Text } from "react-native-paper"
+import SignInHttpService from "http-services/SignInHttpService"
 
 type SignInProps = {
     navigation: any
 }
 
 const SignIn = ({navigation} : SignInProps) => {
+
+    fetch("https://paul-pernalon.fr:5001/user/signin/aa/aa").then((res) => console.log(res)).catch(err => console.log(err))
 
     let fadeAnim = useRef(new Animated.Value(1)).current;
     const [isAnimated, setIsAnimated] = useState(true);
@@ -41,7 +44,21 @@ const SignIn = ({navigation} : SignInProps) => {
                 placeholder: "Mot de passe"
             } as formField
         ],
-        onSubmit: (formState: any) => (navigation.navigate('Menu'))
+        onSubmit: (formState: any) => {
+            let formStateApi={
+                username: formState.pseudo.value,
+                password: formState.password.value
+            }
+            navigation.navigate('Menu')
+            // SignInHttpService
+            // .signIn(formStateApi)
+            // .then(res => {
+            //     console.log(res)
+            // })
+            // .catch(err => {
+            //     console.log(JSON.stringify(err),'error')
+            // } )
+        }
     }
 
     return (

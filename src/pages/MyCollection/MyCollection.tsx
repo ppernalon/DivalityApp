@@ -6,14 +6,13 @@ import {
     ScrollView,
     View
 } from "react-native"
-import { Dialog, Text } from "react-native-paper"
+import { IconButton, Modal, Portal, Text } from "react-native-paper"
 import HeaderTextured from "components/HeaderTextured/HeaderTextured"
 import Disciples from "components/Disciples/Disciples"
 import { colors } from "GlobalStyle"
 import { TouchableOpacity } from "react-native"
 import Card from "components/Card/Card"
 import { myCollectionStyles } from "./MyCollectionStyles"
-import { paperTheme } from "PaperTheme"
 
 
 type MyCollectionProps = {
@@ -27,6 +26,8 @@ const MyCollection = ({navigation} : MyCollectionProps) => {
     const [greekCards, setGreekCards] = useState<string[]>([])
     const [nordicCards, setNordicCards] = useState<string[]>([])
     const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false)
+    const [nameCardDialog, setNameCardDialog] = useState<string[]>([])
+
     
     const fontColor: any = {
         egyptian: colors.egyptianYellow,
@@ -84,14 +85,17 @@ const MyCollection = ({navigation} : MyCollectionProps) => {
 
     const onClickCard = ( { name } : any) => {
         setIsDialogVisible(true)
+        setNameCardDialog(name)
+
     }
 
     const hideDialog = () => {
         setIsDialogVisible(false)
+
     } 
 
     return (
-        <View style={{height:'100%'}}>
+        <View style={{height:'100%', width:'100%'}}>
             <HeaderTextured>
                <Text style={{color: 'white', textAlign: 'center'}}> COLLECTION </Text>
             </HeaderTextured>
@@ -122,12 +126,22 @@ const MyCollection = ({navigation} : MyCollectionProps) => {
                 scrollEnabled= {true}
             />  
             </SafeAreaView>
-            <Dialog visible={isDialogVisible} onDismiss={hideDialog}>
-                <Text>
-                    vklvf
-                </Text>
-            </Dialog>
-             
+            <Portal>
+                 <Modal visible={isDialogVisible} onDismiss={hideDialog} contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
+               <View>
+                    <Card
+                    name={nameCardDialog}
+                    minimal={false}
+                 />
+                 <IconButton icon="close" 
+                    size={27}
+                     color={fontColor[currentPantheon]}
+                     style={myCollectionStyles.iconButtonCloseDialog} onPress={hideDialog} hasTVPreferredFocus={undefined} tvParallaxProperties={undefined}/>
+               </View>
+               
+            </Modal>
+            </Portal>
+           
         </View>
     )
 }
