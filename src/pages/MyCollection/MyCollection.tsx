@@ -97,7 +97,7 @@ const MyCollection = ({navigation} : MyCollectionProps) => {
     return (
         <View style={{height:'100%', width:'100%'}}>
             <HeaderTextured>
-               <Text style={{color: 'white', textAlign: 'center'}}> COLLECTION </Text>
+               <Text style={{color: 'white', textAlign: 'center', fontSize: 20}}> COLLECTION </Text>
             </HeaderTextured>
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                 <TouchableOpacity onPress={() => {setCurrentPantheon('nordic')}}>
@@ -124,6 +124,7 @@ const MyCollection = ({navigation} : MyCollectionProps) => {
                 keyExtractor={(item) => item.name}
                 numColumns={2}
                 scrollEnabled= {true}
+                persistentScrollbar={true}
             />  
             </SafeAreaView>
             <Portal>
