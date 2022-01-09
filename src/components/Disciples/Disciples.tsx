@@ -19,7 +19,7 @@ const Disciples = ({fontColor = "white"}: DisciplesProps) => {
         color: fontColor,
         fontFamily: fonts.medium.fontFamily,
         fontWeight: fonts.medium.fontWeight,
-        fontSize: 27,
+        fontSize: 25,
     }
     return (
         <View style={disciplesStyle.containerDisciples}>

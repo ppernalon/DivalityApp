@@ -53,6 +53,11 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
         },
     ]
 
+    const pricePray: any = {
+        egyptian: 1500,
+        nordic: 1000,
+        greek: 500,
+    }
     const nordicLogo: any = require('@images/pantheon-logos/nordic.png')
     const nordicLogoNoColor: any = require('@images/pantheon-logos/nordic-nocolor.png')
     const greekLogo: any = require('@images/pantheon-logos/greek.png')
@@ -62,7 +67,7 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
 
     const renderItem = ({item}: any) => {
         return (
-            <TouchableOpacity onPress={() => onClickCard(item)} style={{margin: 15}}>
+            <TouchableOpacity onPress={() => onClickCard(item)} style={{marginHorizontal: 15, marginBottom:15}}>
                 <Card name={item.name} minimal={true} />
             </TouchableOpacity>
         )
@@ -114,18 +119,19 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     <Image source={currentPantheon === 'egyptian' ? egyptianLogo : egyptianLogoNoColor} />
                 </TouchableOpacity>
             </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 14}}>
                 <Disciples fontColor={fontColor[currentPantheon]} />
                 <TouchableOpacity
-                    style={{
-                        borderStyle: 'solid',
-                        borderColor: fontColor[currentPantheon],
-                        borderWidth: 2,
-                        borderRadius: 4,
-                        padding: 5,
-                        margin: 10,
-                    }}>
-                    <Text style={{color: fontColor[currentPantheon]}}> Prier </Text>
+                    style={[
+                        {
+                            borderColor: fontColor[currentPantheon],
+                        },
+                        myCollectionStyles.containerPrayDisciples,
+                    ]}>
+                    <Text style={{color: fontColor[currentPantheon], fontSize: 16}}> Prier </Text>
+                    <Image source={require('@images/icon_openHand.png')} style={[myCollectionStyles.iconPray, {marginRight: 13}]} />
+                    <Text style={{color: fontColor[currentPantheon]}}>{-pricePray[currentPantheon]}</Text>
+                    <Image source={require('@images/icon_disciple.png')} style={myCollectionStyles.iconPray} />
                 </TouchableOpacity>
             </View>
             <SafeAreaView style={myCollectionStyles.cardCollectionContainer}>
