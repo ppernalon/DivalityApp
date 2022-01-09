@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest --transformIgnorePatterns \"node_modules/(?!@toolz/allow)/\" --env=jsdom",
     "coverage": "jest --transformIgnorePatterns \"node_modules/(?!@toolz/allow)/\" --env=jsdom --coverage",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prettier": "prettier 'src/**/*.js'"
   },
   "dependencies": {
     "@react-navigation/native": "^6.0.6",
@@ -46,6 +47,14 @@
   },
   "resolutions": {
     "@types/react": "^17"
+  },
+  "prettier": {
+    "bracketSameLine": true,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "printWidth": 160,
+    "bracketSpacing": false
   },
   "jest": {
     "preset": "react-native",
