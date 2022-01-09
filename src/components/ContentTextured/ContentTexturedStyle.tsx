@@ -9,7 +9,7 @@ export const contentTexturedStyle = StyleSheet.create({
     backgroundFooter: {
         marginTop: 35,
         width: '100%',
-        height: 50,
+        height: '100%',
     },
     containerViewFooter: {
         display: 'flex',

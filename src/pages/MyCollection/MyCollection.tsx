@@ -94,7 +94,8 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     COLLECTION
                 </Text>
             </ContentTextured>
-            <View
+            <View style={{height: '78%'}}>
+                <View
                 style={{
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -166,6 +167,8 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     </View>
                 </Modal>
             </Portal>
+            </View>
+            
 
             <ContentTextured position={'footer'} children={<></>} />
         </View>

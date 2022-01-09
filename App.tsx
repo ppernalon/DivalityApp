@@ -5,6 +5,8 @@ import SignIn from './src/pages/SignIn/SignIn'
 import Menu from './src/pages/Menu/Menu'
 import SignUp from './src/pages/SignUp/SignUp'
 import MyCollection from './src/pages/MyCollection/MyCollection'
+import MyTeams from './src/pages/MyTeams/MyTeams'
+
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Provider } from 'react-redux'
@@ -21,7 +23,7 @@ const App = () => {
             <Stack.Screen name="SignUp" component={SignUp}/>
             <Stack.Screen name="Menu" component={Menu}/>
             <Stack.Screen name="Collection" component={MyCollection}/>
-            <Stack.Screen name="Teams" component={Menu}/>
+            <Stack.Screen name="Teams" component={MyTeams}/>
             <Stack.Screen name="Trade" component={Menu}/>
             <Stack.Screen name="Ranking" component={Menu}/>
           </Stack.Navigator>
