@@ -1,11 +1,11 @@
 import ReactIf from '@components/ReactIf'
-import React, { useEffect, useState } from 'react'
-import { View, Image } from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {View, Image} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { ActivityIndicator, Title, Text } from 'react-native-paper'
+import {ActivityIndicator, Title, Text} from 'react-native-paper'
 import CardServices from 'services/CardServices'
-import { colors } from "./../../GlobalStyle"
-import { cardStyle } from "./CardStyle"
+import {colors} from './../../GlobalStyle'
+import {cardStyle} from './CardStyle'
 
 type cardProps = {
     name: string
@@ -19,8 +19,8 @@ const Card = ({name, minimal = false}: cardProps) => {
     const [armor, setArmor] = useState<number>(0)
     const [power, setPower] = useState<number>(0)
     const [speed, setSpeed] = useState<number>(0)
-    const [ability, setAbility] = useState<string>("")
-    
+    const [ability, setAbility] = useState<string>('')
+
     useEffect(() => {
         CardServices.getCardByName(name).then((data: any) => {
             setLife(data.life)
@@ -46,7 +46,7 @@ const Card = ({name, minimal = false}: cardProps) => {
     if (pantheon === 'greek') {
         loadingCircleColor = colors.greekBlue
         globalCardStyle.push(cardStyle.greek)
-    } 
+    }
     if (pantheon === 'nordic') {
         loadingCircleColor = colors.nordicRed
         globalCardStyle.push(cardStyle.nordic)
@@ -55,15 +55,15 @@ const Card = ({name, minimal = false}: cardProps) => {
     return (
         <View style={globalCardStyle}>
             <ReactIf condition={isLoading}>
-                <ActivityIndicator color={loadingCircleColor}/>
+                <ActivityIndicator color={loadingCircleColor} />
             </ReactIf>
             <ReactIf condition={!isLoading}>
                 <React.Fragment>
-                    <Image style={minimal ? cardStyle.imageMinimalDim : cardStyle.imageNotMinimalDim} source={image}/>
-                    <LinearGradient 
-                        start={{x: 0, y: 0}} 
-                        end={{x: 1, y: 0}} 
-                        colors={[cardStyle.rarityHeadband.common.start, cardStyle.rarityHeadband.common.end]} 
+                    <Image style={minimal ? cardStyle.imageMinimalDim : cardStyle.imageNotMinimalDim} source={image} />
+                    <LinearGradient
+                        start={{x: 0, y: 0}}
+                        end={{x: 1, y: 0}}
+                        colors={[cardStyle.rarityHeadband.common.start, cardStyle.rarityHeadband.common.end]}
                         style={cardStyle.rarityHeadband}
                     />
                     <Title style={cardStyle.name}> {name} </Title>
@@ -72,25 +72,25 @@ const Card = ({name, minimal = false}: cardProps) => {
                             <View style={cardStyle.cardAttributesContainer}>
                                 <View style={cardStyle.cardAttributes}>
                                     <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.dot}/>
+                                        <View style={cardStyle.dot} />
                                     </View>
                                     <Text> {life} </Text>
                                 </View>
                                 <View style={cardStyle.cardAttributes}>
-                                <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.square}/>
+                                    <View style={{height: 40, width: 40}}>
+                                        <View style={cardStyle.square} />
                                     </View>
                                     <Text> {armor} </Text>
-                                </View> 
+                                </View>
                                 <View style={cardStyle.cardAttributes}>
                                     <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.arrowRight}/>
+                                        <View style={cardStyle.arrowRight} />
                                     </View>
                                     <Text> {power} </Text>
-                                </View> 
+                                </View>
                                 <View style={cardStyle.cardAttributes}>
                                     <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.arrowUp}/>
+                                        <View style={cardStyle.arrowUp} />
                                     </View>
                                     <Text> {speed} </Text>
                                 </View>
