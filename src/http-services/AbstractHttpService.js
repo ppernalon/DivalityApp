@@ -8,10 +8,9 @@ export default class AbstractHttpService{
         }
     }}
     static buildPath(){
-        return 'http://paul-pernalon.fr:5000'
+        return 'http://10.0.2.2:5000'
     }
     static getHttp(URL) {
-        console.log(this.buildPath() + URL)
         return axios.get(this.buildPath() + URL);
     }
     static postHttp(URL, body){

@@ -7,6 +7,7 @@ import { checkBeforeSubmitFunction, divalityFormProps, formField, formStateType 
 import { colors } from "../../GlobalStyle"
 
 const DivalityForm = ({
+        errorBack = '',
         formName,
         fields,
         onSubmit,
@@ -18,7 +19,7 @@ const DivalityForm = ({
     }: divalityFormProps) => {
     
     let [formState, setFormState] = useState<formStateType>(DivalityForm.initFormState(fields))
-    let [formError, setFormError] = useState<string>("")
+    let [formError, setFormError] = useState<string>('')
 
     const {fonts} = useTheme()
     const fontStyle = { 
@@ -38,9 +39,9 @@ const DivalityForm = ({
                 { DivalityForm.buildForms(formState, setFormState, setFormError) }
             </View>
 
-            <View style={formError.length > 0 ? style.formError : null}>
+            <View style={formError.length > 0 || errorBack.length > 0 ? style.formError : null}>
                 <Text style={style.formError.text}> 
-                    {formError}
+                    {errorBack + formError}
                 </Text>
             </View>
 
