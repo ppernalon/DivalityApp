@@ -8,20 +8,20 @@ CardServices.getPantheonByName = (name: string): string => {
         case "bastet":
         case "horus":
         case "osiris":
-            pantheon = 'egyptian'  
+            pantheon = 'Egypt'  
             break
         case "athena":
         case "hades":
         case "poseidon":
         case "zeus":
-            pantheon = 'greek'  
+            pantheon = 'Grec'  
             break
         case "hel":
         case "odin":
         case "thor":
         case "ymir":
         default:
-            pantheon = 'nordic'
+            pantheon = 'Nordic'
             break
     }
     return pantheon

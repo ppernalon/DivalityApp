@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {FlatList, Image, SafeAreaView, ScrollView, View} from 'react-native'
 import {IconButton, Modal, Portal, Text} from 'react-native-paper'
 import ContentTextured from 'components/ContentTextured/ContentTextured'
@@ -15,64 +15,43 @@ type MyCollectionProps = {
 }
 
 const MyCollection = ({navigation}: MyCollectionProps) => {
-    const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
-    const [egyptianCards, setEgyptianCards] = useState<string[]>([])
-    const [greekCards, setGreekCards] = useState<string[]>([])
-    const [nordicCards, setNordicCards] = useState<string[]>([])
+    const [currentPantheon, setCurrentPantheon] = useState<string>('Egypt')
+    const [EgyptCards, setEgyptCards] = useState<string[]>([])
+    const [GrecCards, setGrecCards] = useState<string[]>([])
+    const [NordicCards, setNordicCards] = useState<string[]>([])
     const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false)
     const [nameCardDialog, setNameCardDialog] = useState<string>('')
+    const [collectionData, setCollectionData] = useState<{[pantheon: string]: string[]}>({})
+    const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
 
-    MyCollection.loadDataCollection()
+    const ws = useSelector(selectWs)
+
+    useEffect(() => {
+        MyCollection.loadDataCollection(setCollectionData, setIsDataLoad, ws)
+    }, [ws])
 
     const fontColor: any = {
-        egyptian: colors.egyptianYellow,
-        nordic: colors.nordicRed,
-        greek: colors.greekBlue,
+        Egypt: colors.EgyptYellow,
+        Nordic: colors.NordicRed,
+        Grec: colors.GrecBlue,
     }
-
-    const MockCardCollection = [
-        {
-            name: 'anubis',
-        },
-        {
-            name: 'bastet',
-        },
-        {
-            name: 'horus',
-        },
-        {
-            name: 'osiris',
-        },
-        {
-            name: 'osiris',
-        },
-        {
-            name: 'anubis',
-        },
-        {
-            name: 'bastet',
-        },
-        {
-            name: 'horus',
-        },
-    ]
 
     const pricePray: any = {
-        egyptian: 1500,
-        nordic: 1000,
-        greek: 500,
+        Egypt: 1500,
+        Nordic: 1000,
+        Grec: 500,
     }
-    const nordicLogo: any = require('@images/pantheon-logos/nordic.png')
-    const nordicLogoNoColor: any = require('@images/pantheon-logos/nordic-nocolor.png')
-    const greekLogo: any = require('@images/pantheon-logos/greek.png')
-    const greekLogoNoColor: any = require('@images/pantheon-logos/greek-nocolor.png')
-    const egyptianLogo: any = require('@images/pantheon-logos/egyptian.png')
-    const egyptianLogoNoColor: any = require('@images/pantheon-logos/egyptian-nocolor.png')
+    const NordicLogo: any = require('@images/pantheon-logos/nordic.png')
+    const NordicLogoNoColor: any = require('@images/pantheon-logos/nordic-nocolor.png')
+    const GrecLogo: any = require('@images/pantheon-logos/greek.png')
+    const GrecLogoNoColor: any = require('@images/pantheon-logos/greek-nocolor.png')
+    const EgyptLogo: any = require('@images/pantheon-logos/egyptian.png')
+    const EgyptLogoNoColor: any = require('@images/pantheon-logos/egyptian-nocolor.png')
 
     const renderItem = ({item}: any) => {
         return (
             <TouchableOpacity onPress={() => onClickCard(item)} style={{marginHorizontal: 15, marginBottom: 15}}>
-                <Card name={item.name} minimal={true} />
+                <Card name={item} minimal={true} />
             </TouchableOpacity>
         )
     }
@@ -107,21 +86,21 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     }}>
                     <TouchableOpacity
                         onPress={() => {
-                            setCurrentPantheon('nordic')
+                            setCurrentPantheon('Nordic')
                         }}>
-                        <Image source={currentPantheon === 'nordic' ? nordicLogo : nordicLogoNoColor} />
+                        <Image source={currentPantheon === 'Nordic' ? NordicLogo : NordicLogoNoColor} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            setCurrentPantheon('greek')
+                            setCurrentPantheon('Grec')
                         }}>
-                        <Image source={currentPantheon === 'greek' ? greekLogo : greekLogoNoColor} />
+                        <Image source={currentPantheon === 'Grec' ? GrecLogo : GrecLogoNoColor} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            setCurrentPantheon('egyptian')
+                            setCurrentPantheon('Egypt')
                         }}>
-                        <Image source={currentPantheon === 'egyptian' ? egyptianLogo : egyptianLogoNoColor} />
+                        <Image source={currentPantheon === 'Egypt' ? EgyptLogo : EgyptLogoNoColor} />
                     </TouchableOpacity>
                 </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 14}}>
@@ -140,14 +119,18 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     </TouchableOpacity>
                 </View>
                 <SafeAreaView style={myCollectionStyles.cardCollectionContainer}>
-                    <FlatList
-                        data={MockCardCollection}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.name}
-                        numColumns={2}
-                        scrollEnabled={true}
-                        persistentScrollbar={true}
-                    />
+                    {isDataLoad ? (
+                        <FlatList
+                            data={collectionData[currentPantheon]}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item}
+                            numColumns={2}
+                            scrollEnabled={true}
+                            persistentScrollbar={true}
+                        />
+                    ) : (
+                        <></>
+                    )}
                 </SafeAreaView>
                 <Portal>
                     <Modal
@@ -177,26 +160,18 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
         </View>
     )
 }
-MyCollection.loadDataCollection = () => {
-    let ws = useSelector(selectWs)
-    ws.onopen = () => {
-        console.log('its open')
-
-        ws.send(
-            JSON.stringify({
-                type: 'connection',
-                username: 'Joulie',
-            })
-        )
-    }
-    ws.addEventListener('open', () => {
-        ws.send('Hello Server!')
-        console.log('Open with event listener')
-    })
+MyCollection.loadDataCollection = (setCollectionData: Function, setIsDataLoad: Function, ws: any) => {
+    ws.send(
+        JSON.stringify({
+            type: 'collection',
+            username: 'test2',
+        })
+    )
     ws.onmessage = (e: any) => {
-        console.log(e)
+        let dataCollection = JSON.parse(e.data)
+        setCollectionData(dataCollection.data)
+        setIsDataLoad(true)
     }
-    console.log(ws)
 }
 
 export default MyCollection
