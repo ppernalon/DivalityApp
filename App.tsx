@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Provider } from 'react-redux'
 import store from './src/store/store'
+import TeamModification from './src/pages/TeamModification/TeamModification'
 
 const App = () => {
   const Stack = createNativeStackNavigator()
@@ -22,6 +23,8 @@ const App = () => {
             <Stack.Screen name="SignIn" component={SignIn}/>
             <Stack.Screen name="SignUp" component={SignUp}/>
             <Stack.Screen name="Menu" component={Menu}/>
+            <Stack.Screen name="TeamModification" component={TeamModification}/>
+
             <Stack.Screen name="Collection" component={MyCollection}/>
             <Stack.Screen name="Teams" component={MyTeams}/>
             <Stack.Screen name="Trade" component={Menu}/>

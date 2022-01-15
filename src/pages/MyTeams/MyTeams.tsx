@@ -29,7 +29,12 @@ const MyTeams = ({navigation}: MyTeams) => {
                 oneTeamConstruction.push(<Image key={teamConstruction.length + oneTeamConstruction.length} source={uri} style={myTeamsStyles.imageDivinity} />)
             })
             teamConstruction.push(
-                <TouchableOpacity onPress={() => {}} key={teamConstruction.length} style={myTeamsStyles.buttonTeamContainer}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('TeamModification', {teamToModify:  myTeamsData[team]})
+                    }}
+                    key={teamConstruction.length}
+                    style={myTeamsStyles.buttonTeamContainer}>
                     <View style={myTeamsStyles.firstRowTeamContainer}>
                         <Image source={require('@images/icon_editButton.png')} style={myTeamsStyles.editButtonImage} />
 
