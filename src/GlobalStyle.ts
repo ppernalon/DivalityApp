@@ -5,9 +5,9 @@ export const colors = {
     blueSky: "#49C5FF",
     primaryBlue: "#2A82C5",
     errorRed: "red",
-    EgyptYellow: '#FFC400',
-    NordicRed: "red",
-    GrecBlue: "blue"
+    egyptianYellow: '#FFC400',
+    nordicRed: "red",
+    greekBlue: "blue"
 }
 
 export const globalStyle = StyleSheet.create({

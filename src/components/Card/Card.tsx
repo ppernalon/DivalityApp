@@ -33,23 +33,23 @@ const Card = ({name, minimal = false}: cardProps) => {
         })
     }, [name])
 
-    let loadingCircleColor: string = colors.EgyptYellow
+    let loadingCircleColor: string = colors.egyptianYellow
     const pantheon: string = CardServices.getPantheonByName(name)
     const globalCardStyle: any[] = [cardStyle.card]
     if (minimal) globalCardStyle.push(cardStyle.minimalDim)
     if (!minimal) globalCardStyle.push(cardStyle.notMinimalDim)
     if (isLoading) globalCardStyle.push(cardStyle.cardIsLoading)
-    if (pantheon === 'Egypt') {
-        loadingCircleColor = colors.EgyptYellow
-        globalCardStyle.push(cardStyle.Egypt)
+    if (pantheon === 'egyptian') {
+        loadingCircleColor = colors.egyptianYellow
+        globalCardStyle.push(cardStyle.egyptian)
     }
-    if (pantheon === 'Grec') {
-        loadingCircleColor = colors.GrecBlue
-        globalCardStyle.push(cardStyle.Grec)
+    if (pantheon === 'greek') {
+        loadingCircleColor = colors.greekBlue
+        globalCardStyle.push(cardStyle.greek)
     }
-    if (pantheon === 'Nordic') {
-        loadingCircleColor = colors.NordicRed
-        globalCardStyle.push(cardStyle.Nordic)
+    if (pantheon === 'nordic') {
+        loadingCircleColor = colors.nordicRed
+        globalCardStyle.push(cardStyle.nordic)
     }
 
     return (

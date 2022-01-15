@@ -15,10 +15,10 @@ type MyCollectionProps = {
 }
 
 const MyCollection = ({navigation}: MyCollectionProps) => {
-    const [currentPantheon, setCurrentPantheon] = useState<string>('Egypt')
-    const [EgyptCards, setEgyptCards] = useState<string[]>([])
-    const [GrecCards, setGrecCards] = useState<string[]>([])
-    const [NordicCards, setNordicCards] = useState<string[]>([])
+    const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
+    const [egyptianCards, setegyptianCards] = useState<string[]>([])
+    const [greekCards, setgreekCards] = useState<string[]>([])
+    const [nordicCards, setnordicCards] = useState<string[]>([])
     const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false)
     const [nameCardDialog, setNameCardDialog] = useState<string>('')
     const [collectionData, setCollectionData] = useState<{[pantheon: string]: string[]}>({})
@@ -31,22 +31,22 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
     }, [ws])
 
     const fontColor: any = {
-        Egypt: colors.EgyptYellow,
-        Nordic: colors.NordicRed,
-        Grec: colors.GrecBlue,
+        egyptian: colors.egyptianYellow,
+        nordic: colors.nordicRed,
+        greek: colors.greekBlue,
     }
 
     const pricePray: any = {
-        Egypt: 1500,
-        Nordic: 1000,
-        Grec: 500,
+        egyptian: 1500,
+        nordic: 1000,
+        greek: 500,
     }
-    const NordicLogo: any = require('@images/pantheon-logos/nordic.png')
-    const NordicLogoNoColor: any = require('@images/pantheon-logos/nordic-nocolor.png')
-    const GrecLogo: any = require('@images/pantheon-logos/greek.png')
-    const GrecLogoNoColor: any = require('@images/pantheon-logos/greek-nocolor.png')
-    const EgyptLogo: any = require('@images/pantheon-logos/egyptian.png')
-    const EgyptLogoNoColor: any = require('@images/pantheon-logos/egyptian-nocolor.png')
+    const nordicLogo: any = require('@images/pantheon-logos/nordic.png')
+    const nordicLogoNoColor: any = require('@images/pantheon-logos/nordic-nocolor.png')
+    const greekLogo: any = require('@images/pantheon-logos/greek.png')
+    const greekLogoNoColor: any = require('@images/pantheon-logos/greek-nocolor.png')
+    const egyptianLogo: any = require('@images/pantheon-logos/egyptian.png')
+    const egyptianLogoNoColor: any = require('@images/pantheon-logos/egyptian-nocolor.png')
 
     const renderItem = ({item}: any) => {
         return (
@@ -86,21 +86,21 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     }}>
                     <TouchableOpacity
                         onPress={() => {
-                            setCurrentPantheon('Nordic')
+                            setCurrentPantheon('nordic')
                         }}>
-                        <Image source={currentPantheon === 'Nordic' ? NordicLogo : NordicLogoNoColor} />
+                        <Image source={currentPantheon === 'nordic' ? nordicLogo : nordicLogoNoColor} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            setCurrentPantheon('Grec')
+                            setCurrentPantheon('greek')
                         }}>
-                        <Image source={currentPantheon === 'Grec' ? GrecLogo : GrecLogoNoColor} />
+                        <Image source={currentPantheon === 'greek' ? greekLogo : greekLogoNoColor} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            setCurrentPantheon('Egypt')
+                            setCurrentPantheon('egyptian')
                         }}>
-                        <Image source={currentPantheon === 'Egypt' ? EgyptLogo : EgyptLogoNoColor} />
+                        <Image source={currentPantheon === 'egyptian' ? egyptianLogo : egyptianLogoNoColor} />
                     </TouchableOpacity>
                 </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 14}}>

@@ -18,14 +18,14 @@ export const cardStyle = StyleSheet.create({
         width: 290,
         height: 500
     },
-    Egypt: {
-        borderColor: colors.EgyptYellow
+    egyptian: {
+        borderColor: colors.egyptianYellow
     },
-    Nordic: {
-        borderColor: colors.NordicRed
+    nordic: {
+        borderColor: colors.nordicRed
     },
-    Grec: {
-        borderColor: colors.GrecBlue
+    greek: {
+        borderColor: colors.greekBlue
     },
     imageMinimalDim: {
         width: "100%",
