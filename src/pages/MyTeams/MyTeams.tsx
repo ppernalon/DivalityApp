@@ -11,13 +11,11 @@ type MyTeams = {
     navigation: any
 }
 
-
-
 const MyTeams = ({navigation}: MyTeams) => {
     const ws = useSelector(selectWs)
     const [myTeamsData, setMyTeamsData] = useState<{compo: string[]; name: string}[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
-
+    const nberOfTeams = 3
     useEffect(() => {
         MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws)
     }, [ws])
@@ -41,6 +39,22 @@ const MyTeams = ({navigation}: MyTeams) => {
                 </TouchableOpacity>
             )
         }
+        for (let i = 0; i < nberOfTeams - myTeamsData.length; i++) {
+            let oneTeamConstruction: JSX.Element[] = []
+            for (let i = 1; i < 7; i++) {
+                oneTeamConstruction.push(<View style={myTeamsStyles.emptyDivinity} key={teamConstruction.length + oneTeamConstruction.length} />)
+            }
+            teamConstruction.push(
+                <TouchableOpacity onPress={() => {}} key={teamConstruction.length} style={myTeamsStyles.buttonTeamContainer}>
+                    <View style={myTeamsStyles.firstRowTeamContainer}>
+                        <Image source={require('@images/icon_addButton.png')} style={myTeamsStyles.editButtonImage} />
+
+                        <Text style={myTeamsStyles.teamNameText}> Ajouter une équipe </Text>
+                    </View>
+                    <View style={myTeamsStyles.secondRowTeamContainer}>{oneTeamConstruction}</View>
+                </TouchableOpacity>
+            )
+        }
         return teamConstruction
     }
     return (
@@ -55,7 +69,7 @@ const MyTeams = ({navigation}: MyTeams) => {
                     MES ÉQUIPES
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', width:'100%', alignItems: 'center'}}>{isDataLoad ? renderTeam() : <></>}</View>
+            <View style={{height: '78%', width: '100%', alignItems: 'center'}}>{isDataLoad ? renderTeam() : <></>}</View>
             <ContentTextured position={'footer'} />
         </View>
     )

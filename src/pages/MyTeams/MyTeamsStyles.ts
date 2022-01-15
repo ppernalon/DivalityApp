@@ -4,9 +4,10 @@ import {StyleSheet, StatusBar} from 'react-native'
 export const myTeamsStyles = StyleSheet.create({
     buttonTeamContainer: {
         width: '70%',
-        marginVertical: 20,
+        marginTop: 17,
     },
     firstRowTeamContainer: {
+        alignItems:'center',
         flexDirection: 'row',
         marginBottom: 15,
     },
@@ -16,8 +17,14 @@ export const myTeamsStyles = StyleSheet.create({
         flexDirection: 'row',
     },
     imageDivinity: {
-        height: 60,
-        width: 60,
+        height: 55,
+        width: 55,
+        margin: 3
+    },
+    emptyDivinity:{
+        backgroundColor: colors.blueSky,
+        height: 55,
+        width: 55,
         margin: 3
     },
     teamNameText: {
@@ -26,8 +33,8 @@ export const myTeamsStyles = StyleSheet.create({
     },
     editButtonImage: {
         resizeMode: 'contain',
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         marginRight: 12,
     },
 })
