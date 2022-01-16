@@ -43,19 +43,16 @@ const SignIn = ({navigation}: SignInProps) => {
                 username: formState.pseudo.value,
                 password: formState.password.value,
             }
+            setErrorBack('')
             SignInHttpService.signIn(formStateApi)
                 .then(() => {
                     navigation.navigate('Menu')
-                    setErrorBack('')
                 })
                 .catch((err) => {
                     const error = JSON.parse(JSON.stringify(err)).status
                     if (error === 401) {
-                        console.log(error)
                         setErrorBack('Mot de passe ou pseudo incorrect')
                     } else {
-                        console.log(error)
-
                         setErrorBack('La connection a échoué')
                     }
                 })

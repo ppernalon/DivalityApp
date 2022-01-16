@@ -19,7 +19,7 @@ const DivalityForm = ({
 }: divalityFormProps) => {
     let [formState, setFormState] = useState<formStateType>(DivalityForm.initFormState(fields))
     let [formError, setFormError] = useState<string>('')
-    let [errorBackToDisplay, setErrorBackToDisplay] = useState(errorBack)
+    let [isErrorBackToDiplay, setIsErrorBackToDisplay] = useState<boolean>(false)
 
     const {fonts} = useTheme()
     const fontStyle = {
@@ -33,10 +33,13 @@ const DivalityForm = ({
                 <Title>{formName}</Title>
             </ReactIf>
 
-            <View>{DivalityForm.buildForms(formState, setFormState, setFormError, setErrorBackToDisplay)}</View>
+            <View>{DivalityForm.buildForms(formState, setFormState, setFormError, setIsErrorBackToDisplay)}</View>
 
-            <View style={formError.length > 0 || errorBackToDisplay.length > 0 ? style.formError : null}>
-                <Text style={style.formError.text}>{errorBackToDisplay + formError}</Text>
+            <View style={formError.length > 0 || (isErrorBackToDiplay && errorBack !== '') ? style.formError : null}>
+                <Text style={style.formError.text}>
+                    {isErrorBackToDiplay ? errorBack : ''}
+                    {formError}
+                </Text>
             </View>
 
             <View style={style.buttonRow}>
@@ -49,7 +52,9 @@ const DivalityForm = ({
                 <Button
                     style={[{width: showCancelButton ? '47%' : '100%'}]}
                     mode="contained"
-                    onPress={() => DivalityForm.onFormValidate(formState, onSubmit, setErrorBackToDisplay, errorBack, formError)}>
+                    onPress={() => {
+                        DivalityForm.onFormValidate(formState, onSubmit, formError, setIsErrorBackToDisplay)
+                    }}>
                     <Text style={fontStyle}>{submitButtonText}</Text>
                 </Button>
             </View>
@@ -57,10 +62,10 @@ const DivalityForm = ({
     )
 }
 
-DivalityForm.onFormValidate = (formState: formStateType, onSubmit: Function, setErrorBackToDisplay: Function, errorBack: string, formError: string) => {
+DivalityForm.onFormValidate = (formState: formStateType, onSubmit: Function, formError: string, setIsErrorBackToDisplay: Function) => {
     if (formError.length === 0) {
         onSubmit(formState)
-        setErrorBackToDisplay(errorBack)
+        setIsErrorBackToDisplay(true)
     }
 }
 
@@ -82,7 +87,7 @@ DivalityForm.initFormState = (fields: formField[]) => {
     return newFormState
 }
 
-DivalityForm.buildForms = (formState: formStateType, setFormState: Function, setFormError: Function, setErrorBackToDisplay: Function) => {
+DivalityForm.buildForms = (formState: formStateType, setFormState: Function, setFormError: Function, setIsErrorBackToDisplay: Function) => {
     const formStateKeys = Object.keys(formState)
     return formStateKeys.map((inputKey: string) => {
         const field = formState[inputKey]
@@ -102,7 +107,7 @@ DivalityForm.buildForms = (formState: formStateType, setFormState: Function, set
                         value={field.value}
                         placeholder={field.placeholder}
                         onBlur={() => DivalityForm.checkField(inputKey, formState, setFormState, setFormError)}
-                        onChangeText={(newValue) => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState, setErrorBackToDisplay)}
+                        onChangeText={(newValue) => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState, setIsErrorBackToDisplay)}
                     />
                 )
                 break
@@ -120,7 +125,7 @@ DivalityForm.buildForms = (formState: formStateType, setFormState: Function, set
                         value={field.value}
                         placeholder={field.placeholder}
                         onBlur={() => DivalityForm.checkField(inputKey, formState, setFormState, setFormError)}
-                        onChangeText={(newValue) => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState, setErrorBackToDisplay)}
+                        onChangeText={(newValue) => DivalityForm.onValueChange(inputKey, newValue, formState, setFormState, setIsErrorBackToDisplay)}
                     />
                 )
                 break
@@ -174,11 +179,11 @@ DivalityForm.checkField = (key: string, formState: formStateType, setFormState: 
     setFormState(newSateForm)
 }
 
-DivalityForm.onValueChange = (key: string, newValue: string, formState: formStateType, setFormState: Function, setErrorBackToDisplay: Function) => {
+DivalityForm.onValueChange = (key: string, newValue: string, formState: formStateType, setFormState: Function, setIsErrorBackToDisplay: Function) => {
     const newSateForm = {...formState}
     newSateForm[key].value = newValue
     setFormState(newSateForm)
-    setErrorBackToDisplay('')
+    setIsErrorBackToDisplay(false)
 }
 
 export default withTheme(DivalityForm)

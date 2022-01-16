@@ -43,10 +43,10 @@ const SignUp = ({navigation}: SignUpProps) => {
             let formStateApi = {
                 username: formState.pseudo.value,
                 password: formState.password.value,
-            }
+            }  
+            setErrorBack('')
             SignUpHttpService.signUp(formStateApi)
                 .then(() => {
-                    setErrorBack('')
                     navigation.navigate('Menu')
                 })
                 .catch((err) => {

@@ -29,7 +29,7 @@ export type formStateType = {
 }
 
 export type divalityFormProps = {
-    errorBack?: string
+    errorBack?: string,
     theme: any
     formName: string
     fields: formField[]
