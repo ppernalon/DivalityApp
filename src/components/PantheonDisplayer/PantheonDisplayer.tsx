@@ -12,7 +12,6 @@ import {incrementByAmount} from '../Disciples//DisciplesSlice'
 import {useSelector, useDispatch} from 'react-redux'
 import wsService from '../../ws-services/WsService'
 
-
 type PantheonDisplayerProps = {
     navigation?: any
     isPrayDisponible: boolean
@@ -33,7 +32,7 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: Pantheon
     const dispatch = useDispatch()
     let animation = useRef<any>(new Animated.Value(0)).current
     const ws = wsService.getWs()
-    
+
     useEffect(() => {
         PantheonDisplayer.loadDataCollection(setCollectionData, setIsDataLoad, ws)
     }, [ws])
@@ -80,7 +79,7 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: Pantheon
                     onPress={() => {
                         setCurrentPantheon('greek')
                     }}>
-                    <Image source={currentPantheon === 'greek' ? greekLogo : greekLogoNoColor}/>
+                    <Image source={currentPantheon === 'greek' ? greekLogo : greekLogoNoColor} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
