@@ -4,15 +4,15 @@ import {TouchableOpacity, View, Button, Image} from 'react-native'
 import {Text} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import CardServices from 'services/CardServices'
-import {selectWs} from 'ws-services/WsSlice'
 import {myTeamsStyles} from './MyTeamsStyles'
+import wsService from '../../ws-services/WsService'
 
 type MyTeams = {
     navigation: any
 }
 
 const MyTeams = ({navigation}: MyTeams) => {
-    const ws = useSelector(selectWs)
+    const ws = wsService.getWs()
     const [myTeamsData, setMyTeamsData] = useState<{compo: string[]; name: string}[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const nberOfTeams = 3
@@ -31,7 +31,7 @@ const MyTeams = ({navigation}: MyTeams) => {
             teamConstruction.push(
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('TeamModification', {teamToModify:  myTeamsData[team]})
+                        navigation.navigate('TeamModification', {teamToModify: myTeamsData[team]})
                     }}
                     key={teamConstruction.length}
                     style={myTeamsStyles.buttonTeamContainer}>
@@ -50,7 +50,15 @@ const MyTeams = ({navigation}: MyTeams) => {
                 oneTeamConstruction.push(<View style={myTeamsStyles.emptyDivinity} key={teamConstruction.length + oneTeamConstruction.length} />)
             }
             teamConstruction.push(
-                <TouchableOpacity onPress={() => {}} key={teamConstruction.length} style={myTeamsStyles.buttonTeamContainer}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('TeamModification', {teamToModify: {
+                            compo: ["empty", "empty", "empty", "empty", "empty", "empty"],
+                            name: "Nouvelle Équipe"
+                        }})
+                    }}
+                    key={teamConstruction.length}
+                    style={myTeamsStyles.buttonTeamContainer}>
                     <View style={myTeamsStyles.firstRowTeamContainer}>
                         <Image source={require('@images/icon_addButton.png')} style={myTeamsStyles.editButtonImage} />
 

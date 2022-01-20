@@ -9,6 +9,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import DivilityLogo from '@components/DivalityLogo/DivalityLogo'
 import {Text} from 'react-native-paper'
 import SignInHttpService from 'http-services/SignInHttpService'
+import wsService from 'ws-services/WsService'
 
 type SignInProps = {
     navigation: any
@@ -46,6 +47,7 @@ const SignIn = ({navigation}: SignInProps) => {
             setErrorBack('')
             SignInHttpService.signIn(formStateApi)
                 .then(() => {
+                    wsService.openWs()
                     navigation.navigate('Menu')
                 })
                 .catch((err) => {

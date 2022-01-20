@@ -1,11 +1,12 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useState} from 'react'
-import {Image, TouchableOpacity, View} from 'react-native'
-import {IconButton, Text} from 'react-native-paper'
+import {Image, TouchableOpacity, View, TextInput} from 'react-native'
+import {IconButton, Text, useTheme} from 'react-native-paper'
 import CardServices from '../../services/CardServices'
 import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
 import {teamModificationStyles} from './TeamModificationStyles'
-
+import {colors} from '../../GlobalStyle'
+import {transform} from '@babel/core'
 type TeamModificationProps = {
     navigation: any
     route: any
@@ -15,6 +16,14 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     const [currentDivinity, setCurrentDivinity] = useState<string>(teamToModify.compo[0])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [listOfDivinity, setListOfDivinity] = useState<string[]>(teamToModify.compo)
+    const [nameOfTeam, setNameOfTeam] = useState<string>(teamToModify.name)
+    const {fonts} = useTheme()
+    const fontStyle = {
+        color: 'white',
+        fontFamily: fonts.medium.fontFamily,
+        fontWeight: fonts.medium.fontWeight,
+        fontSize: 20,
+    }
 
     const displayImageDivinity = (listOfDivinity: string[]) => {
         let teamConstruction: JSX.Element[] = []
@@ -28,7 +37,19 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
                     }}
                     key={teamConstruction.length}
                     style={teamModificationStyles.imageDivinityButton}>
-                    <Image source={uri} style={teamModificationStyles.imageDivinity} />
+                    {name === 'empty' ? (
+                        <View style={teamModificationStyles.emptyDivinity}>
+                            <IconButton
+                                icon="pencil"
+                                color="white"
+                                style={teamModificationStyles.pencilIconWithoutBorder}
+                                hasTVPreferredFocus={undefined}
+                                tvParallaxProperties={undefined}
+                            />
+                        </View>
+                    ) : (
+                        <Image source={uri} style={teamModificationStyles.imageDivinity} />
+                    )}
                     {currentIndex === index ? (
                         <IconButton
                             icon="pencil"
@@ -49,18 +70,26 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     return (
         <View style={{height: '100%', width: '100%', marginBottom: 50}}>
             <ContentTextured position={'header'}>
-                <Text
-                    style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        fontSize: 20,
-                    }}>
-                    {teamToModify.name}
-                </Text>
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                    <TextInput
+                        onChangeText={setNameOfTeam}
+                        selectionColor={colors.primaryBlue}
+                        value={nameOfTeam}
+                        style={[
+                            {
+                                width: '80%',
+                                backgroundColor: 'transparent',
+                                textAlign: 'center',
+                                borderWidth: 0,
+                                borderColor: 'transparent',
+                            },
+                            fontStyle,
+                        ]}></TextInput>
+                </View>
             </ContentTextured>
             <View style={{height: '78%', width: '100%', alignItems: 'center', paddingTop: 20}}>
-                {displayImageDivinity(listOfDivinity)}
-                <View style={{height: '70%'}}>
+                <View  style={{width: '70%',  alignItems: 'center'}}>{displayImageDivinity(listOfDivinity)}</View>
+                <View style={{height: '60%'}}>
                     <PantheonDisplayer
                         isPrayDisponible={false}
                         onClickCard={(name: string, currentPantheon: string) => {

@@ -8,7 +8,6 @@ import {TouchableOpacity} from 'react-native'
 import Card from 'components/Card/Card'
 import {myCollectionStyles} from './MyCollectionStyles'
 import {useSelector} from 'react-redux'
-import {selectWs} from '../../ws-services/WsSlice'
 import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
 
 type MyCollectionProps = {
