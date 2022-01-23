@@ -1,5 +1,5 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Image, TouchableOpacity, View, TextInput} from 'react-native'
 import {IconButton, Text, useTheme} from 'react-native-paper'
 import CardServices from '../../services/CardServices'
@@ -7,16 +7,23 @@ import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
 import {teamModificationStyles} from './TeamModificationStyles'
 import {colors} from '../../GlobalStyle'
 import {transform} from '@babel/core'
+import wsService from '../../ws-services/WsService'
 type TeamModificationProps = {
     navigation: any
     route: any
 }
 const TeamModification = ({route, navigation}: TeamModificationProps) => {
+    const ws = wsService.getWs()
     const {teamToModify} = route.params
     const [currentDivinity, setCurrentDivinity] = useState<string>(teamToModify.compo[0])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
-    const [listOfDivinity, setListOfDivinity] = useState<string[]>(teamToModify.compo)
+    const [listOfDivinityTeam, setListOfDivinityTeam] = useState<string[]>(teamToModify.compo)
     const [nameOfTeam, setNameOfTeam] = useState<string>(teamToModify.name)
+    const [oldNameOfTeam, setOldNameOfTeam] = useState<string>(teamToModify.name)
+    const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
+    const [initialDataCollectionWithOccurence, setInitialDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
+    const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
+
     const {fonts} = useTheme()
     const fontStyle = {
         color: 'white',
@@ -24,10 +31,67 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         fontWeight: fonts.medium.fontWeight,
         fontSize: 20,
     }
+    useEffect(() => {
+        loadDataCollection()
+    }, [ws])
 
-    const displayImageDivinity = (listOfDivinity: string[]) => {
+    const loadDataCollection = () => {
+        ws.send(
+            JSON.stringify({
+                type: 'collection',
+                username: 'test2',
+            })
+        )
+        ws.onmessage = (e: any) => {
+            let dataCollection = JSON.parse(e.data)
+
+            let dataCollectionWithUniqueItemTemp: {[pantheon: string]: string[]} = {
+                egyptian: [],
+                greek: [],
+                nordic: [],
+            }
+            let dataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
+                egyptian: {},
+                greek: {},
+                nordic: {},
+            }
+            let initialDataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
+                egyptian: {},
+                greek: {},
+                nordic: {},
+            }
+            for (const pantheon in dataCollectionWithUniqueItemTemp) {
+                dataCollection.data[pantheon].forEach((divinity: string) => {
+                    if (!dataCollectionWithUniqueItemTemp[pantheon].includes(divinity)) {
+                        dataCollectionWithUniqueItemTemp[pantheon].push(divinity)
+                        const numberOccurence = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
+                        initialDataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
+                        dataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
+                    }
+                })
+            }
+            setInitialDataCollectionWithOccurence(initialDataCollectionWithOccurenceTemp)
+            changeOccurence(dataCollectionWithOccurenceTemp, listOfDivinityTeam)
+            setIsDataLoad(true)
+        }
+    }
+
+    const changeOccurence = (initialDataCollectionWithOccurence: {[pantheon: string]: {[divinity: string]: number}}, listOfDivinityTeam:string[] ) => {
+        let dataWithOccurrenceTemp = JSON.parse(JSON.stringify(initialDataCollectionWithOccurence))
+        for (const pantheon in initialDataCollectionWithOccurence) {
+            for (const divinity in initialDataCollectionWithOccurence[pantheon]) {
+                const occurenceInTeam = listOfDivinityTeam.filter((x: string) => x === divinity).length
+                if (occurenceInTeam !== undefined) {
+                    dataWithOccurrenceTemp[pantheon][divinity] -= occurenceInTeam
+                }
+            }
+        }
+        setDataCollectionWithOccurence(dataWithOccurrenceTemp)
+    }
+
+    const displayImageDivinity = (listOfDivinityTeam: string[]) => {
         let teamConstruction: JSX.Element[] = []
-        listOfDivinity.forEach((name: string, index: number) => {
+        listOfDivinityTeam.forEach((name: string, index: number) => {
             let uri: any = CardServices.getImageByName(name)
             teamConstruction.push(
                 <TouchableOpacity
@@ -70,33 +134,45 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     return (
         <View style={{height: '100%', width: '100%', marginBottom: 50}}>
             <ContentTextured position={'header'}>
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
                     <TextInput
                         onChangeText={setNameOfTeam}
                         selectionColor={colors.primaryBlue}
                         value={nameOfTeam}
                         style={[
                             {
-                                width: '80%',
                                 backgroundColor: 'transparent',
                                 textAlign: 'center',
                                 borderWidth: 0,
                                 borderColor: 'transparent',
                             },
                             fontStyle,
-                        ]}></TextInput>
+                        ]}
+                    />
+                    <IconButton
+                        icon={'check-decagram'}
+                        color="white"
+                        onPress={() => {
+                            TeamModification.validationTeam(listOfDivinityTeam, nameOfTeam, oldNameOfTeam, ws)
+                        }}
+                        hasTVPreferredFocus={undefined}
+                        tvParallaxProperties={undefined}
+                    />
                 </View>
             </ContentTextured>
             <View style={{height: '78%', width: '100%', alignItems: 'center', paddingTop: 20}}>
-                <View  style={{width: '70%',  alignItems: 'center'}}>{displayImageDivinity(listOfDivinity)}</View>
-                <View style={{height: '60%'}}>
+                <View style={{width: '100%', alignItems: 'center'}}>{displayImageDivinity(listOfDivinityTeam)}</View>
+                <View style={{height: '72%'}}>
                     <PantheonDisplayer
+                        isDataLoad={isDataLoad}
+                        dataCollection={dataCollectionWithOccurence}
                         isPrayDisponible={false}
                         onClickCard={(name: string, currentPantheon: string) => {
-                            const temporalList = listOfDivinity
-                            temporalList.splice(currentIndex, 1, name)
-                            setListOfDivinity(temporalList)
+                            const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
+                            temporalListTeam.splice(currentIndex, 1, name)
+                            setListOfDivinityTeam(temporalListTeam)
                             setCurrentDivinity(name)
+                            changeOccurence(initialDataCollectionWithOccurence, temporalListTeam)
                         }}
                     />
                 </View>
@@ -104,6 +180,20 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
             <ContentTextured position={'footer'} />
         </View>
     )
+}
+TeamModification.validationTeam = (listOfDivinityTeam: string[], nameOfTeam: string, oldNameOfTeam: string, ws: any) => {
+    let dataValidationTeamBack = {
+        type: 'modificationTeam',
+        username: 'test2',
+        oldNameTeam: oldNameOfTeam,
+        newNameTeam: nameOfTeam,
+        compo: listOfDivinityTeam,
+    }
+    console.log(JSON.stringify(dataValidationTeamBack))
+    ws.send(JSON.stringify(dataValidationTeamBack))
+    ws.onmessage = (e: any) => {
+        console.log(e)
+    }
 }
 
 export default TeamModification

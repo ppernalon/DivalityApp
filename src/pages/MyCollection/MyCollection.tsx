@@ -9,20 +9,28 @@ import Card from 'components/Card/Card'
 import {myCollectionStyles} from './MyCollectionStyles'
 import {useSelector} from 'react-redux'
 import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
+import wsService from '../../ws-services/WsService'
 
 type MyCollectionProps = {
     navigation: any
 }
 
 const MyCollection = ({navigation}: MyCollectionProps) => {
+    const ws = wsService.getWs()
     const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false)
     const [nameCardDialog, setNameCardDialog] = useState<string>('')
     const [cardDialogPantheon, setCardDialogPantheon] = useState<string>('')
+    const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
+    const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const fontColor: any = {
         egyptian: colors.egyptianYellow,
         nordic: colors.nordicRed,
         greek: colors.greekBlue,
     }
+
+    useEffect(() => {
+        loadDataCollection()
+    }, [ws])
 
     const onClickCardPantheon = (name: string) => {
         setIsDialogVisible(true)
@@ -31,6 +39,40 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
 
     const hideDialog = () => {
         setIsDialogVisible(false)
+    }
+
+    const loadDataCollection = () => {
+        ws.send(
+            JSON.stringify({
+                type: 'collection',
+                username: 'test2',
+            })
+        )
+        ws.onmessage = (e: any) => {
+            let dataCollection = JSON.parse(e.data)
+
+            let dataCollectionWithUniqueItemTemp: {[pantheon: string]: string[]} = {
+                egyptian: [],
+                greek: [],
+                nordic: [],
+            }
+            let dataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
+                egyptian: {},
+                greek: {},
+                nordic: {},
+            }
+            for (const pantheon in dataCollectionWithUniqueItemTemp) {
+                dataCollection.data[pantheon].forEach((divinity: string) => {
+                    if (!dataCollectionWithUniqueItemTemp[pantheon].includes(divinity)) {
+                        dataCollectionWithUniqueItemTemp[pantheon].push(divinity)
+                        const numberOccurence = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
+                        dataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
+                    }
+                })
+            }
+            setDataCollectionWithOccurence(dataCollectionWithOccurenceTemp)
+            setIsDataLoad(true)
+        }
     }
 
     return (
@@ -47,6 +89,8 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
             </ContentTextured>
             <View style={{height: '78%'}}>
                 <PantheonDisplayer
+                    isDataLoad={isDataLoad}
+                    dataCollection={dataCollectionWithOccurence}
                     isPrayDisponible={true}
                     onClickCard={(name: string, cardDialogPantheonProps: string) => {
                         setCardDialogPantheon(cardDialogPantheonProps)

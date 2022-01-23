@@ -16,26 +16,19 @@ type PantheonDisplayerProps = {
     navigation?: any
     isPrayDisponible: boolean
     onClickCard: Function
+    dataCollection: {[pantheon: string]: {[divinity: string]: number}}
+    isDataLoad: boolean
 }
-const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: PantheonDisplayerProps) => {
+const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataCollection, isDataLoad}: PantheonDisplayerProps) => {
     const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
-    const [egyptianCards, setegyptianCards] = useState<string[]>([])
-    const [greekCards, setgreekCards] = useState<string[]>([])
-    const [nordicCards, setnordicCards] = useState<string[]>([])
-    const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false)
-    const [nameCardDialog, setNameCardDialog] = useState<string>('')
-    const [collectionData, setCollectionData] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
-    const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
+    const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>(dataCollection)
+    const [isNewCardLoad, setIsNewCardLoad] = useState<boolean>(false)
     const [newCardName, setNewCardName] = useState<string>('')
     const [isNewCardShow, setIsNewCardShow] = useState<boolean>(false)
 
     const dispatch = useDispatch()
     let animation = useRef<any>(new Animated.Value(0)).current
     const ws = wsService.getWs()
-
-    useEffect(() => {
-        PantheonDisplayer.loadDataCollection(setCollectionData, setIsDataLoad, ws)
-    }, [ws])
 
     const fontColor: any = {
         egyptian: colors.egyptianYellow,
@@ -50,12 +43,20 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: Pantheon
     const egyptianLogo: any = require('@images/pantheon-logos/egyptian.png')
     const egyptianLogoNoColor: any = require('@images/pantheon-logos/egyptian-nocolor.png')
 
+    const onClickCardDivinity = (item: string) => {
+        onClickCard(item, currentPantheon)
+    }
+
     const renderItem = ({item}: any) => {
         return (
-            <TouchableOpacity onPress={() => onClickCard(item, currentPantheon)} style={{marginHorizontal: 15, marginBottom: 15}}>
+            <TouchableOpacity
+                onPress={() => {
+                    onClickCardDivinity(item)
+                }}
+                style={{marginHorizontal: 15, marginBottom: 15}}>
                 <Card name={item} minimal={true} />
                 <View style={[pantheonDiplayerStyle.numberOccurencesContainer, {backgroundColor: fontColor[currentPantheon]}]}>
-                    <Text style={{color: 'white'}}>{collectionData[currentPantheon][item]}</Text>
+                    <Text style={{color: 'white'}}>{dataCollection[currentPantheon][item]}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -109,9 +110,9 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: Pantheon
                             PantheonDisplayer.onPressPrayButton(
                                 currentPantheon,
                                 ws,
-                                setCollectionData,
-                                collectionData,
-                                setIsDataLoad,
+                                setDataCollectionWithOccurence,
+                                dataCollectionWithOccurence,
+                                setIsNewCardLoad,
                                 setNewCardName,
                                 setIsNewCardShow,
                                 animation,
@@ -129,9 +130,9 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: Pantheon
             )}
 
             <SafeAreaView style={myCollectionStyles.cardCollectionContainer}>
-                {isDataLoad ? (
+                {Object.keys(dataCollection).length !== 0 ? (
                     <FlatList
-                        data={Object.keys(collectionData[currentPantheon])}
+                        data={Object.keys(dataCollection[currentPantheon])}
                         renderItem={renderItem}
                         keyExtractor={(item) => item}
                         numColumns={2}
@@ -145,44 +146,17 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard}: Pantheon
         </View>
     )
 }
-PantheonDisplayer.loadDataCollection = (setCollectionData: Function, setIsDataLoad: Function, ws: any) => {
-    ws.send(
-        JSON.stringify({
-            type: 'collection',
-            username: 'test2',
-        })
-    )
-    ws.onmessage = (e: any) => {
-        let dataCollection = JSON.parse(e.data)
-        let dataCollectionWithUniqueItem: {[pantheon: string]: string[]} = {
-            egyptian: [],
-            greek: [],
-            nordic: [],
-        }
-        let dataCollectionWithOccurence: {[pantheon: string]: {[divinityName: string]: number}} = {
-            egyptian: {},
-            greek: {},
-            nordic: {},
-        }
-        for (const pantheon in dataCollectionWithUniqueItem) {
-            dataCollection.data[pantheon].forEach((divinity: string) => {
-                if (!dataCollectionWithUniqueItem[pantheon].includes(divinity)) {
-                    dataCollectionWithUniqueItem[pantheon].push(divinity)
-                    dataCollectionWithOccurence[pantheon][divinity] = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
-                }
-            })
-        }
-        setCollectionData(dataCollectionWithOccurence)
-        setIsDataLoad(true)
-    }
-}
+
+// PantheonDisplayer.onClickCardDivinity = (onClickCard: Function, item: string, currentPantheon: string) => {
+//     onClickCard(item, currentPantheon)
+// }
 
 PantheonDisplayer.onPressPrayButton = (
     currentPantheon: string,
     ws: any,
-    setCollectionData: Function,
-    collectionData: {[pantheon: string]: {[divinityName: string]: number}},
-    setIsDataLoad: Function,
+    setDataCollectionWithOccurence: Function,
+    dataCollectionWithOccurence: {[pantheon: string]: {[divinityName: string]: number}},
+    setIsNewCardLoad: Function,
     setNewCardName: Function,
     setIsNewCardShow: Function,
     animation: any,
@@ -203,18 +177,18 @@ PantheonDisplayer.onPressPrayButton = (
             let newCardName: string = JSON.parse(e.data).name
             setNewCardName(newCardName)
             PantheonDisplayer.animationNewCard(animation, setIsNewCardShow)
-            if (!Object.keys(collectionData[currentPantheon]).includes(newCardName)) {
-                setIsDataLoad(false)
-                const newCollectionData = collectionData
+            if (!Object.keys(dataCollectionWithOccurence[currentPantheon]).includes(newCardName)) {
+                setIsNewCardLoad(false)
+                const newCollectionData = dataCollectionWithOccurence
                 newCollectionData[currentPantheon][newCardName] = 1
-                setCollectionData(newCollectionData)
-                setIsDataLoad(true)
+                setDataCollectionWithOccurence(newCollectionData)
+                setIsNewCardLoad(true)
             } else {
-                setIsDataLoad(false)
-                const newCollectionData = collectionData
+                setIsNewCardLoad(false)
+                const newCollectionData = dataCollectionWithOccurence
                 newCollectionData[currentPantheon][newCardName] += 1
-                setCollectionData(newCollectionData)
-                setIsDataLoad(true)
+                setDataCollectionWithOccurence(newCollectionData)
+                setIsNewCardLoad(true)
             }
         }
     }

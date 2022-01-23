@@ -12,19 +12,19 @@ export const teamModificationStyles = StyleSheet.create({
         justifyContent: 'center',
     },
     imageDivinityButton: {
-        height: 50,
-        width: 50,
-        marginVertical: 10,
-        marginHorizontal:10
+        height: 70,
+        width: 70,
+        marginVertical: 7,
+        marginHorizontal:7
     },
     imageDivinity: {
-        height: 50,
-        width: 50,
+        height: 70,
+        width: 70,
         resizeMode: 'contain',
     },
     pencilIcon:{
-        height: 40,
-        width: 40,
+        height: 55,
+        width: 55,
         padding:10,
         borderWidth: 3,
         borderColor: 'white',
@@ -32,8 +32,8 @@ export const teamModificationStyles = StyleSheet.create({
         position:'absolute'
     },
     pencilIconWithoutBorder:{
-        height: 50,
-        width: 50,
+        height: 55,
+        width: 55,
         padding:10,
         position:'absolute'
     },
@@ -41,8 +41,8 @@ export const teamModificationStyles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         backgroundColor: colors.blueSky,
-        height: 50,
-        width: 50,
+        height: 70,
+        width: 70,
     },
     editButtonImage: {
         resizeMode: 'contain',
