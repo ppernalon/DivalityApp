@@ -99,7 +99,6 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         }
         ws.send(JSON.stringify(dataValidationTeamBack))
         ws.onmessage = (e: any) => {
-            console.log(e)
             navigation.navigate('Teams')
         }
     }
