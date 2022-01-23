@@ -21,7 +21,6 @@ type PantheonDisplayerProps = {
 }
 const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataCollection, isDataLoad}: PantheonDisplayerProps) => {
     const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
-    const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>(dataCollection)
     const [isNewCardLoad, setIsNewCardLoad] = useState<boolean>(false)
     const [newCardName, setNewCardName] = useState<string>('')
     const [isNewCardShow, setIsNewCardShow] = useState<boolean>(false)
@@ -110,8 +109,7 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
                             PantheonDisplayer.onPressPrayButton(
                                 currentPantheon,
                                 ws,
-                                setDataCollectionWithOccurence,
-                                dataCollectionWithOccurence,
+                                dataCollection,
                                 setIsNewCardLoad,
                                 setNewCardName,
                                 setIsNewCardShow,
@@ -155,7 +153,6 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
 PantheonDisplayer.onPressPrayButton = (
     currentPantheon: string,
     ws: any,
-    setDataCollectionWithOccurence: Function,
     dataCollectionWithOccurence: {[pantheon: string]: {[divinityName: string]: number}},
     setIsNewCardLoad: Function,
     setNewCardName: Function,
@@ -180,15 +177,11 @@ PantheonDisplayer.onPressPrayButton = (
             PantheonDisplayer.animationNewCard(animation, setIsNewCardShow)
             if (!Object.keys(dataCollectionWithOccurence[currentPantheon]).includes(newCardName)) {
                 setIsNewCardLoad(false)
-                const newCollectionData = dataCollectionWithOccurence
-                newCollectionData[currentPantheon][newCardName] = 1
-                setDataCollectionWithOccurence(newCollectionData)
+                dataCollectionWithOccurence[currentPantheon][newCardName] = 1
                 setIsNewCardLoad(true)
             } else {
                 setIsNewCardLoad(false)
-                const newCollectionData = dataCollectionWithOccurence
-                newCollectionData[currentPantheon][newCardName] += 1
-                setDataCollectionWithOccurence(newCollectionData)
+                dataCollectionWithOccurence[currentPantheon][newCardName] += 1
                 setIsNewCardLoad(true)
             }
         }
