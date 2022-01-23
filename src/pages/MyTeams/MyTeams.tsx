@@ -1,12 +1,13 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
 import {TouchableOpacity, View, Button, Image} from 'react-native'
-import {Text} from 'react-native-paper'
+import {ActivityIndicator, Text} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import CardServices from 'services/CardServices'
 import {myTeamsStyles} from './MyTeamsStyles'
 import wsService from '../../ws-services/WsService'
-import { useIsFocused } from '@react-navigation/native'
+import {useIsFocused} from '@react-navigation/native'
+import {colors} from 'GlobalStyle'
 
 type MyTeams = {
     navigation: any
@@ -20,7 +21,7 @@ const MyTeams = ({navigation}: MyTeams) => {
     const isFocused = useIsFocused()
 
     useEffect(() => {
-        if(isFocused){
+        if (isFocused) {
             MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws)
         }
     }, [ws, isFocused]) //isFocused is used to reload data when come back to this screen after a team modification
@@ -57,10 +58,12 @@ const MyTeams = ({navigation}: MyTeams) => {
             teamConstruction.push(
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('TeamModification', {teamToModify: {
-                            compo: ["empty", "empty", "empty", "empty", "empty", "empty"],
-                            name: ""
-                        }})
+                        navigation.navigate('TeamModification', {
+                            teamToModify: {
+                                compo: ['empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
+                                name: '',
+                            },
+                        })
                     }}
                     key={teamConstruction.length}
                     style={myTeamsStyles.buttonTeamContainer}>
@@ -87,7 +90,10 @@ const MyTeams = ({navigation}: MyTeams) => {
                     MES ÉQUIPES
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', width: '100%', alignItems: 'center'}}>{isDataLoad ? renderTeam() : <></>}</View>
+            <View style={{height: '78%', width: '100%', alignItems: 'center', justifyContent:'center'}}>
+                {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} /> : <></>}
+                {isDataLoad ? renderTeam() : <></>}
+            </View>
             <ContentTextured position={'footer'} />
         </View>
     )

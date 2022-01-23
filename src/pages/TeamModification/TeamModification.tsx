@@ -1,13 +1,14 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
 import {Image, TouchableOpacity, View, TextInput} from 'react-native'
-import {IconButton, Text, useTheme} from 'react-native-paper'
+import {IconButton, Text, useTheme, ActivityIndicator} from 'react-native-paper'
 import CardServices from '../../services/CardServices'
 import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
 import {teamModificationStyles} from './TeamModificationStyles'
 import {colors} from '../../GlobalStyle'
 import {transform} from '@babel/core'
 import wsService from '../../ws-services/WsService'
+
 type TeamModificationProps = {
     navigation: any
     route: any
@@ -18,7 +19,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     const [currentDivinity, setCurrentDivinity] = useState<string>(teamToModify.compo[0])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [listOfDivinityTeam, setListOfDivinityTeam] = useState<string[]>(teamToModify.compo)
-    const [nameOfTeam, setNameOfTeam] = useState<string>(teamToModify.name === "" ? "Nouvelle Équipe":teamToModify.name)
+    const [nameOfTeam, setNameOfTeam] = useState<string>(teamToModify.name === '' ? 'Nouvelle Équipe' : teamToModify.name)
     const [oldNameOfTeam, setOldNameOfTeam] = useState<string>(teamToModify.name)
     const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
     const [initialDataCollectionWithOccurence, setInitialDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
@@ -76,7 +77,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         }
     }
 
-    const changeOccurence = (initialDataCollectionWithOccurence: {[pantheon: string]: {[divinity: string]: number}}, listOfDivinityTeam:string[] ) => {
+    const changeOccurence = (initialDataCollectionWithOccurence: {[pantheon: string]: {[divinity: string]: number}}, listOfDivinityTeam: string[]) => {
         let dataWithOccurrenceTemp = JSON.parse(JSON.stringify(initialDataCollectionWithOccurence))
         for (const pantheon in initialDataCollectionWithOccurence) {
             for (const divinity in initialDataCollectionWithOccurence[pantheon]) {
@@ -182,14 +183,13 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
                         dataCollection={dataCollectionWithOccurence}
                         isPrayDisponible={false}
                         onClickCard={(name: string, currentPantheon: string) => {
-                            if (dataCollectionWithOccurence[currentPantheon][name] > 0){
-                                 const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
-                            temporalListTeam.splice(currentIndex, 1, name)
-                            setListOfDivinityTeam(temporalListTeam)
-                            setCurrentDivinity(name)
-                            changeOccurence(initialDataCollectionWithOccurence, temporalListTeam)
+                            if (dataCollectionWithOccurence[currentPantheon][name] > 0) {
+                                const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
+                                temporalListTeam.splice(currentIndex, 1, name)
+                                setListOfDivinityTeam(temporalListTeam)
+                                setCurrentDivinity(name)
+                                changeOccurence(initialDataCollectionWithOccurence, temporalListTeam)
                             }
-                           
                         }}
                     />
                 </View>

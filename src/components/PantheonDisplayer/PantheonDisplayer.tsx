@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {Animated, FlatList, Image, SafeAreaView, ScrollView, View} from 'react-native'
-import {IconButton, Modal, Portal, Text} from 'react-native-paper'
+import {ActivityIndicator, IconButton, Modal, Portal, Text} from 'react-native-paper'
 import ContentTextured from 'components/ContentTextured/ContentTextured'
 import Disciples from 'components/Disciples/Disciples'
 import {colors} from 'GlobalStyle'
@@ -130,6 +130,7 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
             )}
 
             <SafeAreaView style={myCollectionStyles.cardCollectionContainer}>
+            {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'}/> : <></>}
                 {Object.keys(dataCollection).length !== 0 ? (
                     <FlatList
                         data={Object.keys(dataCollection[currentPantheon])}
