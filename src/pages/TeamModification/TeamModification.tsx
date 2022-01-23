@@ -168,11 +168,14 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
                         dataCollection={dataCollectionWithOccurence}
                         isPrayDisponible={false}
                         onClickCard={(name: string, currentPantheon: string) => {
-                            const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
+                            if (dataCollectionWithOccurence[currentPantheon][name] > 0){
+                                 const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
                             temporalListTeam.splice(currentIndex, 1, name)
                             setListOfDivinityTeam(temporalListTeam)
                             setCurrentDivinity(name)
                             changeOccurence(initialDataCollectionWithOccurence, temporalListTeam)
+                            }
+                           
                         }}
                     />
                 </View>
