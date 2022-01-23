@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux'
 import CardServices from 'services/CardServices'
 import {myTeamsStyles} from './MyTeamsStyles'
 import wsService from '../../ws-services/WsService'
+import { useIsFocused } from '@react-navigation/native'
 
 type MyTeams = {
     navigation: any
@@ -16,9 +17,13 @@ const MyTeams = ({navigation}: MyTeams) => {
     const [myTeamsData, setMyTeamsData] = useState<{compo: string[]; name: string}[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const nberOfTeams = 3
+    const isFocused = useIsFocused()
+
     useEffect(() => {
-        MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws)
-    }, [ws])
+        if(isFocused){
+            MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws)
+        }
+    }, [ws, isFocused]) //isFocused is used to reload data when come back to this screen after a team modification
 
     const renderTeam = () => {
         let teamConstruction = []
@@ -54,7 +59,7 @@ const MyTeams = ({navigation}: MyTeams) => {
                     onPress={() => {
                         navigation.navigate('TeamModification', {teamToModify: {
                             compo: ["empty", "empty", "empty", "empty", "empty", "empty"],
-                            name: "Nouvelle Équipe"
+                            name: ""
                         }})
                     }}
                     key={teamConstruction.length}

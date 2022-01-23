@@ -18,7 +18,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     const [currentDivinity, setCurrentDivinity] = useState<string>(teamToModify.compo[0])
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [listOfDivinityTeam, setListOfDivinityTeam] = useState<string[]>(teamToModify.compo)
-    const [nameOfTeam, setNameOfTeam] = useState<string>(teamToModify.name)
+    const [nameOfTeam, setNameOfTeam] = useState<string>(teamToModify.name === "" ? "Nouvelle Équipe":teamToModify.name)
     const [oldNameOfTeam, setOldNameOfTeam] = useState<string>(teamToModify.name)
     const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
     const [initialDataCollectionWithOccurence, setInitialDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
@@ -89,6 +89,21 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         setDataCollectionWithOccurence(dataWithOccurrenceTemp)
     }
 
+    const validationTeam = () => {
+        let dataValidationTeamBack = {
+            type: 'modificationTeam',
+            username: 'test2',
+            oldNameTeam: oldNameOfTeam,
+            newNameTeam: nameOfTeam,
+            compo: listOfDivinityTeam,
+        }
+        ws.send(JSON.stringify(dataValidationTeamBack))
+        ws.onmessage = (e: any) => {
+            console.log(e)
+            navigation.navigate('Teams')
+        }
+    }
+
     const displayImageDivinity = (listOfDivinityTeam: string[]) => {
         let teamConstruction: JSX.Element[] = []
         listOfDivinityTeam.forEach((name: string, index: number) => {
@@ -153,7 +168,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
                         icon={'check-decagram'}
                         color="white"
                         onPress={() => {
-                            TeamModification.validationTeam(listOfDivinityTeam, nameOfTeam, oldNameOfTeam, ws)
+                            validationTeam()
                         }}
                         hasTVPreferredFocus={undefined}
                         tvParallaxProperties={undefined}
@@ -183,20 +198,6 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
             <ContentTextured position={'footer'} />
         </View>
     )
-}
-TeamModification.validationTeam = (listOfDivinityTeam: string[], nameOfTeam: string, oldNameOfTeam: string, ws: any) => {
-    let dataValidationTeamBack = {
-        type: 'modificationTeam',
-        username: 'test2',
-        oldNameTeam: oldNameOfTeam,
-        newNameTeam: nameOfTeam,
-        compo: listOfDivinityTeam,
-    }
-    console.log(JSON.stringify(dataValidationTeamBack))
-    ws.send(JSON.stringify(dataValidationTeamBack))
-    ws.onmessage = (e: any) => {
-        console.log(e)
-    }
 }
 
 export default TeamModification
