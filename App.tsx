@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Provider as PaperProvider } from 'react-native-paper'
 import {paperTheme, appTheme} from './src/PaperTheme'
 import SignIn from './src/pages/SignIn/SignIn'
@@ -15,27 +15,27 @@ import TeamModification from './src/pages/TeamModification/TeamModification'
 import Duel from './src/pages/Duel/Duel'
 
 const App = () => {
-  const Stack = createNativeStackNavigator()
-  return (
-    <Provider store={store}>
-      <PaperProvider theme={paperTheme}>
-        <NavigationContainer theme={appTheme}>
-          <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
-            <Stack.Screen name="SignIn" component={SignIn}/>
-            <Stack.Screen name="SignUp" component={SignUp}/>
-            <Stack.Screen name="Menu" component={Menu}/>
-            <Stack.Screen name="TeamModification" component={TeamModification}/>
+	const Stack = createNativeStackNavigator()
+	return (
+		<Provider store={store}>
+			<PaperProvider theme={paperTheme}>
+				<NavigationContainer theme={appTheme}>
+					<Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
+						<Stack.Screen name="SignIn" component={SignIn}/>
+						<Stack.Screen name="SignUp" component={SignUp}/>
+						<Stack.Screen name="Menu" component={Menu}/>
+						<Stack.Screen name="TeamModification" component={TeamModification}/>
 
-            <Stack.Screen name="Duel" component={Duel}/>
-            <Stack.Screen name="Collection" component={MyCollection}/>
-            <Stack.Screen name="Teams" component={MyTeams}/>
-            <Stack.Screen name="Trade" component={Menu}/>
-            <Stack.Screen name="Ranking" component={Menu}/>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-   </Provider>
-  )
+						<Stack.Screen name="Duel" component={Duel}/>
+						<Stack.Screen name="Collection" component={MyCollection}/>
+						<Stack.Screen name="Teams" component={MyTeams}/>
+						<Stack.Screen name="Trade" component={Menu}/>
+						<Stack.Screen name="Ranking" component={Menu}/>
+					</Stack.Navigator>
+				</NavigationContainer>
+			</PaperProvider>
+	 </Provider>
+	)
 }
 
 export default App
