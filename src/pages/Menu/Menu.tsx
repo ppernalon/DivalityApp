@@ -22,7 +22,6 @@ const Menu = ({navigation}: MenuProps) => {
     const username = useSelector(selectUsername)
 
     const startMatchmaking: Function = () => {
-        console.log(username)
         setWaitingState(true)
         ws.send(
             JSON.stringify({
@@ -34,7 +33,7 @@ const Menu = ({navigation}: MenuProps) => {
             const data = JSON.parse(answer.data)
             if (data.type === "duel"){
                 setWaitingState(false)
-                navigation.navigate('Duel')
+                navigation.navigate('Duel', {opponent: data.opponent})
             }
         }
     }
