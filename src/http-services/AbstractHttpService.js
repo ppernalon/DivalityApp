@@ -8,7 +8,8 @@ export default class AbstractHttpService{
         }
     }}
     static buildPath(){
-        return 'http://10.0.2.2:5000'
+        return 'http://localhost:5000' // physical device with reverse tcp:5000
+        // return 'http://10.0.2.2:5000' // emulated device
     }
     static getHttp(URL) {
         return axios.get(this.buildPath() + URL);
