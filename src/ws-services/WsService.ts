@@ -1,11 +1,11 @@
 import constants from './../constants'
-import {initialisationOnConnection} from '../components/Disciples/DisciplesSlice'
+import {initialisationOnConnection} from '../store/reducers/DisciplesSlice'
 import store from '../store/store'
 
 class WsService {
     WS: any = null
 
-    openWs() {
+    openWs(username: string) {
         this.WS = new WebSocket(`ws://${constants.API_URL}/connection`)
 
         this.WS.onopen = () => {
@@ -13,7 +13,7 @@ class WsService {
             this.WS.send(
                 JSON.stringify({
                     type: 'connection',
-                    username: 'test2',
+                    username: username,
                 })
             )
             this.WS.send(
@@ -28,6 +28,7 @@ class WsService {
                 }
             }
         }
+
         return this.WS
     }
 

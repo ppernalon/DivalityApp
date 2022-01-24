@@ -10,6 +10,8 @@ import DivilityLogo from '@components/DivalityLogo/DivalityLogo'
 import {Text} from 'react-native-paper'
 import SignInHttpService from 'http-services/SignInHttpService'
 import wsService from 'ws-services/WsService'
+import store from 'store/store'
+import { onConnect } from 'store/reducers/UsernameSlice'
 
 type SignInProps = {
     navigation: any
@@ -47,7 +49,11 @@ const SignIn = ({navigation}: SignInProps) => {
             setErrorBack('')
             SignInHttpService.signIn(formStateApi)
                 .then(() => {
-                    wsService.openWs()
+                    store.dispatch(onConnect({
+                        username: formStateApi.username,
+                        type: 'ON_CONNECT'
+                    }))
+                    wsService.openWs(formStateApi.username)
                     navigation.navigate('Menu')
                 })
                 .catch((err) => {

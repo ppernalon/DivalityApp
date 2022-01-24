@@ -9,6 +9,8 @@ import {menuStyle} from './MenuStyle'
 import MatchmakingLoader from '@components/MatchmakingLoader'
 import {Modal, Portal} from 'react-native-paper'
 import wsService from '../../ws-services/WsService'
+import { useSelector } from 'react-redux'
+import { selectUsername } from '../../store/reducers/UsernameSlice'
 
 type MenuProps = {
     navigation: any
@@ -17,9 +19,10 @@ const widthButtons = '70%'
 const Menu = ({navigation}: MenuProps) => {
     const [isWaitingForQueue, setWaitingState] = useState<boolean>(false)
     const ws = wsService.getWs()
-    const username = 'test2'
+    const username = useSelector(selectUsername)
 
     const startMatchmaking: Function = () => {
+        console.log(username)
         setWaitingState(true)
         ws.send(
             JSON.stringify({

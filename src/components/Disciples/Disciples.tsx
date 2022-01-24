@@ -1,12 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import { Image, Text, View } from "react-native"
 import { disciplesStyle } from "./DisciplesStyle"
 import { useTheme } from "react-native-paper"
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
-  incrementByAmount,
   selectDisciples
-} from './DisciplesSlice'
+} from '../../store/reducers/DisciplesSlice'
 
 type DisciplesProps = {
     fontColor?: string
