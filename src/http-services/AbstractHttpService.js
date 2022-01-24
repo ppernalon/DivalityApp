@@ -1,4 +1,5 @@
 import axios from "axios";
+import constants from './../constants'
 
 export default class AbstractHttpService{
     static buildHeaders(){
@@ -8,8 +9,7 @@ export default class AbstractHttpService{
         }
     }}
     static buildPath(){
-        return 'http://localhost:5000' // physical device with reverse tcp:5000
-        // return 'http://10.0.2.2:5000' // emulated device
+        return `http://${constants.API_URL}`
     }
     static getHttp(URL) {
         return axios.get(this.buildPath() + URL);

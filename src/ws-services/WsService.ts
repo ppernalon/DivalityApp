@@ -1,4 +1,4 @@
-import {useDispatch} from 'react-redux'
+import constants from './../constants'
 import {initialisationOnConnection} from '../components/Disciples/DisciplesSlice'
 import store from '../store/store'
 
@@ -6,8 +6,7 @@ class WsService {
     WS: any = null
 
     openWs() {
-        this.WS = new WebSocket('ws://localhost:5000/connection') // physical device with reverse tcp:5000
-        // this.WS = new WebSocket('ws://10.0.2.2:5000/connection') // emulated device
+        this.WS = new WebSocket(`ws://${constants.API_URL}/connection`)
 
         this.WS.onopen = () => {
             console.log('websocket ouverte')
