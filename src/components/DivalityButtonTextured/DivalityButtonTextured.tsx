@@ -8,7 +8,7 @@ type DivalityButtonTexturedProps = {
     label: string
     onSubmit: Function
     theme: any
-    width: string
+    width? : string
 }
 
 const DivalityButtonTextured = ({
