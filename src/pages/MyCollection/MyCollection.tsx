@@ -10,6 +10,7 @@ import {myCollectionStyles} from './MyCollectionStyles'
 import {useSelector} from 'react-redux'
 import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
 import wsService from '../../ws-services/WsService'
+import { selectUsername } from 'store/reducers/UsernameSlice'
 
 type MyCollectionProps = {
     navigation: any
@@ -22,6 +23,8 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
     const [cardDialogPantheon, setCardDialogPantheon] = useState<string>('')
     const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
+    const username = useSelector(selectUsername)
+
     const fontColor: any = {
         egyptian: colors.egyptianYellow,
         nordic: colors.nordicRed,
@@ -45,7 +48,7 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
         ws.send(
             JSON.stringify({
                 type: 'collection',
-                username: 'test2',
+                username: username,
             })
         )
         ws.onmessage = (e: any) => {

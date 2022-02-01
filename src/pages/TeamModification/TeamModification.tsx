@@ -8,6 +8,8 @@ import {teamModificationStyles} from './TeamModificationStyles'
 import {colors} from '../../GlobalStyle'
 import {transform} from '@babel/core'
 import wsService from '../../ws-services/WsService'
+import { selectUsername } from 'store/reducers/UsernameSlice'
+import { useSelector } from 'react-redux'
 
 type TeamModificationProps = {
     navigation: any
@@ -24,6 +26,8 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     const [dataCollectionWithOccurence, setDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
     const [initialDataCollectionWithOccurence, setInitialDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
+    const username = useSelector(selectUsername)
+
 
     const {fonts} = useTheme()
     const fontStyle = {
@@ -40,7 +44,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         ws.send(
             JSON.stringify({
                 type: 'collection',
-                username: 'test2',
+                username: username,
             })
         )
         ws.onmessage = (e: any) => {
@@ -93,7 +97,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     const validationTeam = () => {
         let dataValidationTeamBack = {
             type: 'modificationTeam',
-            username: 'test2',
+            username: username,
             oldNameTeam: oldNameOfTeam,
             newNameTeam: nameOfTeam,
             compo: listOfDivinityTeam,

@@ -8,12 +8,16 @@ import {myTeamsStyles} from './MyTeamsStyles'
 import wsService from '../../ws-services/WsService'
 import {useIsFocused} from '@react-navigation/native'
 import {colors} from 'GlobalStyle'
+import {
+    selectUsername
+  } from '../../store/reducers/UsernameSlice'
 
 type MyTeams = {
     navigation: any
 }
 
 const MyTeams = ({navigation}: MyTeams) => {
+    const username = useSelector(selectUsername)
     const ws = wsService.getWs()
     const [myTeamsData, setMyTeamsData] = useState<{compo: string[]; name: string}[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
@@ -22,7 +26,7 @@ const MyTeams = ({navigation}: MyTeams) => {
 
     useEffect(() => {
         if (isFocused) {
-            MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws)
+            MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws, username)
         }
     }, [ws, isFocused]) //isFocused is used to reload data when come back to this screen after a team modification
 
@@ -99,14 +103,15 @@ const MyTeams = ({navigation}: MyTeams) => {
     )
 }
 
-MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: any) => {
+MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: any, username: string) => {
     ws.send(
         JSON.stringify({
             type: 'teams',
-            username: 'test2',
+            username: username,
         })
     )
     ws.onmessage = (e: any) => {
+        console.log(e.data)
         let dataTeams = JSON.parse(e.data)
         setMyTeamsData(dataTeams.teamsdata)
         setIsDataLoad(true)

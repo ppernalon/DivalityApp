@@ -10,16 +10,16 @@ class WsService {
 
         this.WS.onopen = () => {
             console.log('websocket ouverte')
-            this.WS.send(
-                JSON.stringify({
-                    type: 'connection',
-                    username: username,
-                })
-            )
+            // this.WS.send(
+            //     JSON.stringify({
+            //         type: 'connection',
+            //         username: username,
+            //     })
+            // )
             this.WS.send(
                 JSON.stringify({
                     type: 'disciples',
-                    username: 'test2',
+                    username: username,
                 })
             )
             this.WS.onmessage = (e: any) => {

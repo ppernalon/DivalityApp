@@ -8,8 +8,9 @@ import Card from 'components/Card/Card'
 import {myCollectionStyles} from '../../pages/MyCollection/MyCollectionStyles'
 import {pantheonDiplayerStyle} from './PantheonDiplayerStyle'
 import {incrementByAmount} from '../../store/reducers/DisciplesSlice'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
+import { selectUsername } from 'store/reducers/UsernameSlice'
 
 type PantheonDisplayerProps = {
     navigation?: any
@@ -23,6 +24,8 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
     const [isNewCardLoad, setIsNewCardLoad] = useState<boolean>(false)
     const [newCardName, setNewCardName] = useState<string>('')
     const [isNewCardShow, setIsNewCardShow] = useState<boolean>(false)
+    const username = useSelector(selectUsername)
+
 
     const dispatch = useDispatch()
     let animation = useRef<any>(new Animated.Value(0)).current
@@ -113,7 +116,8 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
                                 setNewCardName,
                                 setIsNewCardShow,
                                 animation,
-                                dispatch
+                                dispatch,
+                                username
                             )
                         }>
                         <Text style={{color: fontColor[currentPantheon], fontSize: 16}}> Prier </Text>
@@ -157,12 +161,13 @@ PantheonDisplayer.onPressPrayButton = (
     setNewCardName: Function,
     setIsNewCardShow: Function,
     animation: any,
-    dispatch: Function
+    dispatch: Function,
+    username: string
 ) => {
     ws.send(
         JSON.stringify({
             type: 'pray',
-            username: 'test2',
+            username: username,
             pantheon: currentPantheon,
         })
     )
