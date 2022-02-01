@@ -6,6 +6,7 @@ import Menu from './src/pages/Menu/Menu'
 import SignUp from './src/pages/SignUp/SignUp'
 import MyCollection from './src/pages/MyCollection/MyCollection'
 import MyTeams from './src/pages/MyTeams/MyTeams'
+import AuctionHouse from './src/pages/AuctionHouse/AuctionHouse'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -29,7 +30,7 @@ const App = () => {
 						<Stack.Screen name="Duel" component={Duel}/>
 						<Stack.Screen name="Collection" component={MyCollection}/>
 						<Stack.Screen name="Teams" component={MyTeams}/>
-						<Stack.Screen name="Trade" component={Menu}/>
+						<Stack.Screen name="Trade" component={AuctionHouse}/>
 						<Stack.Screen name="Ranking" component={Menu}/>
 					</Stack.Navigator>
 				</NavigationContainer>

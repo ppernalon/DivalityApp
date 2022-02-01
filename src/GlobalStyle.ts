@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 export const colors = {
     lightBlueSky: "#8DD1EE",
     blueSky: "#49C5FF",
+    blueSkyInactive: "#95d1ed",
     primaryBlue: "#2A82C5",
     errorRed: "red",
     egyptianYellow: '#FFC400',
