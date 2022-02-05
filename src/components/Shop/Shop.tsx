@@ -13,6 +13,7 @@ const Shop = () => {
     const [divinityNameSearch, setDivinityNameSearch] = useState<string>('')
     const [divinityNameSearchIsFocused, setDivinityNameSearchIsFocused] = useState<boolean>(false)
     const [shopData, setShopData] = useState<[]>([])
+    const [shopDataFilter, setShopDataFilter] = useState<[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
@@ -25,6 +26,7 @@ const Shop = () => {
     }, [ws])
 
     const loadDataShop = () => {
+        setIsDataLoad(false)
         ws.send(
             JSON.stringify({
                 type: 'auctionHouse',
@@ -34,9 +36,16 @@ const Shop = () => {
         ws.onmessage = (e: any) => {
             if (JSON.parse(e.data).type === 'auctionHouse') {
                 setShopData(JSON.parse(e.data).shopData)
+                setShopDataFilter(JSON.parse(e.data).shopData)
                 setIsDataLoad(true)
             }
         }
+    }
+
+    const filterDataShop = (divinityNameSearch: string) => {
+        setDivinityNameSearch(divinityNameSearch)
+        const shopDataFilterTemp: any = shopData.filter((item: any) => item.cardName.includes(divinityNameSearch))
+        setShopDataFilter(shopDataFilterTemp)
     }
 
     const renderItem = (item: any, index: number) => {
@@ -73,7 +82,7 @@ const Shop = () => {
                     label="Nom de la divinité"
                     mode={'flat'}
                     value={divinityNameSearch}
-                    onChangeText={(divinityNameSearch) => setDivinityNameSearch(divinityNameSearch)}
+                    onChangeText={(divinityNameSearch) => filterDataShop(divinityNameSearch)}
                     underlineColor={colors.blueSky}
                     theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
                     right={
@@ -89,7 +98,9 @@ const Shop = () => {
                 />
                 <IconButton
                     icon="reload"
-                    onPress={() => {}}
+                    onPress={() => {
+                        loadDataShop()
+                    }}
                     size={40}
                     hasTVPreferredFocus={undefined}
                     tvParallaxProperties={undefined}
@@ -103,10 +114,10 @@ const Shop = () => {
                     <DataTable.Title style={{flex: 2, justifyContent: 'center'}}>Prix</DataTable.Title>
                     <DataTable.Title style={{flex: 1, justifyContent: 'center'}}></DataTable.Title>
                 </DataTable.Header>
-                {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} /> : <></>}
-                {Object.keys(shopData).length !== 0 ? shopData.map((item, index) => renderItem(item, index)) : <></>}
+                {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} style={{marginVertical: 30}} /> : <></>}
+                {Object.keys(shopDataFilter).length !== 0 ? shopDataFilter.map((item, index) => renderItem(item, index)) : <></>}
             </DataTable>
-            <AuctionHouseModal isModalVisible={isModalVisible} changeModalStatus={changeModalStatus} cardInfo={cardInfoModal}/>
+            <AuctionHouseModal isModalVisible={isModalVisible} changeModalStatus={changeModalStatus} cardInfo={cardInfoModal} />
         </View>
     )
 }

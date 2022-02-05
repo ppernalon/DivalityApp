@@ -14,7 +14,7 @@ const AuctionHouse = () => {
     const [currentUnderPage, setCurrentUnderPage] = useState('shop')
 
     return (
-        <View style={{width: '100%'}}>
+        <View style={{width: '100%', height:'100%', marginBottom:50}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -25,36 +25,43 @@ const AuctionHouse = () => {
                     HOTEL DES VENTES
                 </Text>
             </ContentTextured>
-            <ToggleButton.Row
-                onValueChange={(value: string) => setCurrentUnderPage(value)}
-                value={currentUnderPage}
-                style={auctionHouseStyles.containerCurrentUnderPage}>
-                <Button
-                    style={[auctionHouseStyles.buttonCurrentUnderPage]}
-                    onPress={() => {
-                        setCurrentUnderPage('shop')
-                    }}>
-                    <Text
-                        style={[
-                            currentUnderPage === 'shop' ? auctionHouseStyles.buttonCurrentUnderPageActive : auctionHouseStyles.buttonCurrentUnderPageInactive,
-                        ]}>
-                        Achats
-                    </Text>
-                </Button>
-                <Button
-                    style={[auctionHouseStyles.buttonCurrentUnderPage]}
-                    onPress={() => {
-                        setCurrentUnderPage('sell')
-                    }}>
-                    <Text
-                        style={[
-                            currentUnderPage === 'sell' ? auctionHouseStyles.buttonCurrentUnderPageActive : auctionHouseStyles.buttonCurrentUnderPageInactive,
-                        ]}>
-                        Ventes
-                    </Text>
-                </Button>
-            </ToggleButton.Row>
-            <View>{currentUnderPage === 'shop' ? <Shop></Shop> : <Sell></Sell>}</View>
+            <View style={{height:'78%'}}>
+                <ToggleButton.Row
+                    onValueChange={(value: string) => setCurrentUnderPage(value)}
+                    value={currentUnderPage}
+                    style={auctionHouseStyles.containerCurrentUnderPage}>
+                    <Button
+                        style={[auctionHouseStyles.buttonCurrentUnderPage]}
+                        onPress={() => {
+                            setCurrentUnderPage('shop')
+                        }}>
+                        <Text
+                            style={[
+                                currentUnderPage === 'shop'
+                                    ? auctionHouseStyles.buttonCurrentUnderPageActive
+                                    : auctionHouseStyles.buttonCurrentUnderPageInactive,
+                            ]}>
+                            Achats
+                        </Text>
+                    </Button>
+                    <Button
+                        style={[auctionHouseStyles.buttonCurrentUnderPage]}
+                        onPress={() => {
+                            setCurrentUnderPage('sell')
+                        }}>
+                        <Text
+                            style={[
+                                currentUnderPage === 'sell'
+                                    ? auctionHouseStyles.buttonCurrentUnderPageActive
+                                    : auctionHouseStyles.buttonCurrentUnderPageInactive,
+                            ]}>
+                            Ventes
+                        </Text>
+                    </Button>
+                </ToggleButton.Row>
+                <View>{currentUnderPage === 'shop' ? <Shop></Shop> : <Sell></Sell>}</View>
+            </View>
+            <ContentTextured position={'footer'} children={<></>} />
         </View>
     )
 }

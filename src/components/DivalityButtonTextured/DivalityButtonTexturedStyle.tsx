@@ -1,3 +1,4 @@
+import { colors } from "GlobalStyle"
 import { StyleSheet } from "react-native"
 
 export const divalityFormStyle = StyleSheet.create({
@@ -16,13 +17,14 @@ export const divalityFormStyle = StyleSheet.create({
         alignItems: "center",
         borderRadius: 5,
         overflow:"hidden",
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        elevation: 5,
+        padding: 2
+    },
+    backgroundCancelButton:{
+        width:'100%',
+        alignItems: "center",
+        justifyContent:'center',
+        borderRadius: 5,
+        borderColor: colors.blueSky,
+        borderWidth:2,
     }
 })
