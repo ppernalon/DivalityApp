@@ -14,16 +14,21 @@ const Shop = () => {
     const [divinityNameSearchIsFocused, setDivinityNameSearchIsFocused] = useState<boolean>(false)
     const [shopData, setShopData] = useState<[]>([])
     const [shopDataFilter, setShopDataFilter] = useState<[]>([])
+    const [shopDataFilterByPage, setShopDataFilterByPage] = useState<[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
-
+    const [page, setPage] = useState<number>(0)
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
-
+    const numberOfItemsPerPageList = [1, 2, 30]
+    const [numberOfItemsPerPage, setNumberOfItemsPerPage] = React.useState(numberOfItemsPerPageList[0])
+    const fromPagination = page * numberOfItemsPerPage
+    const toPagination = Math.min((page + 1) * numberOfItemsPerPage, shopDataFilter.length)
     useEffect(() => {
         loadDataShop()
-    }, [ws])
+        setPage(0)
+    }, [ws, numberOfItemsPerPage])
 
     const loadDataShop = () => {
         setIsDataLoad(false)
@@ -37,6 +42,7 @@ const Shop = () => {
             if (JSON.parse(e.data).type === 'auctionHouse') {
                 setShopData(JSON.parse(e.data).shopData)
                 setShopDataFilter(JSON.parse(e.data).shopData)
+                setShopDataFilterByPage(JSON.parse(e.data).shopData.slice(0, numberOfItemsPerPage))
                 setIsDataLoad(true)
             }
         }
@@ -46,6 +52,11 @@ const Shop = () => {
         setDivinityNameSearch(divinityNameSearch)
         const shopDataFilterTemp: any = shopData.filter((item: any) => item.cardName.includes(divinityNameSearch))
         setShopDataFilter(shopDataFilterTemp)
+    }
+    const filterByPage = (page: number) => {
+        setPage(page)
+        const shopDataFilterTemp: any = shopDataFilter.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage )
+        setShopDataFilterByPage(shopDataFilterTemp)
     }
 
     const renderItem = (item: any, index: number) => {
@@ -115,7 +126,18 @@ const Shop = () => {
                     <DataTable.Title style={{flex: 1, justifyContent: 'center'}}></DataTable.Title>
                 </DataTable.Header>
                 {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} style={{marginVertical: 30}} /> : <></>}
-                {Object.keys(shopDataFilter).length !== 0 ? shopDataFilter.map((item, index) => renderItem(item, index)) : <></>}
+                {Object.keys(shopDataFilterByPage).length !== 0 ? shopDataFilterByPage.map((item, index) => renderItem(item, index)) : <></>}
+                <DataTable.Pagination
+                    page={page}
+                    numberOfPages={Math.ceil(shopDataFilter.length / numberOfItemsPerPage)}
+                    onPageChange={(page) => filterByPage(page)}
+                    label={`${page + 1 } sur ${Math.ceil(shopDataFilter.length / numberOfItemsPerPage)}`}
+                    numberOfItemsPerPageList={numberOfItemsPerPageList}
+                    numberOfItemsPerPage={numberOfItemsPerPage}
+                    onItemsPerPageChange={setNumberOfItemsPerPage}
+                    showFastPaginationControls
+                    selectPageDropdownLabel={'Lignes par page'}
+                />
             </DataTable>
             <AuctionHouseModal isModalVisible={isModalVisible} changeModalStatus={changeModalStatus} cardInfo={cardInfoModal} />
         </View>
