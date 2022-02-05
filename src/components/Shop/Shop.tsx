@@ -21,7 +21,7 @@ const Shop = () => {
     const [page, setPage] = useState<number>(0)
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
-    const numberOfItemsPerPageList = [1, 2, 30]
+    const numberOfItemsPerPageList = [2, 5, 10]
     const [numberOfItemsPerPage, setNumberOfItemsPerPage] = React.useState(numberOfItemsPerPageList[0])
     const fromPagination = page * numberOfItemsPerPage
     const toPagination = Math.min((page + 1) * numberOfItemsPerPage, shopDataFilter.length)
