@@ -52,6 +52,8 @@ const Shop = () => {
         setDivinityNameSearch(divinityNameSearch)
         const shopDataFilterTemp: any = shopData.filter((item: any) => item.cardName.includes(divinityNameSearch))
         setShopDataFilter(shopDataFilterTemp)
+        const shopDataFilterByPageTemp: any = shopDataFilterTemp.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage )
+        setShopDataFilterByPage(shopDataFilterByPageTemp)
     }
     const filterByPage = (page: number) => {
         setPage(page)
@@ -126,7 +128,7 @@ const Shop = () => {
                     <DataTable.Title style={{flex: 1, justifyContent: 'center'}}></DataTable.Title>
                 </DataTable.Header>
                 {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} style={{marginVertical: 30}} /> : <></>}
-                {Object.keys(shopDataFilterByPage).length !== 0 ? shopDataFilterByPage.map((item, index) => renderItem(item, index)) : <></>}
+                {Object.keys(shopDataFilterByPage).length !== 0 && isDataLoad ? shopDataFilterByPage.map((item, index) => renderItem(item, index)) : <></>}
                 <DataTable.Pagination
                     page={page}
                     numberOfPages={Math.ceil(shopDataFilter.length / numberOfItemsPerPage)}
