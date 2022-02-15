@@ -12,11 +12,11 @@ import {auctionHouseStyle} from './AuctionHouseStyle'
 
 type AuctionHouseModalProps = {
     isModalVisible: boolean
-    changeModalStatus: Function
+    closeModalProps: Function
     cardInfo: any
 }
 
-const AuctionHouseModal = ({isModalVisible, changeModalStatus, cardInfo}: AuctionHouseModalProps) => {
+const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionHouseModalProps) => {
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
     const dispatch = useDispatch()
@@ -45,7 +45,7 @@ const AuctionHouseModal = ({isModalVisible, changeModalStatus, cardInfo}: Auctio
     }
     const closeModal = () => {
         setErrorToDisplay('')
-        changeModalStatus()
+        closeModalProps()
     }
     return (
         <Portal>

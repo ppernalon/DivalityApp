@@ -6,29 +6,35 @@ import wsService from '../../ws-services/WsService'
 import {selectUsername} from 'store/reducers/UsernameSlice'
 import {useSelector} from 'react-redux'
 import AuctionHouseModal from '@components/AuctionHouseModal/AuctionHouseModal'
+import DataTableDivality from 'components/DataTable/DataTableDivality'
 
-type ShopProps = {}
 
 const Shop = () => {
     const [divinityNameSearch, setDivinityNameSearch] = useState<string>('')
-    const [divinityNameSearchIsFocused, setDivinityNameSearchIsFocused] = useState<boolean>(false)
     const [shopData, setShopData] = useState<[]>([])
-    const [shopDataFilter, setShopDataFilter] = useState<[]>([])
-    const [shopDataFilterByPage, setShopDataFilterByPage] = useState<[]>([])
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
-    const [page, setPage] = useState<number>(0)
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
-    const numberOfItemsPerPageList = [2, 5, 10]
-    const [numberOfItemsPerPage, setNumberOfItemsPerPage] = React.useState(numberOfItemsPerPageList[0])
-    const fromPagination = page * numberOfItemsPerPage
-    const toPagination = Math.min((page + 1) * numberOfItemsPerPage, shopDataFilter.length)
+
+    const header = [
+        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardName'},
+        {name: 'Vendeur', type: 'string', width: '', nameOfTheData: 'ownerName'},
+        {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
+        {
+            name: '',
+            type: 'icon',
+            width: '',
+            nameOfTheData: 'cart-arrow-down',
+            action: (item: any) => {
+                onShopClick(item)
+            },
+        },
+    ]
     useEffect(() => {
         loadDataShop()
-        setPage(0)
-    }, [ws, numberOfItemsPerPage])
+    }, [ws])
 
     const loadDataShop = () => {
         setIsDataLoad(false)
@@ -41,8 +47,6 @@ const Shop = () => {
         ws.onmessage = (e: any) => {
             if (JSON.parse(e.data).type === 'auctionHouse') {
                 setShopData(JSON.parse(e.data).shopData)
-                setShopDataFilter(JSON.parse(e.data).shopData)
-                setShopDataFilterByPage(JSON.parse(e.data).shopData.slice(0, numberOfItemsPerPage))
                 setIsDataLoad(true)
             }
         }
@@ -50,41 +54,16 @@ const Shop = () => {
 
     const filterDataShop = (divinityNameSearch: string) => {
         setDivinityNameSearch(divinityNameSearch)
-        const shopDataFilterTemp: any = shopData.filter((item: any) => item.cardName.includes(divinityNameSearch))
-        setShopDataFilter(shopDataFilterTemp)
-        const shopDataFilterByPageTemp: any = shopDataFilterTemp.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage )
-        setShopDataFilterByPage(shopDataFilterByPageTemp)
-    }
-    const filterByPage = (page: number) => {
-        setPage(page)
-        const shopDataFilterTemp: any = shopDataFilter.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage )
-        setShopDataFilterByPage(shopDataFilterTemp)
     }
 
-    const renderItem = (item: any, index: number) => {
-        return (
-            <DataTable.Row key={index}>
-                <DataTable.Cell style={{flex: 2, justifyContent: 'center'}}>{item.cardName}</DataTable.Cell>
-                <DataTable.Cell style={{flex: 2, justifyContent: 'center'}}>{item.ownerName}</DataTable.Cell>
-                <DataTable.Cell style={{flex: 2, justifyContent: 'center'}}>{item.price}</DataTable.Cell>
-                <DataTable.Cell style={{flex: 1, justifyContent: 'center'}}>
-                    <IconButton
-                        onPress={() => {
-                            setCardInfoModal(item)
-                            changeModalStatus()
-                        }}
-                        icon="cart-arrow-down"
-                        hasTVPreferredFocus={undefined}
-                        tvParallaxProperties={undefined}
-                        color={colors.blueSky}
-                    />
-                </DataTable.Cell>
-            </DataTable.Row>
-        )
-    }
-
-    const changeModalStatus = () => {
+    const onShopClick = (item: any) => {
+        setCardInfoModal(item)
         setIsModalVisible(!isModalVisible)
+    }
+
+    const closeModalProps = () => {
+        setIsModalVisible(!isModalVisible)
+        loadDataShop()
     }
 
     return (
@@ -120,28 +99,8 @@ const Shop = () => {
                     color={colors.blueSky}
                 />
             </View>
-            <DataTable style={{width: '80%'}}>
-                <DataTable.Header>
-                    <DataTable.Title style={{flex: 2, justifyContent: 'center'}}>Divinité</DataTable.Title>
-                    <DataTable.Title style={{flex: 2, justifyContent: 'center'}}>Vendeur</DataTable.Title>
-                    <DataTable.Title style={{flex: 2, justifyContent: 'center'}}>Prix</DataTable.Title>
-                    <DataTable.Title style={{flex: 1, justifyContent: 'center'}}></DataTable.Title>
-                </DataTable.Header>
-                {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} style={{marginVertical: 30}} /> : <></>}
-                {Object.keys(shopDataFilterByPage).length !== 0 && isDataLoad ? shopDataFilterByPage.map((item, index) => renderItem(item, index)) : <></>}
-                <DataTable.Pagination
-                    page={page}
-                    numberOfPages={Math.ceil(shopDataFilter.length / numberOfItemsPerPage)}
-                    onPageChange={(page) => filterByPage(page)}
-                    label={`${page + 1 } sur ${Math.ceil(shopDataFilter.length / numberOfItemsPerPage)}`}
-                    numberOfItemsPerPageList={numberOfItemsPerPageList}
-                    numberOfItemsPerPage={numberOfItemsPerPage}
-                    onItemsPerPageChange={setNumberOfItemsPerPage}
-                    showFastPaginationControls
-                    selectPageDropdownLabel={'Lignes par page'}
-                />
-            </DataTable>
-            <AuctionHouseModal isModalVisible={isModalVisible} changeModalStatus={changeModalStatus} cardInfo={cardInfoModal} />
+            <DataTableDivality isDataLoad={isDataLoad} data={shopData} header={header} nameToFilter={divinityNameSearch}></DataTableDivality>
+            <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
         </View>
     )
 }
