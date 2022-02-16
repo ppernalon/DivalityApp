@@ -47,13 +47,13 @@ const Sell = () => {
         setIsDataLoad(false)
         ws.send(
             JSON.stringify({
-                type: 'auctionHouse',
+                type: 'auctionsByUsername',
                 username: username,
             })
         )
         ws.onmessage = (e: any) => {
-            if (JSON.parse(e.data).type === 'auctionHouse') {
-                setSellData(JSON.parse(e.data).shopData)
+            if (JSON.parse(e.data).type === 'auctions') {
+                setSellData(JSON.parse(e.data).auctionsData)
                 setIsDataLoad(true)
             }
         }
@@ -66,6 +66,11 @@ const Sell = () => {
 
     const closeModalProps = () => {
         setIsModalVisible(!isModalVisible)
+        loadDataSell()
+    }
+
+    const closeModalNewSell = () => {
+        setIsModalAddSellVisible(!isModalAddSellVisible)
         loadDataSell()
     }
 
@@ -96,7 +101,7 @@ const Sell = () => {
                 />
             </View>
             <DataTableDivality isDataLoad={isDataLoad} data={sellData} header={header}/>
-            <AuctionHouseModalNewSell isModalVisible={isModalAddSellVisible} closeModalProps={()=>{}}></AuctionHouseModalNewSell>
+            <AuctionHouseModalNewSell isModalVisible={isModalAddSellVisible} closeModalProps={closeModalNewSell}></AuctionHouseModalNewSell>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
         </View>
     )
