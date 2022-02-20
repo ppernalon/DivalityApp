@@ -10,12 +10,12 @@ class WsService {
 
         this.WS.onopen = () => {
             console.log('websocket ouverte')
-            // this.WS.send(
-            //     JSON.stringify({
-            //         type: 'connection',
-            //         username: username,
-            //     })
-            // )
+            this.WS.send(
+                JSON.stringify({
+                    type: 'connection',
+                    username: username,
+                })
+            )
             this.WS.send(
                 JSON.stringify({
                     type: 'disciples',
@@ -27,6 +27,10 @@ class WsService {
                     store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(e.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
                 }
             }
+        }
+
+        this.WS.onerror = (error: WebSocketErrorEvent) => {
+            console.error(error.message)
         }
 
         return this.WS
