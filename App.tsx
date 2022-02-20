@@ -19,6 +19,7 @@ import FightingScreen from '@components/Duel/FightingScreen/FightingScreen'
 
 const App = () => {
 	const Stack = createNativeStackNavigator()
+
 	return (
 		<Provider store={store}>
 			<PaperProvider theme={paperTheme}>
@@ -38,7 +39,7 @@ const App = () => {
 				</NavigationContainer>
 			</PaperProvider>
 
-			<FightingScreen myTeam={[""]} opponentTeam={[""]}/>
+			{/* <FightingScreen myTeam={[""]} opponentTeam={[""]}/> */}
 	 	</Provider>
 	)
 }

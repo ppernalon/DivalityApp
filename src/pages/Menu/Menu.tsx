@@ -3,8 +3,8 @@ import DivalityButtonTextured from '@components/DivalityButtonTextured/DivalityB
 import FooterProfileCommunity from '@components/FooterProfileCommunity/FooterProfileCommunity'
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import PowerIcon from '@components/PowerIcon/PowerIcon'
-import React, {useState} from 'react'
-import {View} from 'react-native'
+import React, {useEffect, useRef, useState} from 'react'
+import {AppState, View} from 'react-native'
 import {menuStyle} from './MenuStyle'
 import MatchmakingLoader from '@components/MatchmakingLoader'
 import {Modal, Portal} from 'react-native-paper'
@@ -17,6 +17,7 @@ type MenuProps = {
 }
 const widthButtons = '70%'
 const Menu = ({navigation}: MenuProps) => {
+    const appState = useRef(AppState.currentState)
     const [isWaitingForQueue, setWaitingState] = useState<boolean>(false)
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
@@ -47,6 +48,28 @@ const Menu = ({navigation}: MenuProps) => {
             })
         )
     }
+
+    useEffect(() => {
+        const subscription = AppState.addEventListener("change", nextAppState => {
+            if (
+                appState.current.match(/inactive|background/) &&
+                nextAppState === "active"
+            ) {
+                console.log("App foreground")
+            } else if (
+                appState.current === "active" &&
+                nextAppState.match(/inactive|background/)
+            ) {
+                ws.close()
+                navigation.navigate("SignIn")
+            }
+        })
+        return () => subscription.remove()
+    }, [])    
+
+	useEffect(() => {
+		
+	})
 
     return (
         <View style={menuStyle.containerMenu}>

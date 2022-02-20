@@ -23,8 +23,13 @@ class WsService {
                 })
             )
             this.WS.onmessage = (e: any) => {
-                if (JSON.parse(e.data).type === "disciples"){
+                const data = JSON.parse(e.data)
+                console.log(data)
+                if (data.type === "disciples"){
                     store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(e.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
+                }
+                if (data.type === "deconnectionWebSocket"){
+                    this.WS.close()
                 }
             }
         }
