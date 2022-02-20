@@ -1,7 +1,9 @@
-import TeamSelection from "components/TeamSelection/TeamSelection"
+import FightingScreen from "components/Duel/FightingScreen/FightingScreen"
+import TeamSelection from "components/Duel/TeamSelection/TeamSelection"
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { Text } from "react-native-paper"
+import wsService from "ws-services/WsService"
 
 type DuelProps = {
     route: any
@@ -9,12 +11,18 @@ type DuelProps = {
 
 const Duel = ({route}: DuelProps) => {
     const opponent = route.params.opponent
+    const ws = wsService.getWs()
     const [myTeam, setMyTeam] = useState<string[]>([])
     const [opponentTeam, setOpponentTeam] = useState<string[]>([])
     const [duelStep, setDuelStep] = useState<string>('teamSelection')
 
     useEffect(() => {
-        console.log("connection à " + opponent)
+        ws.onmessage = (wsEvent: WebSocketMessageEvent) => {
+            const wsAnswer = JSON.parse(wsEvent.data)
+            if (wsAnswer.type === "opponentPickedTeam") {
+                setOpponentTeam(wsAnswer.opponentGods)
+            }
+        }
     }, [opponent])
 
     useEffect(() => {
@@ -36,9 +44,7 @@ const Duel = ({route}: DuelProps) => {
             )
         case 'fighting':
             return (
-                <View>
-                    <Text> fighting </Text>
-                </View>
+                <FightingScreen myTeam={myTeam} opponentTeam={opponentTeam}/>
             )
     }
 

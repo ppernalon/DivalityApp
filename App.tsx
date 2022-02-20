@@ -15,6 +15,8 @@ import store from './src/store/store'
 import TeamModification from './src/pages/TeamModification/TeamModification'
 import Duel from './src/pages/Duel/Duel'
 
+import FightingScreen from '@components/Duel/FightingScreen/FightingScreen'
+
 const App = () => {
 	const Stack = createNativeStackNavigator()
 	return (
@@ -35,7 +37,9 @@ const App = () => {
 					</Stack.Navigator>
 				</NavigationContainer>
 			</PaperProvider>
-	 </Provider>
+
+			<FightingScreen myTeam={[""]} opponentTeam={[""]}/>
+	 	</Provider>
 	)
 }
 

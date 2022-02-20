@@ -5,7 +5,7 @@ import {Text} from 'react-native-paper'
 import CardServices from 'services/CardServices'
 import wsService from "ws-services/WsService"
 import { useSelector } from "react-redux"
-import { selectUsername } from '../../store/reducers/UsernameSlice'
+import { selectUsername } from '../../../store/reducers/UsernameSlice'
 import { colors } from "GlobalStyle"
 import {teamSelectionStyles} from "./TeamSelectionStyles"
 
@@ -35,9 +35,11 @@ const TeamSelection = ({ setMyTeam } : TeamSelectionProps) => {
         }
     }
 
-    useEffect(() => {
-        loadData()
-    }, [])
+    if (!isDataLoad) loadData()
+
+    // useEffect(() => {
+    //     loadData()
+    // }, [])
 
     const pickTeamForDuel = (teamIndex: number) => {
         ws.send(
