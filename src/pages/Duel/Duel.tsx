@@ -44,7 +44,7 @@ const Duel = ({route}: DuelProps) => {
             )
         case 'fighting':
             return (
-                <FightingScreen myTeam={myTeam} opponentTeam={opponentTeam}/>
+                <FightingScreen opponent={opponent} myTeam={myTeam} opponentTeam={opponentTeam}/>
             )
     }
 
