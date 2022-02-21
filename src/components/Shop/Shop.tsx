@@ -19,7 +19,7 @@ const Shop = () => {
     const username = useSelector(selectUsername)
 
     const header = [
-        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardName'},
+        {name: 'Divinité', type: 'string', width: '', nameOfTheData: 'cardName'},
         {name: 'Vendeur', type: 'string', width: '', nameOfTheData: 'ownerName'},
         {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
         {

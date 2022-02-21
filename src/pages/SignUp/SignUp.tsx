@@ -62,7 +62,7 @@ const SignUp = ({navigation}: SignUpProps) => {
                     if (error === 401) {
                         setErrorBack('Pseudo déjà utilisé')
                     } else {
-                        setErrorBack("L'inscription a écouché")
+                        setErrorBack("L'inscription a échoué")
                     }
                 })
         },
