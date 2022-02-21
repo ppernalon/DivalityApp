@@ -7,6 +7,9 @@ import {Text} from 'react-native-paper'
 import DivalityForm from '../../components/DivalityForm/DivalityForm'
 import {checkBeforeSubmitFunction, checkFormAnswer, formField} from '../../components/DivalityForm/DivalityFormTypes'
 import {signUpStyles} from './SignUpStyles'
+import wsService from 'ws-services/WsService'
+import store from 'store/store'
+import { onConnect } from 'store/reducers/UsernameSlice'
 
 type SignUpProps = {
     navigation: any
@@ -47,6 +50,11 @@ const SignUp = ({navigation}: SignUpProps) => {
             setErrorBack('')
             SignUpHttpService.signUp(formStateApi)
                 .then(() => {
+                    store.dispatch(onConnect({
+                        username: formStateApi.username,
+                        type: 'ON_CONNECT'
+                    }))
+                    wsService.openWs(formStateApi.username)
                     navigation.navigate('Menu')
                 })
                 .catch((err) => {
