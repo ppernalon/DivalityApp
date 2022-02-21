@@ -3,7 +3,7 @@ import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityBu
 import {colors} from 'GlobalStyle'
 import React, {useState} from 'react'
 import {View} from 'react-native'
-import {Button, IconButton, Modal, Portal, Text} from 'react-native-paper'
+import {Button, IconButton, Modal, Portal, Text, TextInput} from 'react-native-paper'
 import {useDispatch, useSelector} from 'react-redux'
 import {incrementByAmount} from 'store/reducers/DisciplesSlice'
 import {selectUsername} from 'store/reducers/UsernameSlice'
@@ -68,11 +68,15 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                     <View style={{width: '100%', alignItems: 'center'}}>
                         <Card name={cardInfo.cardName} minimal={true}></Card>
                     </View>
-                    <View style={{marginLeft: '20%', marginTop: '10%'}}>
+                    <View style={{marginLeft: '20%', marginTop: '10%', width: '60%'}}>
                         <Text style={auctionHouseStyle.formName}>Nom du vendeur</Text>
-                        <Text style={auctionHouseStyle.form}>{cardInfo.ownerName}</Text>
+                        <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
+                            {cardInfo.ownerName}
+                        </TextInput>
                         <Text style={auctionHouseStyle.formName}>Prix</Text>
-                        <Text style={auctionHouseStyle.form}>{cardInfo.price}</Text>
+                        <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
+                            {cardInfo.price}
+                        </TextInput>
                     </View>
                     <View
                         style={{
@@ -85,7 +89,13 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
 
                         <View style={{width: '90%', flexDirection: 'row', justifyContent: 'space-around'}}>
                             <View style={{width: '38%'}}>
-                                <DivalityButtonTextured isCancelButton={true} label={'Annuler'} onSubmit={() => closeModal()} fontSize={14} paddingVertical={5} />
+                                <DivalityButtonTextured
+                                    isCancelButton={true}
+                                    label={'Annuler'}
+                                    onSubmit={() => closeModal()}
+                                    fontSize={14}
+                                    paddingVertical={5}
+                                />
                             </View>
                             <View style={{width: '38%'}}>
                                 <DivalityButtonTextured

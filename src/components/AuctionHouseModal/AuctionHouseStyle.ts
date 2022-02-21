@@ -3,10 +3,16 @@ import {colors} from '../../GlobalStyle'
 
 export const auctionHouseStyle = StyleSheet.create({
     formName: {
-        marginBottom: '2%',
+        marginBottom:10
     },
-    form: {
+    formNewSell: {
         marginTop: 30,
+        backgroundColor: '#f7f7f7',
+        fontSize: 12,
+        height: 50,
+    },
+    formSell:{
+        marginBottom: 20,
         backgroundColor: '#f7f7f7',
         fontSize: 12,
         height: 50,

@@ -22,15 +22,20 @@ const Card = ({name, minimal = false}: cardProps) => {
     const [ability, setAbility] = useState<string>('')
 
     useEffect(() => {
-        CardServices.getCardByName(name).then((data: any) => {
-            setLife(data.life)
-            setArmor(data.armor)
-            setPower(data.power)
-            setSpeed(data.speed)
-            setImage(data.uri)
-            setAbility(data.ability)
+        if (name !== '') {
+            CardServices.getCardByName(name).then((data: any) => {
+                setLife(data.life)
+                setArmor(data.armor)
+                setPower(data.power)
+                setSpeed(data.speed)
+                setImage(data.uri)
+                setAbility(data.ability)
+                setIsLoading(false)
+            })
+        }
+        else{
             setIsLoading(false)
-        })
+        }
     }, [name])
 
     let loadingCircleColor: string = colors.egyptianYellow
@@ -53,11 +58,16 @@ const Card = ({name, minimal = false}: cardProps) => {
     }
 
     return (
-        <View style={globalCardStyle}>
+        <View style={name !== '' ? globalCardStyle : {}}>
             <ReactIf condition={isLoading}>
                 <ActivityIndicator color={loadingCircleColor} />
             </ReactIf>
-            <ReactIf condition={!isLoading}>
+            <ReactIf condition={!isLoading && name === ''}>
+                <React.Fragment>
+                    <View style={[minimal ? cardStyle.minimalDim : cardStyle.notMinimalDim, cardStyle.emptyCard]}></View>
+                </React.Fragment>
+            </ReactIf>
+            <ReactIf condition={!isLoading && name !== ''}>
                 <React.Fragment>
                     <Image style={minimal ? cardStyle.imageMinimalDim : cardStyle.imageNotMinimalDim} source={image} />
                     <LinearGradient

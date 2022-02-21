@@ -27,7 +27,11 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
     const [initialData, setInitialData] = useState<[]>([])
     const [maxOccurence, setMaxOccurence] = useState<number>(0)
     useEffect(() => {
-        loadDataCollection()
+        setFormOutput({cardName: '', price: '', quantity: ''})
+        setSelectedDivinityName('')
+        if (isModalVisible) {
+            loadDataCollection()
+        }
     }, [isModalVisible])
 
     const {fonts, colors} = useTheme()
@@ -45,7 +49,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                 username: username,
                 cardName: formOutput.cardName.toLowerCase(),
                 price: formOutput.price,
-                quantity: formOutput.quantity
+                quantity: formOutput.quantity,
             })
         )
         ws.onmessage = (e: any) => {
@@ -93,7 +97,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                 onDismiss={() => {
                     closeModal()
                 }}
-                contentContainerStyle={{backgroundColor: 'white', height: '80%', width: '80%', margin: '10%'}}>
+                contentContainerStyle={{backgroundColor: 'white', height: '85%', width: '80%', margin: '10%'}}>
                 <View style={{height: '100%', width: '100%', flex: 1}}>
                     <IconButton
                         icon="close"
@@ -104,8 +108,11 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                         tvParallaxProperties={undefined}
                         style={{marginLeft: '85%'}}
                     />
-                    <ScrollView style={{marginLeft: '20%', marginTop: '10%', width: '60%', flex: 1}}>
-                        <Text>Ajouter une vente</Text>
+
+                    <ScrollView style={{marginLeft: '20%', width: '60%', flex: 1, marginVertical:20}}>
+                        <View style={{width: '100%', alignItems: 'center'}}>
+                            <Card name={formOutput.cardName} minimal={true}></Card>
+                        </View>
                         <View style={auctionHouseStyle.pickerContainer}>
                             <DropDownPicker
                                 style={{
@@ -152,7 +159,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                         </View>
                         <TextInput
                             keyboardType={'numeric'}
-                            style={auctionHouseStyle.form}
+                            style={auctionHouseStyle.formNewSell}
                             mode={'flat'}
                             underlineColor={colorsGlobal.primaryBlue}
                             label="Quantité"
@@ -161,15 +168,14 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                             onChangeText={(newValue) => {
                                 if (parseInt(newValue) > maxOccurence) {
                                     setFormOutput({...formOutput, quantity: maxOccurence.toString()})
-                                }
-                                else{
+                                } else {
                                     setFormOutput({...formOutput, quantity: newValue})
                                 }
                             }}
                         />
                         <TextInput
                             keyboardType={'numeric'}
-                            style={auctionHouseStyle.form}
+                            style={auctionHouseStyle.formNewSell}
                             mode={'flat'}
                             underlineColor={colorsGlobal.primaryBlue}
                             label="Prix"
@@ -201,7 +207,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                                     onSubmit={() => {
                                         sellOneCard()
                                     }}
-                                    label={'Acheter'}
+                                    label={'Valider'}
                                     fontSize={14}
                                     paddingVertical={5}
                                     isShadow={false}

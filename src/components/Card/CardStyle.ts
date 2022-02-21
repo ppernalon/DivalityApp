@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native"
 import { colors } from "../../GlobalStyle"
 
 export const cardStyle = StyleSheet.create({
+    emptyCard:{
+        backgroundColor: colors.blueSky,
+        borderStyle: 'solid',
+        borderWidth: 5,
+        borderColor: colors.primaryBlue
+    },
     card: {
         backgroundColor: 'white',
         borderStyle: 'solid',
