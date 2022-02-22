@@ -22,6 +22,7 @@ const Shop = () => {
         {name: 'Divinité', type: 'string', width: '', nameOfTheData: 'cardName'},
         {name: 'Vendeur', type: 'string', width: '', nameOfTheData: 'ownerName'},
         {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
+        {name: 'Quantité', type: 'string', width: '', nameOfTheData: 'quantity'},
         {
             name: '',
             type: 'icon',
@@ -45,6 +46,7 @@ const Shop = () => {
             })
         )
         ws.onmessage = (e: any) => {
+            console.log(e)
             if (JSON.parse(e.data).type === 'auctionHouse') {
                 setShopData(JSON.parse(e.data).shopData)
                 setIsDataLoad(true)

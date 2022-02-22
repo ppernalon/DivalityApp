@@ -10,6 +10,7 @@ import {useSelector} from 'react-redux'
 import DataTableDivality from 'components/DataTable/DataTableDivality'
 import AuctionHouseModal from 'components/AuctionHouseModal/AuctionHouseModal'
 import AuctionHouseModalNewSell from 'components/AuctionHouseModal/AuctionHouseModalNewSell'
+import AuctionHouseCancelSellModal from 'components/AuctionHouseModal/AuctionHouseCancelSellModal'
 
 type SellProps = {}
 
@@ -27,8 +28,8 @@ const Sell = () => {
 
     const header = [
         {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardName'},
-        {name: 'Vendeur', type: 'string', width: '', nameOfTheData: 'ownerName'},
         {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
+        {name: 'Quantité', type: 'string', width: '', nameOfTheData: 'quantity'},
         {
             name: '',
             type: 'icon',
@@ -65,35 +66,6 @@ const Sell = () => {
         setIsModalDeleteVisible(!isModalDeleteVisible)
     }
 
-    const onValidationDeleteSell = () => {
-        setIsDataLoad(false)
-        setIsModalDeleteVisible(!isModalDeleteVisible)
-        const cardToDelete = sellToDelete
-        console.log(
-            JSON.stringify({
-                type: 'cancelAuction',
-                username: username,
-                carnName: cardToDelete.cardName,
-                price: cardToDelete.price,
-                quantity: '1',
-            })
-        )
-        ws.send(
-            JSON.stringify({
-                type: 'cancelAuction',
-                username: username,
-                cardName: cardToDelete.cardName,
-                price: cardToDelete.price,
-                quantity: '1',
-            })
-        )
-        ws.onmessage = (e: any) => {
-            console.log(e)
-            if (JSON.parse(e.data).type === 'auctionHouse') {
-                loadDataSell()
-            }
-        }
-    }
 
     const closeModalProps = () => {
         setIsModalVisible(!isModalVisible)
@@ -106,6 +78,16 @@ const Sell = () => {
     }
     const closeModalDelete = () => {
         setIsModalDeleteVisible(!isModalDeleteVisible)
+    }
+    
+    const onValidationDeleteClose = () => {
+        setIsModalDeleteVisible(!isModalDeleteVisible)
+        setIsDataLoad(false)
+        ws.onmessage = (e: any) => {
+            if (JSON.parse(e.data).type === 'auctionHouse') {
+                loadDataSell()
+            }
+        }
     }
 
     return (
@@ -146,56 +128,7 @@ const Sell = () => {
             <AuctionHouseModalNewSell isModalVisible={isModalAddSellVisible} closeModalProps={closeModalNewSell}></AuctionHouseModalNewSell>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
             {isModalDeleteVisible ? (
-                <Portal>
-                    <Modal
-                        visible={isModalDeleteVisible}
-                        onDismiss={() => {
-                            closeModalDelete()
-                        }}
-                        contentContainerStyle={{
-                            backgroundColor: 'white',
-                            width: '80%',
-                            margin: '10%',
-                            alignItems: 'center',
-                            paddingTop: '1%',
-                            paddingBottom: '5%',
-                        }}>
-                        <IconButton
-                            icon="close"
-                            onPress={() => {
-                                closeModalDelete()
-                            }}
-                            hasTVPreferredFocus={undefined}
-                            tvParallaxProperties={undefined}
-                            style={{marginLeft: '85%', marginBottom: '3%'}}
-                        />
-                        <Text style={{width: '80%', paddingBottom: '5%'}}>
-                            Voulez-vous supprimer la vente de {sellToDelete.cardName.replace(sellToDelete.cardName[0], sellToDelete.cardName[0].toUpperCase())}?
-                        </Text>
-                        <View style={{width: '90%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                            <View style={{width: '38%'}}>
-                                <DivalityButtonTextured
-                                    isCancelButton={true}
-                                    label={'Annuler'}
-                                    onSubmit={() => closeModalDelete()}
-                                    fontSize={14}
-                                    paddingVertical={5}
-                                />
-                            </View>
-                            <View style={{width: '38%'}}>
-                                <DivalityButtonTextured
-                                    onSubmit={() => {
-                                        onValidationDeleteSell()
-                                    }}
-                                    label={'Valider'}
-                                    fontSize={14}
-                                    paddingVertical={5}
-                                    isShadow={false}
-                                />
-                            </View>
-                        </View>
-                    </Modal>
-                </Portal>
+                <AuctionHouseCancelSellModal isModalVisible={isModalDeleteVisible} closeModalProps={closeModalDelete} sellInfo={sellToDelete} onValidation={onValidationDeleteClose}></AuctionHouseCancelSellModal>
             ) : (
                 <></>
             )}

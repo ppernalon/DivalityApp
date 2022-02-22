@@ -54,7 +54,6 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
         )
         ws.onmessage = (e: any) => {
             if (JSON.parse(e.data).type === 'auctionHouse') {
-                console.log(e)
                 closeModal()
             }
         }
@@ -80,7 +79,6 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                         value: divinityNameUpperCase,
                     })
                 })
-                console.log(listDivinityNameForDropdown)
                 setDivinitiesNames(listDivinityNameForDropdown)
             }
         }
@@ -109,7 +107,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                         style={{marginLeft: '85%'}}
                     />
 
-                    <ScrollView style={{marginLeft: '20%', width: '60%', flex: 1, marginVertical:20}}>
+                    <ScrollView style={{marginLeft: '20%', width: '60%', flex: 1, marginVertical: 20}}>
                         <View style={{width: '100%', alignItems: 'center'}}>
                             <Card name={formOutput.cardName} minimal={true}></Card>
                         </View>
@@ -152,8 +150,9 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                                 setValue={setSelectedDivinityName}
                                 setItems={setDivinitiesNames}
                                 onSelectItem={(cardName) => {
-                                    setMaxOccurence(initialData.filter((x: string) => x === cardName.label.toLowerCase()).length)
-                                    setFormOutput({...formOutput, cardName: cardName.label})
+                                    const maxOccTemp = initialData.filter((x: string) => x === cardName.label.toLowerCase()).length
+                                    setMaxOccurence(maxOccTemp)
+                                    setFormOutput({...formOutput, cardName: cardName.label, quantity: maxOccTemp.toString()})
                                 }}
                             />
                         </View>
