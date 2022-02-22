@@ -87,12 +87,13 @@ GodTeam.opponentGodsData = (godTeam: {god: string, maxLife: number, currentLife:
         const image = CardServices.getImageByName(teamMember.god)
         const godId: string = `${teamMember.god}_${index}_opponent`
         let thisGodData: any = {}
+        // miroir de MyTeam
         if (index === 0) thisGodData = {x: 2*tileWidth, y: 0 + tileHeight/5}
-        if (index === 1) thisGodData = {x: tileWidth, y: tileHeight + tileHeight/5}
-        if (index === 2) thisGodData = {x: 3*tileWidth, y: tileHeight + tileHeight/5}
-        if (index === 3) thisGodData = {x: 0, y: 2*tileHeight + tileHeight/5}
+        if (index === 1) thisGodData = {x: 3*tileWidth, y: tileHeight + tileHeight/5}
+        if (index === 2) thisGodData = {x: tileWidth, y: tileHeight + tileHeight/5}
+        if (index === 3) thisGodData = {x: 4*tileWidth, y: 2*tileHeight + tileHeight/5}
         if (index === 4) thisGodData = {x: 2*tileWidth, y: 2*tileHeight + tileHeight/5}
-        if (index === 5) thisGodData = {x: 4*tileWidth, y: 2*tileHeight + tileHeight/5}
+        if (index === 5) thisGodData = {x: 0, y: 2*tileHeight + tileHeight/5}
         thisGodData.image = image
         thisGodData.maxLife = teamMember.maxLife
         thisGodData.currentLife = teamMember.currentLife
