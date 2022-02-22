@@ -1,27 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Circle, ClipPath, Defs, Image, Rect, Text } from 'react-native-svg'
 import CardServices from 'services/CardServices'
 
 type GodTeam = {
     tileHeight: number
     tileWidth: number
+    godTeam: {god: string, maxLife: number, currentLife: number}[]
     isOpponent: boolean
 }
 
-const GodTeam = ({ tileHeight, tileWidth, isOpponent }: GodTeam) => {
+const GodTeam = ({ tileHeight, tileWidth, godTeam, isOpponent }: GodTeam) => {
     const rayon = Math.min(tileHeight, tileWidth)/2
     const keyId = isOpponent ? 'opponentGodTeam' : 'myGodTeam'
+    const [godData, setGodData] = useState<{[godname: string]: {x: number, y: number, image: any, maxLife: number, currentLife: number}}>({})
 
-    const godTeam = [
-        { god: "anubis", maxLife: 150, currentLife: 120 },
-        { god: "anubis", maxLife: 150, currentLife: 120 },
-        { god: "horus", maxLife: 200, currentLife: 120 },
-        { god: "horus", maxLife: 200, currentLife: 120 },
-        { god: "anubis", maxLife: 150, currentLife: 120 },
-        { god: "zeus", maxLife: 75, currentLife: 120 },
-    ]
-
-    const godData = isOpponent ? GodTeam.opponentGodsData(godTeam, tileWidth, tileHeight) : GodTeam.myGodsData(godTeam, tileWidth, tileHeight) 
+    useEffect(() => {
+        setGodData(
+            isOpponent ? 
+                GodTeam.opponentGodsData(godTeam, tileWidth, tileHeight) 
+                : GodTeam.myGodsData(godTeam, tileWidth, tileHeight)
+        )
+    }, [godTeam])
 
     return (
         <>

@@ -35,11 +35,9 @@ const TeamSelection = ({ setMyTeam } : TeamSelectionProps) => {
         }
     }
 
-    if (!isDataLoad) loadData()
-
-    // useEffect(() => {
-    //     loadData()
-    // }, [])
+    useEffect(() => {
+        loadData()
+    }, [ws])
 
     const pickTeamForDuel = (teamIndex: number) => {
         ws.send(
