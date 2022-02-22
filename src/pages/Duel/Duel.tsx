@@ -1,4 +1,5 @@
 import FightingScreen from "components/Duel/FightingScreen/FightingScreen"
+import GodTeam from "components/Duel/GodTeam"
 import TeamSelection from "components/Duel/TeamSelection/TeamSelection"
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
@@ -20,8 +21,19 @@ const Duel = ({route}: DuelProps) => {
     const [duelStep, setDuelStep] = useState<string>('teamSelection')
     const [attacks, setAttacks] = useState<any>([])
 
-    const timeBetweenAttack = 4000 // 4s
-    const [lastTimeAnimated, setLastTimeAnimated] = useState(0)
+    const timeBetweenAttack = 3000 // 3s
+    const [waitingForAttacks, setwaitingForAttacks] = useState(true)
+
+    const isPlayerAlive = (godTeam: {god: string, maxLife: number, currentLife: number}[]) => {
+        godTeam.forEach(god => {
+            if (god.currentLife > 0) return true
+        })
+        return false
+    }
+
+    const isGameOn = () => {
+        return isPlayerAlive(myTeam) && isPlayerAlive(opponentTeam)
+    }
 
     useEffect(() => {
         ws.addEventListener("message", (wsEvent: WebSocketMessageEvent) => {
@@ -33,36 +45,39 @@ const Duel = ({route}: DuelProps) => {
             if (wsAnswer.type === "startDuel") {
                 setMyTeam(wsAnswer[username])
                 setOpponentTeam(wsAnswer[opponent])
-                setTimeout(() => setDuelStep("fighting"), 1)
+                setTimeout(() => {
+                    setDuelStep("fighting")
+                }, 1)
             }
             if (wsAnswer.type === "updatingDuelState") {
-                setAttacks([...attacks, {offensivePlayer: wsAnswer.offensivePlayer, pattern: wsAnswer.attackPattern, updatedGods: wsAnswer.updatedAttackedGods}])
-                setLastTimeAnimated(Date.now())
+                setAttacks((oldAttacks: any[]) => [...oldAttacks, {offensivePlayer: wsAnswer.offensivePlayer, turn: wsAnswer.turn, pattern: wsAnswer.attackPattern, updatedGods: wsAnswer.updatedAttackedGods}])
+                if (!isPlayerAlive(wsAnswer.updatedAttackedGods)){
+                    setwaitingForAttacks(false)
+                }
             }
         })
     }, [ws])
 
     useEffect(() => {
-        if (opponentTeam.length > 0 && myTeam.length > 0 && attacks.length > 0){
-            // wait to update attack
-            setTimeout(() => {
-                const attack = attacks[0]
-
-                // attack removed from the list
-                const newAttacks = [...attacks]
-                newAttacks.splice(0, 1)
-                setAttacks(newAttacks)
-
+        if ( duelStep === "fighting" && !waitingForAttacks ){
+            const attacksSorted = attacks
+            attacksSorted.sort((a1: any, a2: any) => a1.turn - a2.turn)
+            const updateTeam = (index: number) => {
+                const attack = attacksSorted[index]
                 if (attack.offensivePlayer === opponent) {
                     setMyTeam(attack.updatedGods)
                 } else {
                     setOpponentTeam(attack.updatedGods)
                 }
-                setLastTimeAnimated(Date.now())
-
-            }, timeBetweenAttack)
+                setTimeout(() => {
+                    if (isGameOn() || index + 1 < attacks.length) {
+                        updateTeam(index + 1)
+                    }
+                }, timeBetweenAttack) 
+            }
+            updateTeam(0)
         }
-    }, [lastTimeAnimated])
+    }, [duelStep, waitingForAttacks])
 
     switch (duelStep) {
         case 'teamSelection':
