@@ -54,7 +54,6 @@ const Sell = () => {
             })
         )
         ws.onmessage = (e: any) => {
-            console.log(JSON.parse(e.data).auctionsData)
             if (JSON.parse(e.data).type === 'auctions') {
                 setSellData(JSON.parse(e.data).auctionsData)
                 setIsDataLoad(true)

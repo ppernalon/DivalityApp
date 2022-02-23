@@ -111,7 +111,6 @@ MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: 
         })
     )
     ws.onmessage = (e: any) => {
-        console.log(e.data)
         let dataTeams = JSON.parse(e.data)
         setMyTeamsData(dataTeams.teamsdata)
         setIsDataLoad(true)

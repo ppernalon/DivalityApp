@@ -46,7 +46,6 @@ const Shop = () => {
             })
         )
         ws.onmessage = (e: any) => {
-            console.log(e)
             if (JSON.parse(e.data).type === 'auctionHouse') {
                 setShopData(JSON.parse(e.data).shopData)
                 setIsDataLoad(true)

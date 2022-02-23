@@ -24,7 +24,6 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
     const [formOutputQuantity, setFormOutputQuantity] = useState<string>('')
 
     useEffect(() => {
-        console.log(typeof(cardInfo.quantity))
         if (isModalVisible) {
             setFormOutputQuantity(cardInfo.quantity.toString())
         }
@@ -43,11 +42,9 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
             })
         )
         ws.onmessage = (e: any) => {
-            console.log(e)
             if (e.data === "L'utilisateur ne possède pas assez de disciples") {
                 setErrorToDisplay('Vous ne possedez pas assez de disciples')
             } else if (JSON.parse(e.data).type === 'auctionHouse') {
-                console.log(e)
                 dispatch(incrementByAmount({number: -parseInt(cardInfo.price), type: 'INCREMENT'}))
                 closeModal()
             }
