@@ -2,7 +2,7 @@ import FightingScreen from "components/Duel/FightingScreen/FightingScreen"
 import GodTeam from "components/Duel/GodTeam"
 import TeamSelection from "components/Duel/TeamSelection/TeamSelection"
 import React, { useEffect, useState } from "react"
-import { View } from "react-native"
+import { ImageBackground, View } from "react-native"
 import { Text } from "react-native-paper"
 import { useSelector } from "react-redux"
 import { selectUsername } from "store/reducers/UsernameSlice"
@@ -20,6 +20,14 @@ const Duel = ({route}: DuelProps) => {
     const [opponentTeam, setOpponentTeam] = useState<{god: string, maxLife: number, currentLife: number}[]>([])
     const [duelStep, setDuelStep] = useState<string>('teamSelection')
     const [attacks, setAttacks] = useState<any>([])
+    const [currentAttack, setCurrentAttack] = useState<{
+        offensivePlayer: string, 
+        attackerPosition: number, 
+        pattern: number[][]}>({
+            offensivePlayer: "NONE", 
+            attackerPosition: -1, 
+            pattern: []
+        })
 
     const timeBetweenAttack = 3000 // 3s
     const [waitingForAttacks, setwaitingForAttacks] = useState(true)
@@ -50,7 +58,20 @@ const Duel = ({route}: DuelProps) => {
                 }, 1)
             }
             if (wsAnswer.type === "updatingDuelState") {
-                setAttacks((oldAttacks: any[]) => [...oldAttacks, {offensivePlayer: wsAnswer.offensivePlayer, turn: wsAnswer.turn, pattern: wsAnswer.attackPattern, updatedGods: wsAnswer.updatedAttackedGods}])
+                setAttacks((oldAttacks: any[]) => {
+                    return (
+                        [
+                            ...oldAttacks, 
+                            {
+                                offensivePlayer: wsAnswer.offensivePlayer, 
+                                attackerPosition: wsAnswer.attackerPosition, 
+                                turn: wsAnswer.turn, 
+                                pattern: wsAnswer.attackPattern, 
+                                updatedGods: wsAnswer.updatedAttackedGods
+                            }
+                        ]
+                    ) 
+                })
                 if (!isPlayerAlive(wsAnswer.updatedAttackedGods)){
                     setwaitingForAttacks(false)
                 }
@@ -69,6 +90,11 @@ const Duel = ({route}: DuelProps) => {
                 } else {
                     setOpponentTeam(attack.updatedGods)
                 }
+                setCurrentAttack({
+                    offensivePlayer: attack.offensivePlayer, 
+                    attackerPosition: attack.attackerPosition, 
+                    pattern: attack.pattern
+                })
                 setTimeout(() => {
                     if (isGameOn() || index + 1 < attacks.length) {
                         updateTeam(index + 1)
@@ -92,7 +118,21 @@ const Duel = ({route}: DuelProps) => {
             )
         case 'fighting':
             return (
-                <FightingScreen opponent={opponent} myTeam={myTeam} opponentTeam={opponentTeam}/>
+                <View style={{ height: "100%", width: "100%", backgroundColor: 'white', alignItems: 'center'}}>
+                    <FightingScreen 
+                        opponent={opponent} 
+                        attackerPosition={currentAttack.attackerPosition} 
+                        offensivePlayer={currentAttack.offensivePlayer} 
+                        attackPattern={currentAttack.pattern}
+                        myTeam={myTeam} 
+                        opponentTeam={opponentTeam}
+                    />
+                    <View style={{height:"10%", width: "100%"}}>
+                        <ImageBackground source={require('@images/texturebouton.png')} style={{height:"100%", width:"100%"}}>
+                            <Text style={{color: 'white', fontSize: 20, textAlign: 'center'}}> prochain dieu qui attaque </Text>
+                        </ImageBackground>
+                    </View>
+                </View>
             )
     }
 
