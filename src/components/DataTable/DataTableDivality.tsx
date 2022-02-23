@@ -15,7 +15,7 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
     const [dataFilterByPage, setDataFilterByPage] = useState<[]>([])
     const [page, setPage] = useState<number>(0)
     const numberOfItemsPerPageList = [2, 5, 10]
-    const [numberOfItemsPerPage, setNumberOfItemsPerPage] = React.useState(numberOfItemsPerPageList[0])
+    const [numberOfItemsPerPage, setNumberOfItemsPerPage] = React.useState(numberOfItemsPerPageList[1])
     const fromPagination = page * numberOfItemsPerPage
     const toPagination = Math.min((page + 1) * numberOfItemsPerPage, dataFilter.length)
     useEffect(() => {
@@ -24,6 +24,7 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
     }, [numberOfItemsPerPage, nameToFilter, isDataLoad, data])
 
     const filterData = () => {
+        setPage(0)
         const dataFilterTemp: any = data.filter((item: any) => item.cardName.includes(nameToFilter))
         setDataFilter(dataFilterTemp)
         const dataFilterByPageTemp: any = dataFilterTemp.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage)

@@ -27,7 +27,7 @@ const Sell = () => {
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
 
     const header = [
-        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardName'},
+        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardId'}, 
         {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
         {name: 'Quantité', type: 'string', width: '', nameOfTheData: 'quantity'},
         {
@@ -54,6 +54,7 @@ const Sell = () => {
             })
         )
         ws.onmessage = (e: any) => {
+            console.log(JSON.parse(e.data).auctionsData)
             if (JSON.parse(e.data).type === 'auctions') {
                 setSellData(JSON.parse(e.data).auctionsData)
                 setIsDataLoad(true)

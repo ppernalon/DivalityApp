@@ -1,8 +1,8 @@
 import Card from '@components/Card/Card'
 import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityButtonTextured'
 import {colors} from 'GlobalStyle'
-import React, {useState} from 'react'
-import {View} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {View, ScrollView} from 'react-native'
 import {Button, IconButton, Modal, Portal, Text, TextInput} from 'react-native-paper'
 import {useDispatch, useSelector} from 'react-redux'
 import {incrementByAmount} from 'store/reducers/DisciplesSlice'
@@ -21,6 +21,15 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
     const username = useSelector(selectUsername)
     const dispatch = useDispatch()
     const [errorToDisplay, setErrorToDisplay] = useState<string>('')
+    const [formOutputQuantity, setFormOutputQuantity] = useState<string>('')
+
+    useEffect(() => {
+        console.log(typeof(cardInfo.quantity))
+        if (isModalVisible) {
+            setFormOutputQuantity(cardInfo.quantity.toString())
+        }
+    }, [isModalVisible])
+
 
     const buyOneCard = () => {
         ws.send(
@@ -30,6 +39,7 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                 cardName: cardInfo.cardName,
                 ownerName: cardInfo.ownerName,
                 price: cardInfo.price,
+                quantity: formOutputQuantity,
             })
         )
         ws.onmessage = (e: any) => {
@@ -55,7 +65,7 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                     closeModal()
                 }}
                 contentContainerStyle={{backgroundColor: 'white', height: '80%', width: '80%', margin: '10%'}}>
-                <View style={{height: '100%', width: '100%'}}>
+                <View style={{height: '100%', width: '100%', flex:1}}>
                     <IconButton
                         icon="close"
                         onPress={() => {
@@ -65,24 +75,41 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                         tvParallaxProperties={undefined}
                         style={{marginLeft: '85%'}}
                     />
-                    <View style={{width: '100%', alignItems: 'center'}}>
-                        <Card name={cardInfo.cardName} minimal={true}></Card>
-                    </View>
-                    <View style={{marginLeft: '20%', marginTop: '10%', width: '60%'}}>
-                        <Text style={auctionHouseStyle.formName}>Nom du vendeur</Text>
+                    <ScrollView style={{flex: 1, marginVertical: 20, height: '100%'}}>
+                        <View style={{width: '100%', alignItems: 'center'}}>
+                            <Card name={cardInfo.cardName} minimal={true}></Card>
+                        </View>
+                        <View style={{marginLeft: '20%', marginTop: '10%', width: '60%'}}>
+                            {/* <Text style={auctionHouseStyle.formName}>Nom du vendeur</Text>
                         <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
                             {cardInfo.ownerName}
-                        </TextInput>
-                        <Text style={auctionHouseStyle.formName}>Prix</Text>
-                        <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
-                            {cardInfo.price}
-                        </TextInput>
-                    </View>
+                        </TextInput> */}
+                            <Text style={auctionHouseStyle.formName}>Prix</Text>
+                            <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
+                                {cardInfo.price}
+                            </TextInput>
+                            <Text style={auctionHouseStyle.formName}>Quantité</Text>
+                            <TextInput
+                                keyboardType={'numeric'}
+                                style={auctionHouseStyle.formSell}
+                                mode={'flat'}
+                                underlineColor={colors.primaryBlue}
+                                value={formOutputQuantity}
+                                right={<TextInput.Affix text={'Max ' + cardInfo.quantity} />}
+                                onChangeText={(newValue) => {
+                                    if (parseInt(newValue) > parseInt(cardInfo.quantity)) {
+                                        setFormOutputQuantity(cardInfo.quantity)
+                                    } else {
+                                        setFormOutputQuantity(newValue)
+                                    }
+                                }}
+                            />
+                        </View>
+                    </ScrollView>
                     <View
                         style={{
                             width: '100%',
                             marginHorizontal: '5%',
-                            position: 'absolute',
                             bottom: '5%',
                         }}>
                         <Text style={{color: colors.errorRed, fontSize: 10, marginBottom: 10, left: '10%'}}>{errorToDisplay}</Text>
