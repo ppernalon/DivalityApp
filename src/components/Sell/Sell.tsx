@@ -27,7 +27,7 @@ const Sell = () => {
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
 
     const header = [
-        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardId'}, 
+        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardName'}, 
         {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
         {name: 'Quantité', type: 'string', width: '', nameOfTheData: 'quantity'},
         {

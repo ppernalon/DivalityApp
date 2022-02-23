@@ -7,13 +7,13 @@ export const auctionHouseStyle = StyleSheet.create({
     },
     formNewSell: {
         marginTop: 30,
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.greyForm,
         fontSize: 12,
         height: 50,
     },
     formSell:{
         marginBottom: 20,
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.greyForm,
         fontSize: 12,
         height: 50,
     },

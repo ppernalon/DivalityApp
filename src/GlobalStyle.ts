@@ -8,7 +8,10 @@ export const colors = {
     errorRed: "red",
     egyptianYellow: '#FFC400',
     nordicRed: "red",
-    greekBlue: "blue"
+    greekBlue: "blue",
+    greyForm : "#f7f7f7",
+    greyInactive: "#b3b3b3",
+    green: "#57b870"
 }
 
 export const globalStyle = StyleSheet.create({

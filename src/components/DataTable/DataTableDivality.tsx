@@ -19,13 +19,18 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
     const fromPagination = page * numberOfItemsPerPage
     const toPagination = Math.min((page + 1) * numberOfItemsPerPage, dataFilter.length)
     useEffect(() => {
+        console.log(data, 'data from dataTable')
         setPage(0)
         filterData()
     }, [numberOfItemsPerPage, nameToFilter, isDataLoad, data])
 
     const filterData = () => {
         setPage(0)
-        const dataFilterTemp: any = data.filter((item: any) => item.cardName.includes(nameToFilter))
+        let dataFilterTemp: any = data
+        if (nameToFilter !== '') {
+            dataFilterTemp = data.filter((item: any) => item.cardName.includes(nameToFilter))
+        }
+
         setDataFilter(dataFilterTemp)
         const dataFilterByPageTemp: any = dataFilterTemp.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage)
         setDataFilterByPage(dataFilterByPageTemp)
@@ -59,6 +64,57 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
                                     />
                                 </DataTable.Cell>
                             )
+                        case 'isConnected':
+                            if (rowDataJSON[headerJSON.nameOfTheData] === 'request') {
+                                return (
+                                    <DataTable.Cell style={{flex: 1, justifyContent: 'center', flexDirection: 'row'}} key={indexColumn}>
+                                        <IconButton
+                                            onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON, true) : () => console.log('error missing action')}
+                                            icon={'close-circle-outline'}
+                                            hasTVPreferredFocus={undefined}
+                                            tvParallaxProperties={undefined}
+                                            color={colors.blueSky}
+                                        />
+                                        <IconButton
+                                            onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON, true) : () => console.log('error missing action')}
+                                            icon={'check-circle-outline'}
+                                            hasTVPreferredFocus={undefined}
+                                            tvParallaxProperties={undefined}
+                                            color={colors.blueSky}
+                                        />
+                                    </DataTable.Cell>
+                                )
+                            }
+                            if (rowDataJSON[headerJSON.nameOfTheData] === 'connected') {
+                                return (
+                                    <DataTable.Cell style={{flex: 1, justifyContent: 'center'}} key={indexColumn}>
+                                        <IconButton
+                                            onPress={
+                                                rowDataJSON[headerJSON.nameOfTheData] === 'request'
+                                                    ? () => headerJSON.action(rowDataJSON)
+                                                    : () => console.log('error missing action')
+                                            }
+                                            icon={'account-circle'}
+                                            hasTVPreferredFocus={undefined}
+                                            tvParallaxProperties={undefined}
+                                            color={colors.green}
+                                        />
+                                    </DataTable.Cell>
+                                )
+                            } else if (rowDataJSON[headerJSON.nameOfTheData] === 'disconnected') {
+                                return (
+                                    <DataTable.Cell style={{flex: 1, justifyContent: 'center'}} key={indexColumn}>
+                                        <IconButton
+                                            onPress={() => {}}
+                                            icon={'account-circle'}
+                                            hasTVPreferredFocus={undefined}
+                                            tvParallaxProperties={undefined}
+                                            color={colors.greyInactive}
+                                        />
+                                    </DataTable.Cell>
+                                )
+                            }
+
                         default:
                             return (
                                 <DataTable.Cell style={{flex: 2, justifyContent: 'center'}} key={indexColumn}>
