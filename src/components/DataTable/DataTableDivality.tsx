@@ -7,7 +7,7 @@ type DataTableDivalityProps = {
     nameToFilter?: string
     isDataLoad: boolean
     data: []
-    header: [{name: string; type: string; width: string; nameOfTheData: string; action?: Function}]
+    header: [{name: string; type: string; width: number; nameOfTheData: string; action?: Function}]
 }
 
 const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTableDivalityProps) => {
@@ -19,7 +19,6 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
     const fromPagination = page * numberOfItemsPerPage
     const toPagination = Math.min((page + 1) * numberOfItemsPerPage, dataFilter.length)
     useEffect(() => {
-        console.log(data, 'data from dataTable')
         setPage(0)
         filterData()
     }, [numberOfItemsPerPage, nameToFilter, isDataLoad, data])
@@ -48,13 +47,13 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
                     switch (headerJSON.type) {
                         case 'string':
                             return (
-                                <DataTable.Cell style={{flex: 1, justifyContent: 'center'}} key={indexColumn}>
+                                <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
                                     {rowDataJSON[headerJSON.nameOfTheData]}
                                 </DataTable.Cell>
                             )
                         case 'icon':
                             return (
-                                <DataTable.Cell style={{flex: 1, justifyContent: 'center'}} key={indexColumn}>
+                                <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
                                     <IconButton
                                         onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON) : () => console.log('error missing action')}
                                         icon={headerJSON.nameOfTheData}
@@ -64,30 +63,72 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
                                     />
                                 </DataTable.Cell>
                             )
+                        case 'iconDefy':
+                            return (
+                                <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
+                                    {rowDataJSON['status'] === 'connected' ? (
+                                        <IconButton
+                                            onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON) : () => console.log('error missing action')}
+                                            icon={headerJSON.nameOfTheData}
+                                            hasTVPreferredFocus={undefined}
+                                            tvParallaxProperties={undefined}
+                                            color={colors.blueSky}
+                                        />
+                                    ) : (
+                                        <></>
+                                    )}
+                                </DataTable.Cell>
+                            )
+                            case 'iconDelete':
+                                return (
+                                    <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
+                                        {rowDataJSON['status'] !== 'request' ? (
+                                            <IconButton
+                                                onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON) : () => console.log('error missing action')}
+                                                icon={headerJSON.nameOfTheData}
+                                                hasTVPreferredFocus={undefined}
+                                                tvParallaxProperties={undefined}
+                                                color={colors.blueSky}
+                                            />
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </DataTable.Cell>
+                                )
                         case 'isConnected':
                             if (rowDataJSON[headerJSON.nameOfTheData] === 'request') {
                                 return (
-                                    <DataTable.Cell style={{flex: 1, justifyContent: 'center', flexDirection: 'row'}} key={indexColumn}>
-                                        <IconButton
-                                            onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON, true) : () => console.log('error missing action')}
-                                            icon={'close-circle-outline'}
-                                            hasTVPreferredFocus={undefined}
-                                            tvParallaxProperties={undefined}
-                                            color={colors.blueSky}
-                                        />
-                                        <IconButton
-                                            onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON, true) : () => console.log('error missing action')}
-                                            icon={'check-circle-outline'}
-                                            hasTVPreferredFocus={undefined}
-                                            tvParallaxProperties={undefined}
-                                            color={colors.blueSky}
-                                        />
+                                    <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
+                                        <View style={{flexDirection: 'row', height: '100%', width:'60%', justifyContent: "center", alignItems:'center'}}>
+                                            <IconButton
+                                                onPress={
+                                                    headerJSON.action ? () => headerJSON.action(rowDataJSON, true) : () => console.log('error missing action')
+                                                }
+                                                style={{margin: 0, padding: 0}}
+                                                icon={'check-circle-outline'}
+                                                hasTVPreferredFocus={undefined}
+                                                tvParallaxProperties={undefined}
+                                                color={colors.blueSky}
+                                                size={20}
+                                            />
+                                            <IconButton
+                                                onPress={
+                                                    headerJSON.action ? () => headerJSON.action(rowDataJSON, false) : () => console.log('error missing action')
+                                                }
+                                                style={{margin: 0, padding: 0}}
+                                                icon={'close-circle-outline'}
+                                                hasTVPreferredFocus={undefined}
+                                                tvParallaxProperties={undefined}
+                                                color={colors.blueSky}
+                                                size={20}
+                                            />
+                                        </View>
                                     </DataTable.Cell>
                                 )
                             }
                             if (rowDataJSON[headerJSON.nameOfTheData] === 'connected') {
                                 return (
-                                    <DataTable.Cell style={{flex: 1, justifyContent: 'center'}} key={indexColumn}>
+                                    <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
                                         <IconButton
                                             onPress={
                                                 rowDataJSON[headerJSON.nameOfTheData] === 'request'
@@ -103,7 +144,7 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
                                 )
                             } else if (rowDataJSON[headerJSON.nameOfTheData] === 'disconnected') {
                                 return (
-                                    <DataTable.Cell style={{flex: 1, justifyContent: 'center'}} key={indexColumn}>
+                                    <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
                                         <IconButton
                                             onPress={() => {}}
                                             icon={'account-circle'}
@@ -117,7 +158,7 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
 
                         default:
                             return (
-                                <DataTable.Cell style={{flex: 2, justifyContent: 'center'}} key={indexColumn}>
+                                <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
                                     {rowDataJSON[headerJSON.nameOfTheData]}
                                 </DataTable.Cell>
                             )
@@ -132,7 +173,7 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
             <DataTable style={{width: '80%'}}>
                 <DataTable.Header>
                     {header.map((headerJSON, indexHeader) => (
-                        <DataTable.Title style={{flex: 2, justifyContent: 'center'}} key={indexHeader}>
+                        <DataTable.Title style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexHeader}>
                             {headerJSON.name}
                         </DataTable.Title>
                     ))}

@@ -8,15 +8,17 @@ export const friendsSlice = createSlice({
     reducers: {
         onModificationFriends: (state, action) =>{
             if (action.payload.type === 'MODIFICATION_FRIENDS') {
-                state.value = {
-                    connected: [{username: 'testConnected', victory: 10, defeat: 5}],
-                    disconnected: [
-                        {username: 'testDisconnected', victory: 10, defeat: 5},
-                        {username: 'testDisconnected2', victory: 10, defeat: 5},
-                    ],
-                    request: [],
-                }
-                // state.value = action.payload.friends
+                // state.value = {
+                //     connected: [{username: 'testConnected', victory: 10, defeat: 5}],
+                //     disconnected: [
+                //         {username: 'testDisconnected', victory: 10, defeat: 5},
+                //         {username: 'testDisconnected2', victory: 10, defeat: 5},
+                //     ],
+                //     request: [                        
+                //         {username: 'request', victory: 10, defeat: 5},
+                // ],
+                // }
+                state.value = action.payload.friends
             }
         },
     },

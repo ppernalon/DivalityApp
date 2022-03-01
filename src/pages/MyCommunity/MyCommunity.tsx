@@ -1,13 +1,16 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
 import {TouchableOpacity, View, Button, Image} from 'react-native'
-import {ActivityIndicator, Text} from 'react-native-paper'
+import {ActivityIndicator, Text, TextInput} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
 import {colors} from 'GlobalStyle'
 import {selectUsername} from '../../store/reducers/UsernameSlice'
-import {selectFriends} from '../../store/reducers/FriendsSlice'
+import {onModificationFriends, selectFriends} from '../../store/reducers/FriendsSlice'
 import DataTableDivality from 'components/DataTable/DataTableDivality'
+import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityButtonTextured'
+import {auctionHouseStyle} from 'components/AuctionHouseModal/AuctionHouseStyle'
+import store from 'store/store'
 
 type MyCommunityProps = {}
 
@@ -17,6 +20,8 @@ const MyCommunity = ({}: MyCommunityProps) => {
     const ws = wsService.getWs()
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const [dataForDataTable, setDataForDataTable] = useState<{pseudo: string; rate: string; status: string}[]>([])
+    const [formAddByUsername, setFormAddByUsername] = useState<string>('')
+    const [addFriendText, setAddFriendText] = useState<{text: string; color: string}>({text: '', color: ''})
 
     useEffect(() => {
         onChangeFriends()
@@ -38,27 +43,109 @@ const MyCommunity = ({}: MyCommunityProps) => {
         setIsDataLoad(true)
     }
     const header = [
-        {name: 'Pseudo', type: 'string', width: '', nameOfTheData: 'username'},
-        {name: 'V/D', type: 'string', width: '', nameOfTheData: 'rate'},
+        {name: 'Pseudo', type: 'string', width: 4, nameOfTheData: 'username'},
+        {name: 'V/D', type: 'string', width: 2, nameOfTheData: 'rate'},
         {
             name: 'Statut',
             type: 'isConnected',
-            width: '',
-            nameOfTheData: 'status', //sword-fight //Sport
+            width: 4,
+            nameOfTheData: 'status',
             action: (item: any, isValidated: boolean) => {
-                console.log('tu as défié ', item, isValidated)
+                if (isValidated) {
+                    acceptRequestFriend(item)
+                } else {
+                    removeRequestFriend(item)
+                }
             },
         },
         {
             name: 'Défier',
-            type: 'icon',
-            width: '',
-            nameOfTheData: 'fencing', //sword-fight //Sport
-            action: (item: any) => {
-                console.log('tu as défié ', item)
+            type: 'iconDefy',
+            width: 2,
+            nameOfTheData: 'fencing',
+            action: (friend: any) => {
+                defyFriend(friend)
+            },
+        },
+        {
+            name: '',
+            type: 'iconDelete',
+            width: 2,
+            nameOfTheData: 'delete',
+            action: (friendInfo: any) => {
+                deleteFriend(friendInfo)
             },
         },
     ]
+
+    const deleteFriend = (friendInfo: any) => {
+        ws.send(
+            JSON.stringify({
+                type: 'deleteFriend',
+                usernameFriendToDelete: friendInfo.username,
+                username: username,
+            })
+        )
+    }
+
+    const defyFriend = (friendInfo: any) => {
+        // Ajouter cette partie quand la ws sera faite
+    }
+
+    const removeRequestFriend = (friendInfo: any) => {
+        ws.send(
+            JSON.stringify({
+                type: 'refuseFriendRequest',
+                usernameSender: friendInfo.username,
+                usernameReceiver: username,
+            })
+        )
+    }
+    const acceptRequestFriend = (friendInfo: any) => {
+        ws.send(
+            JSON.stringify({
+                type: 'acceptFriendRequest',
+                usernameSender: friendInfo.username,
+                usernameReceiver: username,
+            })
+        )
+    }
+
+    const addFriend = () => {
+        ws.send(
+            JSON.stringify({
+                type: 'sendFriendRequest',
+                usernameSender: username,
+                usernameReceiver: formAddByUsername,
+            })
+        )
+        ws.onmessage = (e: any) => {
+            console.log(e)
+            if (e.data === "Vous avez déjà envoyé une requête d'ami à cette personne")
+                setAddFriendText({text: 'Vous avez déjà demandé en ami ' + formAddByUsername, color: colors.errorRed})
+            if (e.data === 'Joueur introuvable') {
+                setAddFriendText({text: formAddByUsername + " n'a pas été trouvé", color: colors.errorRed})
+            }
+            if (e.data === 'Vous êtes déjà ami avec ce joueur') {
+                setAddFriendText({text: 'Vous êtes déjà ami avec ' + formAddByUsername, color: colors.errorRed})
+            }
+            if (e.data === "Demande d'ami réalisée") {
+                //A changer quand on aura le retour de la ws positive quand request réalisée
+                console.log('request friend')
+                setAddFriendText({text: "Demande d'ami envoyé à " + formAddByUsername, color: colors.blueSky})
+                store.dispatch(
+                    onModificationFriends({
+                        friends: {
+                            connected: JSON.parse(e.data).connected,
+                            disconnected: JSON.parse(e.data).disconnected,
+                            request: JSON.parse(e.data).request,
+                        },
+                        type: 'MODIFICATION_FRIENDS',
+                    })
+                )
+            }
+        }
+    }
 
     return (
         <View style={{height: '100%', width: '100%', marginBottom: 50}}>
@@ -72,10 +159,31 @@ const MyCommunity = ({}: MyCommunityProps) => {
                     MES AMIS
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', width: '100%', alignItems: 'center', marginTop: 30}}>
-                <Text style={{marginBottom: 30, fontSize: 17}}>
-                    Amis en ligne
-                </Text>
+            <View style={{height: '78%', width: '100%', alignItems: 'center', paddingTop: 30}}>
+                <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
+                    <View style={{width: '50%', marginRight: 12}}>
+                        <TextInput
+                            keyboardType={'numeric'}
+                            style={{
+                                backgroundColor: colors.greyForm,
+                                fontSize: 12,
+                            }}
+                            mode={'flat'}
+                            underlineColor={colors.primaryBlue}
+                            label="Pseudo"
+                            value={formAddByUsername}
+                            onChangeText={(newValue) => {
+                                setFormAddByUsername(newValue)
+                                setAddFriendText({text: '', color: ''})
+                            }}
+                        />
+                    </View>
+                    <View style={{width: '30%', justifyContent: 'center', alignItems: 'center'}}>
+                        <DivalityButtonTextured label={'Ajouter'} onSubmit={addFriend} paddingHorizontal={12} paddingVertical={7} fontSize={15} />
+                    </View>
+                </View>
+                {addFriendText.text !== '' ? <Text style={{color: addFriendText.color, marginBottom: 30}}>{addFriendText.text}</Text> : <></>}
+                <Text style={{marginBottom: 30, fontSize: 17}}>Amis en ligne</Text>
                 {!isDataLoad ? (
                     <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
                 ) : (

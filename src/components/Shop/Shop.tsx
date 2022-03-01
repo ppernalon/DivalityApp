@@ -19,14 +19,14 @@ const Shop = () => {
     const username = useSelector(selectUsername)
 
     const header = [
-        {name: 'Divinité', type: 'string', width: '', nameOfTheData: 'cardName'},
-        {name: 'Vendeur', type: 'string', width: '', nameOfTheData: 'ownerName'},
-        {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
-        {name: 'Quantité', type: 'string', width: '', nameOfTheData: 'quantity'},
+        {name: 'Divinité', type: 'string', width: 1, nameOfTheData: 'cardName'},
+        {name: 'Vendeur', type: 'string', width: 1, nameOfTheData: 'ownerName'},
+        {name: 'Prix', type: 'string', width: 1, nameOfTheData: 'price'},
+        {name: 'Quantité', type: 'string', width: 1, nameOfTheData: 'quantity'},
         {
             name: '',
             type: 'icon',
-            width: '',
+            width: 1,
             nameOfTheData: 'cart-arrow-down',
             action: (item: any) => {
                 onShopClick(item)

@@ -27,13 +27,13 @@ const Sell = () => {
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
 
     const header = [
-        {name: 'Divinités', type: 'string', width: '', nameOfTheData: 'cardName'}, 
-        {name: 'Prix', type: 'string', width: '', nameOfTheData: 'price'},
-        {name: 'Quantité', type: 'string', width: '', nameOfTheData: 'quantity'},
+        {name: 'Divinités', type: 'string', width: 1, nameOfTheData: 'cardName'}, 
+        {name: 'Prix', type: 'string', width: 1, nameOfTheData: 'price'},
+        {name: 'Quantité', type: 'string', width: 1, nameOfTheData: 'quantity'},
         {
             name: '',
             type: 'icon',
-            width: '',
+            width: 1,
             nameOfTheData: 'delete',
             action: (item: any) => {
                 onDeleteClick(item)
