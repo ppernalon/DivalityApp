@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import {View} from 'react-native'
-import {ActivityIndicator, Button, DataTable, IconButton, Modal, Text, TextInput} from 'react-native-paper'
+import {IconButton, TextInput} from 'react-native-paper'
 import {colors} from 'GlobalStyle'
 import wsService from '../../ws-services/WsService'
 import {selectUsername} from 'store/reducers/UsernameSlice'
 import {useSelector} from 'react-redux'
-import AuctionHouseModal from '@components/AuctionHouseModal/AuctionHouseModal'
-import DataTableDivality from 'components/DataTable/DataTableDivality'
+import AuctionHouseModal from '@components/ModalDivality/AuctionHouseModal'
+import DataTableDivality from '@components/DataTable/DataTableDivality'
 
 
 const Shop = () => {

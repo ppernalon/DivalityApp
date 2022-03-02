@@ -77,10 +77,6 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                             <Card name={cardInfo.cardName} minimal={true}></Card>
                         </View>
                         <View style={{marginLeft: '20%', marginTop: '10%', width: '60%'}}>
-                            {/* <Text style={auctionHouseStyle.formName}>Nom du vendeur</Text>
-                        <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
-                            {cardInfo.ownerName}
-                        </TextInput> */}
                             <Text style={auctionHouseStyle.formName}>Prix</Text>
                             <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={auctionHouseStyle.formSell}>
                                 {cardInfo.price}

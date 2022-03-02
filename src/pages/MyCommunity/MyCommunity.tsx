@@ -9,7 +9,7 @@ import {selectUsername} from '../../store/reducers/UsernameSlice'
 import {onModificationFriends, selectFriends} from '../../store/reducers/FriendsSlice'
 import DataTableDivality from 'components/DataTable/DataTableDivality'
 import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityButtonTextured'
-import {auctionHouseStyle} from 'components/AuctionHouseModal/AuctionHouseStyle'
+import {auctionHouseStyle} from 'components/ModalDivality/AuctionHouseStyle'
 import store from 'store/store'
 
 type MyCommunityProps = {}

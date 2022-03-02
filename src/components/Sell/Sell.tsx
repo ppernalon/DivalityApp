@@ -7,10 +7,10 @@ import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityBu
 import wsService from 'ws-services/WsService'
 import {selectUsername} from 'store/reducers/UsernameSlice'
 import {useSelector} from 'react-redux'
-import DataTableDivality from 'components/DataTable/DataTableDivality'
-import AuctionHouseModal from 'components/AuctionHouseModal/AuctionHouseModal'
-import AuctionHouseModalNewSell from 'components/AuctionHouseModal/AuctionHouseModalNewSell'
-import AuctionHouseCancelSellModal from 'components/AuctionHouseModal/AuctionHouseCancelSellModal'
+import DataTableDivality from '@components/DataTable/DataTableDivality'
+import AuctionHouseModal from '@components/ModalDivality/AuctionHouseModal'
+import AuctionHouseModalNewSell from '@components/ModalDivality/AuctionHouseModalNewSell'
+import AuctionHouseCancelSellModal from '@components/ModalDivality/AuctionHouseCancelSellModal'
 
 type SellProps = {}
 
