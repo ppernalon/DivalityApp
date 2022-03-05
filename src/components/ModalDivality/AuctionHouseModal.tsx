@@ -45,7 +45,7 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
             if (e.data === "L'utilisateur ne possède pas assez de disciples") {
                 setErrorToDisplay('Vous ne possedez pas assez de disciples')
             } else if (JSON.parse(e.data).type === 'auctionHouse') {
-                dispatch(incrementByAmount({number: -parseInt(cardInfo.price), type: 'INCREMENT'}))
+                dispatch(incrementByAmount({number: -(parseInt(cardInfo.price)*parseInt(formOutputQuantity)), type: 'INCREMENT'}))
                 closeModal()
             }
         }
@@ -105,7 +105,7 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                             marginHorizontal: '5%',
                             bottom: '5%',
                         }}>
-                        <Text style={{color: colors.errorRed, fontSize: 10, marginBottom: 10, left: '10%'}}>{errorToDisplay}</Text>
+                        <Text style={{color: colors.errorRed, fontSize: 10, marginVertical: 10, left: '10%'}}>{errorToDisplay}</Text>
 
                         <View style={{width: '90%', flexDirection: 'row', justifyContent: 'space-around'}}>
                             <View style={{width: '38%'}}>

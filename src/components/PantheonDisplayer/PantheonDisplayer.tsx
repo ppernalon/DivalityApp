@@ -10,22 +10,21 @@ import {pantheonDiplayerStyle} from './PantheonDiplayerStyle'
 import {incrementByAmount} from '../../store/reducers/DisciplesSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
-import { selectUsername } from 'store/reducers/UsernameSlice'
+import {selectUsername} from 'store/reducers/UsernameSlice'
 
 type PantheonDisplayerProps = {
-    navigation?: any
     isPrayDisponible: boolean
     onClickCard: Function
     dataCollection: {[pantheon: string]: {[divinity: string]: number}}
     isDataLoad: boolean
 }
-const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataCollection, isDataLoad}: PantheonDisplayerProps) => {
+const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDataLoad}: PantheonDisplayerProps) => {
     const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
     const [isNewCardLoad, setIsNewCardLoad] = useState<boolean>(false)
     const [newCardName, setNewCardName] = useState<string>('')
     const [isNewCardShow, setIsNewCardShow] = useState<boolean>(false)
     const username = useSelector(selectUsername)
-
+    const [errorBuyDisciple, setErrorBuyDisciple] = useState<string>('')
 
     const dispatch = useDispatch()
     let animation = useRef<any>(new Animated.Value(0)).current
@@ -61,6 +60,36 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
                 </View>
             </TouchableOpacity>
         )
+    }
+
+    const onPressPrayButton = (dataCollectionWithOccurence: {[pantheon: string]: {[divinityName: string]: number}}) => {
+        ws.send(
+            JSON.stringify({
+                type: 'pray',
+                username: username,
+                pantheon: currentPantheon,
+            })
+        )
+        ws.onmessage = (e: any) => {
+            if (e.data === "L'utilisateur ne possède pas assez de disciples") {
+                setErrorBuyDisciple("Vous n'avez pas assez de disciples")
+            } else {
+                setErrorBuyDisciple('')
+                dispatch(incrementByAmount({number: -10, type: 'INCREMENT'}))
+                let newCardName: string = JSON.parse(e.data).name
+                setNewCardName(newCardName)
+                PantheonDisplayer.animationNewCard(animation, setIsNewCardShow)
+                if (!Object.keys(dataCollectionWithOccurence[currentPantheon]).includes(newCardName)) {
+                    setIsNewCardLoad(false)
+                    dataCollectionWithOccurence[currentPantheon][newCardName] = 1
+                    setIsNewCardLoad(true)
+                } else {
+                    setIsNewCardLoad(false)
+                    dataCollectionWithOccurence[currentPantheon][newCardName] += 1
+                    setIsNewCardLoad(true)
+                }
+            }
+        }
     }
 
     return (
@@ -107,31 +136,20 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
                             },
                             myCollectionStyles.containerPrayDisciples,
                         ]}
-                        onPress={() =>
-                            PantheonDisplayer.onPressPrayButton(
-                                currentPantheon,
-                                ws,
-                                dataCollection,
-                                setIsNewCardLoad,
-                                setNewCardName,
-                                setIsNewCardShow,
-                                animation,
-                                dispatch,
-                                username
-                            )
-                        }>
+                        onPress={() => onPressPrayButton(dataCollection)}>
                         <Text style={{color: fontColor[currentPantheon], fontSize: 16}}> Prier </Text>
                         <Image source={require('@images/icon_openHand.png')} style={[myCollectionStyles.iconPray, {marginRight: 13}]} />
                         <Text style={{color: fontColor[currentPantheon]}}>{-10}</Text>
                         <Image source={require('@images/icon_disciple.png')} style={myCollectionStyles.iconPray} />
                     </TouchableOpacity>
+                    {errorBuyDisciple === '' ? <></> : <Text style={{color: colors.errorRed, fontSize:12}}>{errorBuyDisciple}</Text>}
                 </View>
             ) : (
                 <></>
             )}
 
             <SafeAreaView style={myCollectionStyles.cardCollectionContainer}>
-            {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'}/> : <></>}
+                {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} /> : <></>}
                 {Object.keys(dataCollection).length !== 0 ? (
                     <FlatList
                         data={Object.keys(dataCollection[currentPantheon])}
@@ -152,45 +170,6 @@ const PantheonDisplayer = ({navigation, isPrayDisponible, onClickCard, dataColle
 // PantheonDisplayer.onClickCardDivinity = (onClickCard: Function, item: string, currentPantheon: string) => {
 //     onClickCard(item, currentPantheon)
 // }
-
-PantheonDisplayer.onPressPrayButton = (
-    currentPantheon: string,
-    ws: any,
-    dataCollectionWithOccurence: {[pantheon: string]: {[divinityName: string]: number}},
-    setIsNewCardLoad: Function,
-    setNewCardName: Function,
-    setIsNewCardShow: Function,
-    animation: any,
-    dispatch: Function,
-    username: string
-) => {
-    ws.send(
-        JSON.stringify({
-            type: 'pray',
-            username: username,
-            pantheon: currentPantheon,
-        })
-    )
-    ws.onmessage = (e: any) => {
-        if (e.data === "L'utilisateur ne possède pas assez de disciples") {
-            console.log('Impossible manque des disciples')
-        } else {
-            dispatch(incrementByAmount({number: -10, type: 'INCREMENT'}))
-            let newCardName: string = JSON.parse(e.data).name
-            setNewCardName(newCardName)
-            PantheonDisplayer.animationNewCard(animation, setIsNewCardShow)
-            if (!Object.keys(dataCollectionWithOccurence[currentPantheon]).includes(newCardName)) {
-                setIsNewCardLoad(false)
-                dataCollectionWithOccurence[currentPantheon][newCardName] = 1
-                setIsNewCardLoad(true)
-            } else {
-                setIsNewCardLoad(false)
-                dataCollectionWithOccurence[currentPantheon][newCardName] += 1
-                setIsNewCardLoad(true)
-            }
-        }
-    }
-}
 
 PantheonDisplayer.animationNewCard = (animation: any, setIsNewCardShow: Function) => {
     setIsNewCardShow(true)

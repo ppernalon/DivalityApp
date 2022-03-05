@@ -164,18 +164,25 @@ const MyCommunity = ({}: MyCommunityProps) => {
                     <View style={{width: '50%', marginRight: 12}}>
                         <TextInput
                             keyboardType={'numeric'}
-                            style={{
-                                backgroundColor: colors.greyForm,
-                                fontSize: 12,
-                            }}
+                            style={{ backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 5, height: 60}}
                             mode={'flat'}
-                            underlineColor={colors.primaryBlue}
+                            theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
                             label="Pseudo"
                             value={formAddByUsername}
                             onChangeText={(newValue) => {
                                 setFormAddByUsername(newValue)
                                 setAddFriendText({text: '', color: ''})
                             }}
+                            right={
+                                <TextInput.Icon
+                                    name="magnify"
+                                    color={(isTextInputFocused: boolean) => {
+                                        if (isTextInputFocused) {
+                                            return colors.blueSky
+                                        } else return colors.blueSky
+                                    }}
+                                />
+                            }
                         />
                     </View>
                     <View style={{width: '30%', justifyContent: 'center', alignItems: 'center'}}>

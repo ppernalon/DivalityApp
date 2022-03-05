@@ -27,7 +27,7 @@ const Sell = () => {
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
 
     const header = [
-        {name: 'Divinités', type: 'string', width: 1, nameOfTheData: 'cardName'}, 
+        {name: 'Divinités', type: 'string', width: 1, nameOfTheData: 'cardName'},
         {name: 'Prix', type: 'string', width: 1, nameOfTheData: 'price'},
         {name: 'Quantité', type: 'string', width: 1, nameOfTheData: 'quantity'},
         {
@@ -66,7 +66,6 @@ const Sell = () => {
         setIsModalDeleteVisible(!isModalDeleteVisible)
     }
 
-
     const closeModalProps = () => {
         setIsModalVisible(!isModalVisible)
         loadDataSell()
@@ -79,7 +78,7 @@ const Sell = () => {
     const closeModalDelete = () => {
         setIsModalDeleteVisible(!isModalDeleteVisible)
     }
-    
+
     const onValidationDeleteClose = () => {
         setIsModalDeleteVisible(!isModalDeleteVisible)
         setIsDataLoad(false)
@@ -105,7 +104,7 @@ const Sell = () => {
             </View>
             <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
                 <TextInput
-                    style={{width: '60%', marginVertical: 20, backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 15}}
+                    style={{width: '50%', marginVertical: 20, backgroundColor: '#f7f7f7', fontSize: 13, marginRight: 15, height: 60}}
                     label="Nom de la divinité"
                     mode={'flat'}
                     value={divinityNameSearch}
@@ -128,7 +127,11 @@ const Sell = () => {
             <AuctionHouseModalNewSell isModalVisible={isModalAddSellVisible} closeModalProps={closeModalNewSell}></AuctionHouseModalNewSell>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
             {isModalDeleteVisible ? (
-                <AuctionHouseCancelSellModal isModalVisible={isModalDeleteVisible} closeModalProps={closeModalDelete} sellInfo={sellToDelete} onValidation={onValidationDeleteClose}></AuctionHouseCancelSellModal>
+                <AuctionHouseCancelSellModal
+                    isModalVisible={isModalDeleteVisible}
+                    closeModalProps={closeModalDelete}
+                    sellInfo={sellToDelete}
+                    onValidation={onValidationDeleteClose}></AuctionHouseCancelSellModal>
             ) : (
                 <></>
             )}

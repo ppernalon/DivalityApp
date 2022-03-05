@@ -67,7 +67,7 @@ const AuctionHouseCancelSellModal = ({isModalVisible, closeModalProps, sellInfo,
                     style={{marginLeft: '85%', marginBottom: '3%'}}
                 />
                 <Text style={{width: '80%'}}>
-                    Voulez-vous supprimer la vente de {sellInfo.cardName.replace(sellInfo.cardName[0], sellInfo.cardName[0].toUpperCase())}?
+                    Combien de {sellInfo.cardName.replace(sellInfo.cardName[0], sellInfo.cardName[0].toUpperCase())} voulez-vous supprimer?
                 </Text>
                 <View style={{width: '60%', paddingBottom:30}}>
                      <TextInput
