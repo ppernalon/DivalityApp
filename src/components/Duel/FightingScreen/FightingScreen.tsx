@@ -16,7 +16,7 @@ type FightingScreenProps = {
 }
 
 const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPattern, myTeam, opponentTeam}: FightingScreenProps) => {
-    const heightAvailable = Dimensions.get("screen").height*0.90
+    const heightAvailable = Dimensions.get("screen").height*0.9
     const widthAvailable = Dimensions.get("screen").width*0.8
     const tileWidth = widthAvailable/5
     const tileHeight = heightAvailable/8

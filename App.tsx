@@ -14,7 +14,6 @@ import { Provider } from 'react-redux'
 import store from './src/store/store'
 import TeamModification from './src/pages/TeamModification/TeamModification'
 import Duel from './src/pages/Duel/Duel'
-import FightingScreen from 'components/Duel/FightingScreen/FightingScreen'
 import MyCommunity from './src/pages/MyCommunity/MyCommunity'
 import MyProfile from './src/pages/MyProfil/MyProfile'
 
@@ -40,8 +39,6 @@ const App = () => {
 					</Stack.Navigator>
 				</NavigationContainer>
 			</PaperProvider>
-
-			{/* <FightingScreen opponent='' myTeam={[]} opponentTeam={[]}/> */}
 	 	</Provider>
 	)
 }

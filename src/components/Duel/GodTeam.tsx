@@ -10,17 +10,15 @@ type GodTeam = {
 }
 
 const GodTeam = ({ tileHeight, tileWidth, godTeam, isOpponent }: GodTeam) => {
+    const getGodData = () => isOpponent ? GodTeam.opponentGodsData(godTeam, tileWidth, tileHeight) : GodTeam.myGodsData(godTeam, tileWidth, tileHeight)
+
     const rayon = Math.min(tileHeight, tileWidth)/2
     const keyId = isOpponent ? 'opponentGodTeam' : 'myGodTeam'
-    const [godData, setGodData] = useState<{[godname: string]: {x: number, y: number, image: any, maxLife: number, currentLife: number}}>({})
+    const [godData, setGodData] = useState<{[godname: string]: {x: number, y: number, image: any, maxLife: number, currentLife: number}}>(getGodData())
 
     useEffect(() => {
-        setGodData(
-            isOpponent ? 
-                GodTeam.opponentGodsData(godTeam, tileWidth, tileHeight) 
-                : GodTeam.myGodsData(godTeam, tileWidth, tileHeight)
-        )
-    }, [godTeam])
+        setGodData(getGodData())
+    }, [godTeam, tileHeight, tileWidth])
 
     return (
         <>

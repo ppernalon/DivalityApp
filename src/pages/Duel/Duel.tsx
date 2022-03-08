@@ -1,5 +1,4 @@
 import FightingScreen from "components/Duel/FightingScreen/FightingScreen"
-import GodTeam from "components/Duel/GodTeam"
 import TeamSelection from "components/Duel/TeamSelection/TeamSelection"
 import React, { useEffect, useState } from "react"
 import { ImageBackground, View } from "react-native"
@@ -116,7 +115,7 @@ const Duel = ({route}: DuelProps) => {
                     <Text> godPlacement </Text>
                 </View>
             )
-        case 'fighting':
+        case 'fighting':    
             return (
                 <View style={{ height: "100%", width: "100%", backgroundColor: 'white', alignItems: 'center'}}>
                     <FightingScreen 
