@@ -5,14 +5,14 @@ import CardServices from 'services/CardServices'
 type GodTeam = {
     tileHeight: number
     tileWidth: number
+    rayon: number
     godTeam: {god: string, maxLife: number, currentLife: number}[]
     isOpponent: boolean
 }
 
-const GodTeam = ({ tileHeight, tileWidth, godTeam, isOpponent }: GodTeam) => {
+const GodTeam = ({ tileHeight, tileWidth, rayon, godTeam, isOpponent }: GodTeam) => {
     const getGodData = () => isOpponent ? GodTeam.opponentGodsData(godTeam, tileWidth, tileHeight) : GodTeam.myGodsData(godTeam, tileWidth, tileHeight)
 
-    const rayon = Math.min(tileHeight, tileWidth)/2
     const keyId = isOpponent ? 'opponentGodTeam' : 'myGodTeam'
     const [godData, setGodData] = useState<{[godname: string]: {x: number, y: number, image: any, maxLife: number, currentLife: number}}>(getGodData())
 
@@ -50,14 +50,14 @@ const GodTeam = ({ tileHeight, tileWidth, godTeam, isOpponent }: GodTeam) => {
                             <Rect
                                 x={data.x} 
                                 y={data.y + 2*rayon + 10}
-                                width={tileWidth}
+                                width={2*rayon}
                                 height={10}
                                 fill={"red"}
                             />
                             <Rect
                                 x={data.x} 
                                 y={data.y + 2*rayon + 10}
-                                width={tileWidth * data.currentLife / data.maxLife}
+                                width={2*rayon * data.currentLife / data.maxLife}
                                 height={10}
                                 fill={"green"}
                             />
@@ -87,11 +87,11 @@ GodTeam.opponentGodsData = (godTeam: {god: string, maxLife: number, currentLife:
         let thisGodData: any = {}
         // miroir de MyTeam
         if (index === 0) thisGodData = {x: 2*tileWidth, y: 0 + tileHeight/5}
-        if (index === 1) thisGodData = {x: 3*tileWidth, y: tileHeight + tileHeight/5}
-        if (index === 2) thisGodData = {x: tileWidth, y: tileHeight + tileHeight/5}
-        if (index === 3) thisGodData = {x: 4*tileWidth, y: 2*tileHeight + tileHeight/5}
+        if (index === 1) thisGodData = {x: 3*tileWidth - 5, y: tileHeight + tileHeight/5}
+        if (index === 2) thisGodData = {x: tileWidth + 5, y: tileHeight + tileHeight/5}
+        if (index === 3) thisGodData = {x: 4*tileWidth - 10, y: 2*tileHeight + tileHeight/5}
         if (index === 4) thisGodData = {x: 2*tileWidth, y: 2*tileHeight + tileHeight/5}
-        if (index === 5) thisGodData = {x: 0, y: 2*tileHeight + tileHeight/5}
+        if (index === 5) thisGodData = {x: 10, y: 2*tileHeight + tileHeight/5}
         thisGodData.image = image
         thisGodData.maxLife = teamMember.maxLife
         thisGodData.currentLife = teamMember.currentLife
@@ -110,11 +110,11 @@ GodTeam.myGodsData = (godTeam: {god: string, maxLife: number, currentLife: numbe
         let thisGodData: any = {}
 
         if (index === 0) thisGodData = {x: 2*tileWidth, y: 6*tileHeight - tileHeight/5}
-        if (index === 1) thisGodData = {x: tileWidth, y: 5*tileHeight - tileHeight/5}
-        if (index === 2) thisGodData = {x: 3*tileWidth, y: 5*tileHeight - tileHeight/5}
-        if (index === 3) thisGodData = {x: 0, y: 4*tileHeight - tileHeight/5}
+        if (index === 1) thisGodData = {x: tileWidth + 5, y: 5*tileHeight - tileHeight/5}
+        if (index === 2) thisGodData = {x: 3*tileWidth - 5, y: 5*tileHeight - tileHeight/5}
+        if (index === 3) thisGodData = {x: 10, y: 4*tileHeight - tileHeight/5}
         if (index === 4) thisGodData = {x: 2*tileWidth, y: 4*tileHeight - tileHeight/5}
-        if (index === 5) thisGodData = {x: 4*tileWidth, y: 4*tileHeight - tileHeight/5}
+        if (index === 5) thisGodData = {x: 4*tileWidth - 10, y: 4*tileHeight - tileHeight/5}
         
         thisGodData.image = image
         thisGodData.maxLife = teamMember.maxLife
