@@ -5,6 +5,7 @@ import Svg, { Image, Text } from "react-native-svg"
 import { useSelector } from "react-redux"
 import { selectUsername } from "store/reducers/UsernameSlice"
 import GodTeam from "../GodTeam"
+import Spark from "../Spark"
 
 type FightingScreenProps = {
     opponent: string
@@ -24,16 +25,28 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
     const username = useSelector(selectUsername)
 
     const [attackerPositionComputed, setAttackerPositionComputed] = useState({x: 0, y: 0})
-    
+    const [positions, setPositions] = useState([attackerPositionComputed])
+
     useEffect(() => {
-        setAttackerPositionComputed(
-            FightingScreen.getPosition(
-                attackerPosition, 
-                username === offensivePlayer, 
+        const newAttackerPosition = FightingScreen.getPosition(
+            attackerPosition, 
+            username === offensivePlayer, 
+            {width: tileWidth, height: tileHeight}
+        )
+        setAttackerPositionComputed(newAttackerPosition)
+
+        let newPositions = [newAttackerPosition]
+        attackPattern.map(p => {
+            const patternToIndex = FightingScreen.fromPatternToIndex(p)
+            const indexToPos = FightingScreen.getPosition(
+                patternToIndex, 
+                username !== offensivePlayer, 
                 {width: tileWidth, height: tileHeight}
             )
-        )
-    }, [attackerPosition])
+            newPositions.push(indexToPos)
+        })
+        setPositions(newPositions)
+    }, [attackerPosition, attackPattern])
 
     return (
         <Svg style={{ height: "90%", width: "90%"}}>
@@ -70,6 +83,7 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
                         /> 
                     ) : null
             }
+            <Spark positions={positions} rayon={rayon}/>
         </Svg>
     )
 }
