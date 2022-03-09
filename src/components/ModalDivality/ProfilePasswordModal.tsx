@@ -19,32 +19,41 @@ type ProfilePasswordModalProps = {
 const ProfilePasswordModal = ({isModalVisible, closeModalProps}: ProfilePasswordModalProps) => {
     const username = useSelector(selectUsername)
     const [errorToDisplay, setErrorToDisplay] = useState<string>('')
-    const [formOutput, setFormOutput] = useState<{password: string; confirmationPassword: string}>({password: '', confirmationPassword: ''})
-
+    const [formOutput, setFormOutput] = useState<{oldPassword: string; password: string; confirmationPassword: string}>({
+        oldPassword: '',
+        password: '',
+        confirmationPassword: '',
+    })
     const {fonts, colors} = useTheme()
 
-    const fontStyle = {
-        fontFamily: fonts.regular.fontFamily,
-        color: colors.placeholder,
-        fontSize: 12,
-    }
     const closeModal = () => {
         setErrorToDisplay('')
         closeModalProps()
     }
     const changePassword = () => {
-        if (formOutput.password === formOutput.confirmationPassword) {
+        if (
+            formOutput.password === formOutput.confirmationPassword &&
+            formOutput.password !== '' &&
+            formOutput.confirmationPassword !== '' &&
+            formOutput.oldPassword !== ''
+        ) {
             setErrorToDisplay('')
-            ProfileHttpService.changePassword(formOutput)
+            ProfileHttpService.changePassword(formOutput, username)
                 .then(() => {
-                    console.log('ok')
+                    closeModal()
                 })
                 .catch((err) => {
                     const error = JSON.parse(JSON.stringify(err)).status
-                    console.log(JSON.parse(JSON.stringify(err)))
+                    if (error === 401) {
+                        setErrorToDisplay("L'ancien mot de passe est incorrecte")
+                    } else {
+                        setErrorToDisplay('Une erreur est apparue, veuillez réessayer')
+                    }
                 })
-        } else {
+        } else if (formOutput.password !== formOutput.confirmationPassword) {
             setErrorToDisplay('Les mots de passes sont différents')
+        } else if (formOutput.password === '' || formOutput.confirmationPassword === '' || formOutput.oldPassword === '') {
+            setErrorToDisplay('Veuillez remplir tous les champs')
         }
     }
 
@@ -55,20 +64,32 @@ const ProfilePasswordModal = ({isModalVisible, closeModalProps}: ProfilePassword
                 onDismiss={() => {
                     closeModal()
                 }}
-                contentContainerStyle={{backgroundColor: 'white', width: '80%', margin: '10%'}}>
+                contentContainerStyle={{backgroundColor: 'white', width: '80%', marginHorizontal: '10%'}}>
                 <View style={{width: '100%'}}>
                     <IconButton
                         icon="close"
                         onPress={() => {
                             closeModal()
                         }}
+                        size={25}
                         hasTVPreferredFocus={undefined}
                         tvParallaxProperties={undefined}
-                        style={{marginLeft: '85%'}}
+                        style={{marginLeft: '85%', marginTop: 15}}
                     />
 
                     <ScrollView style={{marginLeft: '15%', width: '70%', marginVertical: 20}}>
                         <Text>Voulez-vous changer votre mot de passe?</Text>
+                        <TextInput
+                            style={auctionHouseStyle.formNewSell}
+                            secureTextEntry={true}
+                            mode={'flat'}
+                            underlineColor={colorsGlobal.primaryBlue}
+                            label="Ancien mot de passe"
+                            value={formOutput.oldPassword}
+                            onChangeText={(newValue) => {
+                                setFormOutput({...formOutput, oldPassword: newValue})
+                            }}
+                        />
                         <TextInput
                             style={auctionHouseStyle.formNewSell}
                             secureTextEntry={true}
@@ -97,10 +118,10 @@ const ProfilePasswordModal = ({isModalVisible, closeModalProps}: ProfilePassword
                             width: '100%',
                             marginHorizontal: '5%',
                             bottom: '5%',
-                            marginTop: 30
+                            marginTop: 30,
                         }}>
                         {errorToDisplay !== '' ? (
-                            <Text style={{color: colorsGlobal.errorRed, fontSize: 12, marginVertical: 20, left: '10%'}}>{errorToDisplay}</Text>
+                            <Text style={{color: colorsGlobal.errorRed, fontSize: 12, marginBottom: 15, left: '10%'}}>{errorToDisplay}</Text>
                         ) : (
                             <></>
                         )}

@@ -16,6 +16,7 @@ import TeamModification from './src/pages/TeamModification/TeamModification'
 import Duel from './src/pages/Duel/Duel'
 import MyCommunity from './src/pages/MyCommunity/MyCommunity'
 import MyProfile from './src/pages/MyProfil/MyProfile'
+import Ranking from './src/pages/Ranking/Ranking'
 
 const App = () => {
 	const Stack = createNativeStackNavigator()
@@ -33,7 +34,7 @@ const App = () => {
 						<Stack.Screen name="Collection" component={MyCollection}/>
 						<Stack.Screen name="Teams" component={MyTeams}/>
 						<Stack.Screen name="Trade" component={AuctionHouse}/>
-						<Stack.Screen name="Ranking" component={Menu}/>
+						<Stack.Screen name="Ranking" component={Ranking}/>
 						<Stack.Screen name="Community" component={MyCommunity}/>
 						<Stack.Screen name="Profile" component={MyProfile}/>
 					</Stack.Navigator>

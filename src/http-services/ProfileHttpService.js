@@ -2,10 +2,12 @@ import AbstractHttpService from "./AbstractHttpService";
 import constants from "../constants"
 
 export default class ProfileHttpService extends AbstractHttpService{
-    static changePassword(passwordForm) {
+    static changePassword(passwordForm, username) {
         const passwordObject = {
-            password: passwordForm.password,
+            oldPassword: passwordForm.oldPassword,
+            newPassword: passwordForm.password,
+            username: username
         }
-        return this.putHttp(constants.API_UPDATE_PASSWORD, passwordObject)      
+        return this.postHttp(constants.API_UPDATE_PASSWORD, passwordObject)      
     }
 }
