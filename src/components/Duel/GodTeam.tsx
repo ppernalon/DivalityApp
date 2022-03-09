@@ -17,7 +17,7 @@ const GodTeam = ({ tileHeight, tileWidth, rayon, godTeam, isOpponent }: GodTeam)
     const [godData, setGodData] = useState<{[godname: string]: {x: number, y: number, image: any, maxLife: number, currentLife: number}}>(getGodData())
 
     useEffect(() => {
-        setGodData(getGodData())
+        setTimeout(() => setGodData(getGodData()), 2000) // timebetweenattack - 1s
     }, [godTeam, tileHeight, tileWidth])
 
     return (

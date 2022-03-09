@@ -59,13 +59,17 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
             >
                 {username}
             </Text>
-            <Image
-                x={attackerPositionComputed.x - 0.25*rayon} 
-                y={attackerPositionComputed.y - 0.25*rayon}  
-                width={2.5*rayon} 
-                height={2.5*rayon} 
-                href={require('@images/lightningCircle.png')} 
-            /> 
+            {
+                attackerPositionComputed.x > 0 && attackerPositionComputed.y > 0 ? (
+                        <Image
+                            x={attackerPositionComputed.x - 0.25*rayon} 
+                            y={attackerPositionComputed.y - 0.25*rayon}  
+                            width={2.5*rayon} 
+                            height={2.5*rayon} 
+                            href={require('@images/lightningCircle.png')} 
+                        /> 
+                    ) : null
+            }
         </Svg>
     )
 }
