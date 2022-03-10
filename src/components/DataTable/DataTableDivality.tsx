@@ -4,13 +4,13 @@ import {ActivityIndicator, Button, DataTable, IconButton, Modal, Text, TextInput
 import {colors} from 'GlobalStyle'
 
 type DataTableDivalityProps = {
-    nameToFilter?: string
+    nameToFilter?: string[]
     isDataLoad: boolean
     data: []
     header: [{name: string; type: string; width: number; nameOfTheData: string; action?: Function}]
 }
 
-const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTableDivalityProps) => {
+const DataTableDivality = ({nameToFilter = ['',''], isDataLoad, data, header}: DataTableDivalityProps) => {
     const [dataFilter, setDataFilter] = useState<[]>([])
     const [dataFilterByPage, setDataFilterByPage] = useState<[]>([])
     const [page, setPage] = useState<number>(0)
@@ -19,17 +19,15 @@ const DataTableDivality = ({nameToFilter = '', isDataLoad, data, header}: DataTa
     const fromPagination = page * numberOfItemsPerPage
     const toPagination = Math.min((page + 1) * numberOfItemsPerPage, dataFilter.length)
     useEffect(() => {
-        setPage(0)
         filterData()
-    }, [numberOfItemsPerPage, nameToFilter, isDataLoad, data])
+    }, [numberOfItemsPerPage, nameToFilter[0], isDataLoad, data])
 
     const filterData = () => {
         setPage(0)
         let dataFilterTemp: any = data
-        if (nameToFilter !== '') {
-            dataFilterTemp = data.filter((item: any) => item.cardName.includes(nameToFilter))
+        if (nameToFilter[0] !== '') {
+            dataFilterTemp = data.filter((item: any) => item[nameToFilter[1]].includes(nameToFilter[0]))
         }
-
         setDataFilter(dataFilterTemp)
         const dataFilterByPageTemp: any = dataFilterTemp.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage)
         setDataFilterByPage(dataFilterByPageTemp)

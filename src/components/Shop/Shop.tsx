@@ -100,7 +100,7 @@ const Shop = () => {
                     color={colors.blueSky}
                 />
             </View>
-            <DataTableDivality isDataLoad={isDataLoad} data={shopData} header={header} nameToFilter={divinityNameSearch}></DataTableDivality>
+            <DataTableDivality isDataLoad={isDataLoad} data={shopData} header={header} nameToFilter={[divinityNameSearch, 'cardName']}></DataTableDivality>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
         </View>
     )

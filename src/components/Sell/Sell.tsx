@@ -123,7 +123,7 @@ const Sell = () => {
                     }
                 />
             </View>
-            <DataTableDivality isDataLoad={isDataLoad} data={sellData} header={header} nameToFilter={divinityNameSearch} />
+            <DataTableDivality isDataLoad={isDataLoad} data={sellData} header={header} nameToFilter={[divinityNameSearch, 'cardName']} />
             <AuctionHouseModalNewSell isModalVisible={isModalAddSellVisible} closeModalProps={closeModalNewSell}></AuctionHouseModalNewSell>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
             {isModalDeleteVisible ? (
