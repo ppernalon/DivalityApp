@@ -129,20 +129,8 @@ const MyCommunity = ({}: MyCommunityProps) => {
             if (e.data === 'Vous êtes déjà ami avec ce joueur') {
                 setAddFriendText({text: 'Vous êtes déjà ami avec ' + formAddByUsername, color: colors.errorRed})
             }
-            if (e.data === "Demande d'ami réalisée") {
-                //A changer quand on aura le retour de la ws positive quand request réalisée
-                console.log('request friend')
-                setAddFriendText({text: "Demande d'ami envoyé à " + formAddByUsername, color: colors.blueSky})
-                store.dispatch(
-                    onModificationFriends({
-                        friends: {
-                            connected: JSON.parse(e.data).connected,
-                            disconnected: JSON.parse(e.data).disconnected,
-                            request: JSON.parse(e.data).request,
-                        },
-                        type: 'MODIFICATION_FRIENDS',
-                    })
-                )
+            if (e.data === "La demande a bien été effectuée") {
+                setAddFriendText({text: "Demande d'ami envoyé à " + formAddByUsername, color: colors.green})
             }
         }
     }
@@ -163,7 +151,6 @@ const MyCommunity = ({}: MyCommunityProps) => {
                 <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
                     <View style={{width: '50%', marginRight: 12}}>
                         <TextInput
-                            keyboardType={'numeric'}
                             style={{ backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 5, height: 60}}
                             mode={'flat'}
                             theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
