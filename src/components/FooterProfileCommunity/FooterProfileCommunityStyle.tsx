@@ -7,7 +7,7 @@ export const FooterStyle = StyleSheet.create({
         justifyContent: "space-between",
     },
     imageProfileCommunity: {
-        height: 38,
+        height: 48,
         marginHorizontal: 10,
         resizeMode: "contain",
     }
