@@ -20,7 +20,7 @@ const ContentTextured = ({children, position}: ContentTexturedProps) => {
                 </ImageBackground>
             </ReactIf>
             <ReactIf condition={position === 'footer'}>
-                <View>
+                <View style={{height: 50}}>
                     <ImageBackground source={require('@images/texturebouton.png')} style={contentTexturedStyle.backgroundFooter}>
                         <View style={contentTexturedStyle.containerViewFooter}>
                             <TouchableOpacity onPress={() => navigation.navigate('Menu')}>

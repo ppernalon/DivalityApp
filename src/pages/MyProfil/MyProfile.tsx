@@ -8,8 +8,10 @@ import {colors} from 'GlobalStyle'
 import {selectUsername} from '../../store/reducers/UsernameSlice'
 import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityButtonTextured'
 import {profileStyles} from './MyProfileStyles'
-import { selectDisciples } from 'store/reducers/DisciplesSlice'
+import {selectDisciples} from 'store/reducers/DisciplesSlice'
 import ProfilePasswordModal from 'components/ModalDivality/ProfilePasswordModal'
+import {Appbar} from 'react-native-paper'
+import {ScrollView} from 'react-native-gesture-handler'
 
 type MyProfileProps = {}
 
@@ -20,7 +22,7 @@ const MyProfile = ({}: MyProfileProps) => {
     const [isModalChangePassword, setIsModalChangePassword] = useState<boolean>(false)
 
     return (
-        <View style={{height: '100%', width: '100%', marginBottom: 50}}>
+        <View style={{height: '100%', width: '100%'}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -31,7 +33,7 @@ const MyProfile = ({}: MyProfileProps) => {
                     MON PROFILE
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', paddingTop: 30, alignItems: 'center'}}>
+            <View style={{alignItems: 'center', flex:1, paddingTop: 40}}>
                 <View style={{width: '80%', alignItems: 'center'}}>
                     <View style={{width: '90%'}}>
                         <Text style={profileStyles.formName}>Pseudo</Text>
@@ -55,13 +57,21 @@ const MyProfile = ({}: MyProfileProps) => {
                                 fontSize={15}
                                 paddingVertical={10}
                                 label={'Changer de mot de passe'}
-                                onSubmit={() => { setIsModalChangePassword(!isModalChangePassword)}}></DivalityButtonTextured>
+                                onSubmit={() => {
+                                    setIsModalChangePassword(!isModalChangePassword)
+                                }}></DivalityButtonTextured>
                         </View>
-                        <ProfilePasswordModal isModalVisible={isModalChangePassword} closeModalProps={()=>{setIsModalChangePassword(!isModalChangePassword)}}></ProfilePasswordModal>
+                        <ProfilePasswordModal
+                            isModalVisible={isModalChangePassword}
+                            closeModalProps={() => {
+                                setIsModalChangePassword(!isModalChangePassword)
+                            }}></ProfilePasswordModal>
                     </View>
                 </View>
             </View>
-            <ContentTextured position={'footer'} />
+            <View>
+                <ContentTextured position={'footer'} />
+            </View>
         </View>
     )
 }

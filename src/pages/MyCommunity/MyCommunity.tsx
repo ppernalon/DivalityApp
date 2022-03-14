@@ -147,7 +147,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
                     MES AMIS
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', width: '100%', alignItems: 'center', paddingTop: 30}}>
+            <View style={{flex:1, width: '100%', alignItems: 'center', paddingTop: 30}}>
                 <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
                     <View style={{width: '50%', marginRight: 12}}>
                         <TextInput

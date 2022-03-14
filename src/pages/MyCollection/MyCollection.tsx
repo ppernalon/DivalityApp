@@ -79,7 +79,7 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
     }
 
     return (
-        <View style={{height: '100%', width: '100%', marginBottom: 50}}>
+        <View style={{width: '100%', height: '100%'}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -90,7 +90,7 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     COLLECTION
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%'}}>
+            <View style={{flex: 1, paddingBottom: 20, paddingTop: 10}} >
                 <PantheonDisplayer
                     isDataLoad={isDataLoad}
                     dataCollection={dataCollectionWithOccurence}
@@ -123,7 +123,6 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                     </Modal>
                 </Portal>
             </View>
-
             <ContentTextured position={'footer'} children={<></>} />
         </View>
     )

@@ -14,7 +14,7 @@ const AuctionHouse = () => {
     const [currentUnderPage, setCurrentUnderPage] = useState('shop')
 
     return (
-        <View style={{width: '100%', height:'100%', marginBottom:50}}>
+        <View style={{width: '100%', height: '100%'}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -25,7 +25,7 @@ const AuctionHouse = () => {
                     HOTEL DES VENTES
                 </Text>
             </ContentTextured>
-            <View style={{height:'78%'}}>
+            <View style={{flex:1}}>
                 <ToggleButton.Row
                     onValueChange={(value: string) => setCurrentUnderPage(value)}
                     value={currentUnderPage}

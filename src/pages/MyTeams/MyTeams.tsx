@@ -8,9 +8,7 @@ import {myTeamsStyles} from './MyTeamsStyles'
 import wsService from '../../ws-services/WsService'
 import {useIsFocused} from '@react-navigation/native'
 import {colors} from 'GlobalStyle'
-import {
-    selectUsername
-  } from '../../store/reducers/UsernameSlice'
+import {selectUsername} from '../../store/reducers/UsernameSlice'
 
 type MyTeams = {
     navigation: any
@@ -83,7 +81,7 @@ const MyTeams = ({navigation}: MyTeams) => {
         return teamConstruction
     }
     return (
-        <View style={{height: '100%', width: '100%', marginBottom: 50}}>
+        <View style={{height: '100%', width: '100%'}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -94,8 +92,14 @@ const MyTeams = ({navigation}: MyTeams) => {
                     MES ÉQUIPES
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', width: '100%', alignItems: 'center', justifyContent:'center'}}>
-                {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} /> : <></>}
+            <View style={{width: '100%', flex: 1, paddingTop: 5, alignItems: 'center' }}>
+                {!isDataLoad ? (
+                    <View style={{height: '100%', justifyContent:'center'}}>
+                        <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
+                    </View>
+                ) : (
+                    <></>
+                )}
                 {isDataLoad ? renderTeam() : <></>}
             </View>
             <ContentTextured position={'footer'} />

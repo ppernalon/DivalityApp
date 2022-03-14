@@ -179,7 +179,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
                     />
                 </View>
             </ContentTextured>
-            <View style={{height: '78%', width: '100%', alignItems: 'center', paddingTop: 20}}>
+            <View style={{flex: 1, width: '100%', alignItems: 'center', paddingTop: 15, paddingBottom:25}}>
                 <View style={{width: '100%', alignItems: 'center'}}>{displayImageDivinity(listOfDivinityTeam)}</View>
                 <View style={{height: '72%'}}>
                     <PantheonDisplayer

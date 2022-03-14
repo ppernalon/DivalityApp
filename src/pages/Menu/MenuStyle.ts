@@ -7,7 +7,9 @@ export const menuStyle = StyleSheet.create({
         justifyContent: "space-between",
     },
     containerButtons: {
-        height: "70%",
+        paddingTop: 40,
+        paddingBottom: 40,
+        flex: 1,
         justifyContent: "space-between",
         alignItems: "center",
     },
@@ -18,7 +20,7 @@ export const menuStyle = StyleSheet.create({
         alignItems: "center",
     },
     footer: {
+        bottom: 10,
         width: "100%",
-        bottom: 10
     },
 })

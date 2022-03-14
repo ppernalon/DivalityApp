@@ -7,7 +7,6 @@ export const contentTexturedStyle = StyleSheet.create({
         justifyContent: 'center',
     },
     backgroundFooter: {
-        marginTop: 35,
         width: '100%',
         height: '100%',
     },

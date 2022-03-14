@@ -53,7 +53,7 @@ const Ranking = () => {
         }
     }
     return (
-        <View style={{height: '100%', width: '100%', marginBottom: 50}}>
+        <View style={{height: "100%", width: '100%'}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -64,7 +64,7 @@ const Ranking = () => {
                     CLASSEMENT
                 </Text>
             </ContentTextured>
-            <View style={{height: '78%', paddingTop: 30, alignItems: 'center'}}>
+            <View style={{flex:1, paddingTop: 30, alignItems: 'center'}}>
                 <View style={{width: '90%', alignItems: 'center'}}>
                     <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
                         <TextInput
