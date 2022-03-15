@@ -168,7 +168,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
                     MES AMIS
                 </Text>
             </ContentTextured>
-            <ScrollView style={{flex: 1, width: '100%', paddingTop: 30}}>
+            <View style={{flex: 1, width: '100%', paddingTop: 30}}>
                 <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
                     <View style={{width: '50%', marginRight: 12}}>
                         <TextInput
@@ -205,7 +205,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
                 ) : (
                     <DataTableDivality isDataLoad={isDataLoad} data={dataForDataTable} header={header} />
                 )}
-            </ScrollView>
+            </View>
             <View style={{ bottom:0, width:'100%'}}>
                 <ContentTextured position={'footer'}/>
             </View>
