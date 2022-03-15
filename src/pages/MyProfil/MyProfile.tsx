@@ -1,5 +1,5 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {View} from 'react-native'
 import {Text, TextInput} from 'react-native-paper'
 import {useSelector} from 'react-redux'
@@ -20,6 +20,32 @@ const MyProfile = ({}: MyProfileProps) => {
     const ws = wsService.getWs()
     const nberDisciples = useSelector(selectDisciples)
     const [isModalChangePassword, setIsModalChangePassword] = useState<boolean>(false)
+    const [winRate, setWinRate] = useState<string>('')
+
+    useEffect(() => {
+        loadWinRate()
+    }, [ws])
+
+    const loadWinRate = () => {
+        ws.send(
+            JSON.stringify({
+                type: 'infoWinRate',
+                username: username,
+            })
+        )
+        ws.onmessage = (e: any) => {
+            console.log(e)
+            if (JSON.parse(e.data).type === 'infoWinRate') {
+                const data = JSON.parse(e.data)
+                console.log(data)
+                if (data.victory && data.defeat) {
+                    setWinRate(data.victory.toString() + '/' + data.defeat.toString())
+                } else {
+                    setWinRate('Indisponible')
+                }
+            }
+        }
+    }
 
     return (
         <View style={{height: '100%', width: '100%'}}>
@@ -33,7 +59,7 @@ const MyProfile = ({}: MyProfileProps) => {
                     MON PROFILE
                 </Text>
             </ContentTextured>
-            <View style={{alignItems: 'center', flex:1, paddingTop: 40}}>
+            <View style={{alignItems: 'center', flex: 1, paddingTop: 40}}>
                 <View style={{width: '80%', alignItems: 'center'}}>
                     <View style={{width: '90%'}}>
                         <Text style={profileStyles.formName}>Pseudo</Text>
@@ -49,7 +75,7 @@ const MyProfile = ({}: MyProfileProps) => {
                         <View>
                             <Text style={profileStyles.formName}>Victoire/Défaite</Text>
                             <TextInput mode={'flat'} underlineColor={colors.primaryBlue} disabled={true} style={profileStyles.formSell}>
-                                15/20
+                                {winRate}
                             </TextInput>
                         </View>
                         <View style={{marginVertical: 15}}>
