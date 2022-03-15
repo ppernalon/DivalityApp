@@ -17,10 +17,10 @@ import Duel from './src/pages/Duel/Duel'
 import MyCommunity from './src/pages/MyCommunity/MyCommunity'
 import MyProfile from './src/pages/MyProfil/MyProfile'
 import Ranking from './src/pages/Ranking/Ranking'
+import wsService from 'ws-services/WsService'
 
 const App = () => {
 	const Stack = createNativeStackNavigator()
-
 	return (
 		<Provider store={store}>
 			<PaperProvider theme={paperTheme}>

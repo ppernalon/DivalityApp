@@ -3,6 +3,8 @@ import {initialisationOnConnection} from '../store/reducers/DisciplesSlice'
 import store from '../store/store'
 import {onModificationFriends} from '../store/reducers/FriendsSlice'
 
+
+
 class WsService {
     WS: any = null
 
@@ -24,15 +26,14 @@ class WsService {
                 })
             )
             this.WS.onmessage = (e: any) => {
-                const data = JSON.parse(e.data)
-                console.log(data)
-                if (data.type === 'disciples') {
+                console.log(e)
+                if (JSON.parse(e.data).type === 'disciples') {
                     store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(e.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
                 }
-                if (data.type === 'deconnectionWebSocket') {
+                if (JSON.parse(e.data).type === 'deconnectionWebSocket') {
                     this.WS.close()
                 }
-                if (data.type === 'friends') {
+                if (JSON.parse(e.data).type === 'friends') {
                     console.log(JSON.parse(e.data), 'modification friends')
                     store.dispatch(
                         onModificationFriends({
