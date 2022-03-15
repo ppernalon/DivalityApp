@@ -11,6 +11,8 @@ import DataTableDivality from 'components/DataTable/DataTableDivality'
 import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityButtonTextured'
 import {auctionHouseStyle} from 'components/ModalDivality/AuctionHouseStyle'
 import store from 'store/store'
+import DefyFriendModal from 'components/ModalDivality/DefyFriendModal'
+import { selectDefyFriend } from 'store/reducers/DefyFriendSlice'
 
 type MyCommunityProps = {}
 
@@ -23,6 +25,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
     const [dataForDataTable, setDataForDataTable] = useState<{pseudo: string; rate: string; status: string}[]>([])
     const [formAddByUsername, setFormAddByUsername] = useState<string>('')
     const [addFriendText, setAddFriendText] = useState<{text: string; color: string}>({text: '', color: ''})
+    const [isModalDefyOpen, setIsModalDefyOpen] = useState<boolean>(false)
 
     useEffect(() => {
         onChangeFriends()
@@ -91,6 +94,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
 
     const defyFriend = (friendInfo: any) => {
         // Ajouter cette partie quand la ws sera faite
+        setIsModalDefyOpen(true)
     }
 
     const removeRequestFriend = (friendInfo: any) => {
@@ -168,7 +172,8 @@ const MyCommunity = ({}: MyCommunityProps) => {
                     MES AMIS
                 </Text>
             </ContentTextured>
-            <View style={{flex: 1, width: '100%', paddingTop: 30}}>
+            <View style={{flex: 1, width: '100%', paddingTop: 30, alignItems: 'center'}}>
+                
                 <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
                     <View style={{width: '50%', marginRight: 12}}>
                         <TextInput
@@ -206,8 +211,8 @@ const MyCommunity = ({}: MyCommunityProps) => {
                     <DataTableDivality isDataLoad={isDataLoad} data={dataForDataTable} header={header} />
                 )}
             </View>
-            <View style={{ bottom:0, width:'100%'}}>
-                <ContentTextured position={'footer'}/>
+            <View style={{bottom: 0, width: '100%'}}>
+                <ContentTextured position={'footer'} />
             </View>
         </View>
     )

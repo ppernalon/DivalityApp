@@ -2,8 +2,7 @@ import constants from './../constants'
 import {initialisationOnConnection} from '../store/reducers/DisciplesSlice'
 import store from '../store/store'
 import {onModificationFriends} from '../store/reducers/FriendsSlice'
-
-
+import {onModificationDefyFriend} from 'store/reducers/DefyFriendSlice'
 
 class WsService {
     WS: any = null
@@ -27,13 +26,16 @@ class WsService {
             )
             this.WS.onmessage = (e: any) => {
                 console.log(e)
-                if (JSON.parse(e.data).type === 'disciples') {
+                if (e.data === 'Challenge refused') {
+                    console.log('refus de challenge')
+                }
+                else if (JSON.parse(e.data).type === 'disciples') {
                     store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(e.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
                 }
-                if (JSON.parse(e.data).type === 'deconnectionWebSocket') {
+                else if (JSON.parse(e.data).type === 'deconnectionWebSocket') {
                     this.WS.close()
                 }
-                if (JSON.parse(e.data).type === 'friends') {
+                else if (JSON.parse(e.data).type === 'friends') {
                     console.log(JSON.parse(e.data), 'modification friends')
                     store.dispatch(
                         onModificationFriends({
@@ -43,6 +45,18 @@ class WsService {
                                 request: JSON.parse(e.data).request,
                             },
                             type: 'MODIFICATION_FRIENDS',
+                        })
+                    )
+                }
+                else if (JSON.parse(e.data).type === 'challenge') {
+                    console.log(JSON.parse(e.data), 'onWeb')
+                    store.dispatch(
+                        onModificationDefyFriend({
+                            defyFriend: {
+                                stateModal: true,
+                                infoFriend: JSON.parse(e.data).username,
+                            },
+                            type: 'MODIFICATION_DEFY_FRIEND',
                         })
                     )
                 }
