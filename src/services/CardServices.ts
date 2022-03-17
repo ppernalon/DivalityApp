@@ -1,3 +1,4 @@
+import wsService from "ws-services/WsService"
 
 const CardServices = () => {}
 
@@ -28,6 +29,18 @@ CardServices.getPantheonByName = (name: string): string => {
 }
 
 CardServices.getCardByName = (name: string) => {
+    console.log("try")
+    const ws = wsService.getWs()
+    ws.send(JSON.stringify({
+        type: "card",
+        cardName: name
+    }))
+    ws.onmessage = (e: any) => {
+        console.log(e, "cardData")
+        if(JSON.parse(e.data).type == "card" ){
+            console.log(JSON.parse(e.data))
+        }
+    }
     const cardData = {
         pantheon: CardServices.getPantheonByName(name),
         life: 120,
