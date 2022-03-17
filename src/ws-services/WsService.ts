@@ -11,7 +11,6 @@ class WsService {
         this.WS = new WebSocket(`ws://${constants.API_URL}/connection`)
 
         this.WS.onopen = () => {
-            console.log('websocket ouverte')
             this.WS.send(
                 JSON.stringify({
                     type: 'connection',
@@ -24,49 +23,45 @@ class WsService {
                     username: username,
                 })
             )
-            this.WS.onmessage = (e: any) => {
-                console.log(e)
-                if (e.data === 'Challenge refused') {
-                    console.log('refus de challenge')
-                }
-                else if (JSON.parse(e.data).type === 'disciples') {
-                    store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(e.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
-                }
-                else if (JSON.parse(e.data).type === 'deconnectionWebSocket') {
-                    this.WS.close()
-                }
-                else if (JSON.parse(e.data).type === 'friends') {
-                    console.log(JSON.parse(e.data), 'modification friends')
+            this.WS.addEventListener('message', function (event: any) {
+                if (JSON.parse(event.data).type === 'challenge') {
+                    console.log('tu as été défié')
+                    store.dispatch(
+                        onModificationDefyFriend({
+                            defyFriend: {
+                                stateModal: true,
+                                infoFriend: JSON.parse(event.data).username,
+                            },
+                            type: 'MODIFICATION_DEFY_FRIEND',
+                        })
+                    )
+                } else if (JSON.parse(event.data).type === 'userAlreadyConnected') {
+                    console.log('deja co !!!!!')
+                } else if (JSON.parse(event.data).type === 'disciples') {
+                    store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(event.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
+                } else if (JSON.parse(event.data).type === 'deconnectionWebSocket') {
+                    console.log('deconnectionWebSocket todo')
+                } else if (JSON.parse(event.data).type === 'friends') {
+                    console.log(JSON.parse(event.data), 'modification friends')
                     store.dispatch(
                         onModificationFriends({
                             friends: {
-                                connected: JSON.parse(e.data).connected,
-                                disconnected: JSON.parse(e.data).disconnected,
-                                request: JSON.parse(e.data).request,
+                                connected: JSON.parse(event.data).connected,
+                                disconnected: JSON.parse(event.data).disconnected,
+                                request: JSON.parse(event.data).request,
                             },
                             type: 'MODIFICATION_FRIENDS',
                         })
                     )
                 }
-                else if (JSON.parse(e.data).type === 'challenge') {
-                    console.log(JSON.parse(e.data), 'onWeb')
-                    store.dispatch(
-                        onModificationDefyFriend({
-                            defyFriend: {
-                                stateModal: true,
-                                infoFriend: JSON.parse(e.data).username,
-                            },
-                            type: 'MODIFICATION_DEFY_FRIEND',
-                        })
-                    )
-                }
-            }
+                console.log('Voici un message du serveur', event)
+            })
         }
 
         this.WS.onerror = (error: WebSocketErrorEvent) => {
             console.error(error.message)
         }
-
+        
         return this.WS
     }
 

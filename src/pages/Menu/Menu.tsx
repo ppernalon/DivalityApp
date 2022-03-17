@@ -9,8 +9,8 @@ import {menuStyle} from './MenuStyle'
 import MatchmakingLoader from '@components/MatchmakingLoader'
 import {Modal, Portal} from 'react-native-paper'
 import wsService from '../../ws-services/WsService'
-import { useSelector } from 'react-redux'
-import { selectUsername } from '../../store/reducers/UsernameSlice'
+import {useSelector} from 'react-redux'
+import {selectUsername} from '../../store/reducers/UsernameSlice'
 
 type MenuProps = {
     navigation: any
@@ -32,7 +32,7 @@ const Menu = ({navigation}: MenuProps) => {
         )
         ws.onmessage = (answer: WebSocketMessageEvent) => {
             const data = JSON.parse(answer.data)
-            if (data.type === "duel"){
+            if (data.type === 'duel') {
                 setWaitingState(false)
                 navigation.navigate('Duel', {opponent: data.opponent})
             }
@@ -50,26 +50,18 @@ const Menu = ({navigation}: MenuProps) => {
     }
 
     useEffect(() => {
-        const subscription = AppState.addEventListener("change", nextAppState => {
-            if (
-                appState.current.match(/inactive|background/) &&
-                nextAppState === "active"
-            ) {
-                console.log("App foreground")
-            } else if (
-                appState.current === "active" &&
-                nextAppState.match(/inactive|background/)
-            ) {
+        const subscription = AppState.addEventListener('change', (nextAppState) => {
+            if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+                console.log('App foreground')
+            } else if (appState.current === 'active' && nextAppState.match(/inactive|background/)) {
                 ws.close()
-                navigation.navigate("SignIn")
+                navigation.navigate('SignIn')
             }
         })
         return () => subscription.remove()
-    }, [])    
+    }, [])
 
-	useEffect(() => {
-		
-	})
+    useEffect(() => {})
 
     return (
         <View style={menuStyle.containerMenu}>
@@ -97,7 +89,7 @@ const Menu = ({navigation}: MenuProps) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <MatchmakingLoader onCancel={cancelMatchmaking} />
+                    <MatchmakingLoader onCancel={cancelMatchmaking} label={"Recherche d'une partie en cours"} />
                 </Modal>
             </Portal>
         </View>

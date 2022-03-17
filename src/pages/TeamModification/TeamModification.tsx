@@ -8,8 +8,8 @@ import {teamModificationStyles} from './TeamModificationStyles'
 import {colors} from '../../GlobalStyle'
 import {transform} from '@babel/core'
 import wsService from '../../ws-services/WsService'
-import { selectUsername } from 'store/reducers/UsernameSlice'
-import { useSelector } from 'react-redux'
+import {selectUsername} from 'store/reducers/UsernameSlice'
+import {useSelector} from 'react-redux'
 
 type TeamModificationProps = {
     navigation: any
@@ -27,7 +27,6 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
     const [initialDataCollectionWithOccurence, setInitialDataCollectionWithOccurence] = useState<{[pantheon: string]: {[divinity: string]: number}}>({})
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const username = useSelector(selectUsername)
-
 
     const {fonts} = useTheme()
     const fontStyle = {
@@ -48,36 +47,38 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
             })
         )
         ws.onmessage = (e: any) => {
-            let dataCollection = JSON.parse(e.data)
+            if (JSON.parse(e.data).type === 'collection') {
+                let dataCollection = JSON.parse(e.data)
 
-            let dataCollectionWithUniqueItemTemp: {[pantheon: string]: string[]} = {
-                egyptian: [],
-                greek: [],
-                nordic: [],
+                let dataCollectionWithUniqueItemTemp: {[pantheon: string]: string[]} = {
+                    egyptian: [],
+                    greek: [],
+                    nordic: [],
+                }
+                let dataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
+                    egyptian: {},
+                    greek: {},
+                    nordic: {},
+                }
+                let initialDataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
+                    egyptian: {},
+                    greek: {},
+                    nordic: {},
+                }
+                for (const pantheon in dataCollectionWithUniqueItemTemp) {
+                    dataCollection.data[pantheon].forEach((divinity: string) => {
+                        if (!dataCollectionWithUniqueItemTemp[pantheon].includes(divinity)) {
+                            dataCollectionWithUniqueItemTemp[pantheon].push(divinity)
+                            const numberOccurence = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
+                            initialDataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
+                            dataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
+                        }
+                    })
+                }
+                setInitialDataCollectionWithOccurence(initialDataCollectionWithOccurenceTemp)
+                changeOccurence(dataCollectionWithOccurenceTemp, listOfDivinityTeam)
+                setIsDataLoad(true)
             }
-            let dataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
-                egyptian: {},
-                greek: {},
-                nordic: {},
-            }
-            let initialDataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
-                egyptian: {},
-                greek: {},
-                nordic: {},
-            }
-            for (const pantheon in dataCollectionWithUniqueItemTemp) {
-                dataCollection.data[pantheon].forEach((divinity: string) => {
-                    if (!dataCollectionWithUniqueItemTemp[pantheon].includes(divinity)) {
-                        dataCollectionWithUniqueItemTemp[pantheon].push(divinity)
-                        const numberOccurence = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
-                        initialDataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
-                        dataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
-                    }
-                })
-            }
-            setInitialDataCollectionWithOccurence(initialDataCollectionWithOccurenceTemp)
-            changeOccurence(dataCollectionWithOccurenceTemp, listOfDivinityTeam)
-            setIsDataLoad(true)
         }
     }
 
@@ -104,7 +105,9 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         }
         ws.send(JSON.stringify(dataValidationTeamBack))
         ws.onmessage = (e: any) => {
-            navigation.navigate('Teams')
+            if (JSON.parse(e.data).type === 'teams') {
+                navigation.navigate('Teams')
+            }
         }
     }
 
@@ -179,7 +182,7 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
                     />
                 </View>
             </ContentTextured>
-            <View style={{flex: 1, width: '100%', alignItems: 'center', paddingTop: 15, paddingBottom:25}}>
+            <View style={{flex: 1, width: '100%', alignItems: 'center', paddingTop: 15, paddingBottom: 25}}>
                 <View style={{width: '100%', alignItems: 'center'}}>{displayImageDivinity(listOfDivinityTeam)}</View>
                 <View style={{height: '72%'}}>
                     <PantheonDisplayer

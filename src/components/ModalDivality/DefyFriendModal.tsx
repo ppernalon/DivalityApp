@@ -38,7 +38,6 @@ const DefyFriendModal = ({}: DefyFriendModalProps) => {
                 usernameChallenged: username,
             })
         )
-        
     }
 
     const onValidationDefyFriend = () => {
@@ -50,7 +49,7 @@ const DefyFriendModal = ({}: DefyFriendModalProps) => {
             })
         )
         ws.onmessage = (e: any) => {
-            if (e.data === 'Challenge accepted') {
+            if (JSON.parse(e.data).type === 'challengeAccepted') {
                 navigation.navigate('Duel', {opponent: defyFriend.infoFriend})
                 dispatch(onModificationDefyFriend({defyFriend: {stateModal: false, infoFriend: ''}, type: 'MODIFICATION_DEFY_FRIEND'}))
             }
@@ -83,7 +82,7 @@ const DefyFriendModal = ({}: DefyFriendModalProps) => {
                 </View>
 
                 <Text style={{marginBottom: 10}}>
-                    Vous avez été défié par 
+                    Vous avez été défié par
                     <Text style={{color: colors.blueSky}}> {defyFriend.infoFriend}</Text>
                 </Text>
                 <Text style={{marginBottom: 20}}> Voulez-vous accepter ?</Text>

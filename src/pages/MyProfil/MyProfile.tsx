@@ -34,11 +34,9 @@ const MyProfile = ({}: MyProfileProps) => {
             })
         )
         ws.onmessage = (e: any) => {
-            console.log(e)
             if (JSON.parse(e.data).type === 'infoWinRate') {
                 const data = JSON.parse(e.data)
-                console.log(data)
-                if (data.victory && data.defeat) {
+                if (data.victory >= 0 && data.defeat >= 0) {
                     setWinRate(data.victory.toString() + '/' + data.defeat.toString())
                 } else {
                     setWinRate('Indisponible')

@@ -1,7 +1,7 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useRef, useState} from 'react'
 import {TouchableOpacity, View, Button, Image, Keyboard} from 'react-native'
-import {ActivityIndicator, Text, TextInput} from 'react-native-paper'
+import {ActivityIndicator, Modal, Portal, Text, TextInput} from 'react-native-paper'
 import {useDispatch, useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
 import {colors} from 'GlobalStyle'
@@ -12,7 +12,9 @@ import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityBu
 import {auctionHouseStyle} from 'components/ModalDivality/AuctionHouseStyle'
 import store from 'store/store'
 import DefyFriendModal from 'components/ModalDivality/DefyFriendModal'
-import { selectDefyFriend } from 'store/reducers/DefyFriendSlice'
+import {selectDefyFriend} from 'store/reducers/DefyFriendSlice'
+import MatchmakingLoader from 'components/MatchmakingLoader'
+import { useNavigation } from '@react-navigation/native'
 
 type MyCommunityProps = {}
 
@@ -20,12 +22,14 @@ const MyCommunity = ({}: MyCommunityProps) => {
     const username = useSelector(selectUsername)
     const friends = useSelector(selectFriends)
     const ws = wsService.getWs()
+    const navigation = useNavigation()
     const dispatch = useDispatch()
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const [dataForDataTable, setDataForDataTable] = useState<{pseudo: string; rate: string; status: string}[]>([])
     const [formAddByUsername, setFormAddByUsername] = useState<string>('')
     const [addFriendText, setAddFriendText] = useState<{text: string; color: string}>({text: '', color: ''})
     const [isModalDefyOpen, setIsModalDefyOpen] = useState<boolean>(false)
+    const [friendInfoToDefy, setFriendInfoToDefy] = useState<{rate: string, status: string, username: string}>({rate: '', status: '', username: ''})
 
     useEffect(() => {
         onChangeFriends()
@@ -93,8 +97,48 @@ const MyCommunity = ({}: MyCommunityProps) => {
     }
 
     const defyFriend = (friendInfo: any) => {
-        // Ajouter cette partie quand la ws sera faite
+        setFriendInfoToDefy(friendInfo)
+        ws.send(
+            JSON.stringify({
+                type: 'challengeFriend',
+                usernameChallenged: friendInfo.username,
+                username: username,
+            })
+        )
+        ws.onmessage = (e: any) => {
+            const type = JSON.parse(e.data).type 
+            if (type === "friendChallenged" ){
+                setIsModalDefyOpen(true)
+            }
+            else if (type === "userAlreadyInDuel"){
+                setAddFriendText({text: friendInfo.username + ' est déjà en duel', color: colors.errorRed})
+                setIsModalDefyOpen(false)
+            }
+            else if (type === "userNotConnected"){
+                setAddFriendText({text: friendInfo.username + ' est déconnecté', color: colors.errorRed})
+                setIsModalDefyOpen(false)
+            }
+            else if (type === "challengeAccepted"){
+                navigation.navigate('Duel', {opponent: friendInfo.username})
+                setIsModalDefyOpen(false)
+            }
+            else if (type === "challengeRefused"){
+                setAddFriendText({text: friendInfo.username + ' a refusé votre duel', color: colors.errorRed})
+                setIsModalDefyOpen(false)
+            }
+        }
         setIsModalDefyOpen(true)
+    }
+    
+    const cancelDefy = () =>{
+        ws.send(
+            JSON.stringify({
+                type: 'cancelChallenge',
+                usernameChallenged: friendInfoToDefy.username,
+                username: username,
+            })
+        )
+        setIsModalDefyOpen(false)
     }
 
     const removeRequestFriend = (friendInfo: any) => {
@@ -126,35 +170,22 @@ const MyCommunity = ({}: MyCommunityProps) => {
                 })
             )
             ws.onmessage = (e: any) => {
-                if (e.data === "Vous avez déjà envoyé une requête d'ami à cette personne")
+                if (JSON.parse(e.data).type === 'requestAlreadySent')
                     setAddFriendText({text: 'Vous avez déjà demandé en ami ' + formAddByUsername, color: colors.errorRed})
-                else if (e.data === 'Joueur introuvable') {
+                else if (JSON.parse(e.data).type === 'userNotFound') {
                     setAddFriendText({text: formAddByUsername + " n'a pas été trouvé", color: colors.errorRed})
-                } else if (e.data === 'Vous êtes déjà ami avec ce joueur') {
+                } else if (JSON.parse(e.data).type === 'alreadyFriend') {
                     setAddFriendText({text: 'Vous êtes déjà ami avec ' + formAddByUsername, color: colors.errorRed})
                     setFormAddByUsername('')
                     Keyboard.dismiss()
-                } else if (e.data === 'La demande a bien été effectuée') {
+                } else if (JSON.parse(e.data).type === 'requestSent') {
                     setAddFriendText({text: "Demande d'ami envoyée à " + formAddByUsername, color: colors.green})
                     setFormAddByUsername('')
                     Keyboard.dismiss()
-                } else if (e.data === 'Demande automatiquement acceptée') {
+                } else if (JSON.parse(e.data).type === 'requestAutomaticallyAccepted') {
                     setAddFriendText({text: "Demande d'ami de " + formAddByUsername + ' acceptée', color: colors.blueSky})
                     setFormAddByUsername('')
                     Keyboard.dismiss()
-                } else {
-                    if (JSON.parse(e.data).type == 'friends') {
-                        store.dispatch(
-                            onModificationFriends({
-                                friends: {
-                                    connected: JSON.parse(e.data).connected,
-                                    disconnected: JSON.parse(e.data).disconnected,
-                                    request: JSON.parse(e.data).request,
-                                },
-                                type: 'MODIFICATION_FRIENDS',
-                            })
-                        )
-                    }
                 }
             }
         }
@@ -173,8 +204,20 @@ const MyCommunity = ({}: MyCommunityProps) => {
                 </Text>
             </ContentTextured>
             <View style={{flex: 1, width: '100%', paddingTop: 30, alignItems: 'center'}}>
-                
                 <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
+                    <View>
+                        <Portal>
+                            <Modal
+                                visible={isModalDefyOpen}
+                                onDismiss={() => cancelDefy()}
+                                contentContainerStyle={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                <MatchmakingLoader onCancel={cancelDefy} label={"Annuler le défi"}/>
+                            </Modal>
+                        </Portal>
+                    </View>
                     <View style={{width: '50%', marginRight: 12}}>
                         <TextInput
                             style={{backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 5, height: 60}}

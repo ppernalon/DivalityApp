@@ -92,9 +92,9 @@ const MyTeams = ({navigation}: MyTeams) => {
                     MES ÉQUIPES
                 </Text>
             </ContentTextured>
-            <View style={{width: '100%', flex: 1, paddingTop: 5, alignItems: 'center' }}>
+            <View style={{width: '100%', flex: 1, paddingTop: 5, alignItems: 'center'}}>
                 {!isDataLoad ? (
-                    <View style={{height: '100%', justifyContent:'center'}}>
+                    <View style={{height: '100%', justifyContent: 'center'}}>
                         <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
                     </View>
                 ) : (
@@ -115,9 +115,11 @@ MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: 
         })
     )
     ws.onmessage = (e: any) => {
-        let dataTeams = JSON.parse(e.data)
-        setMyTeamsData(dataTeams.teamsdata)
-        setIsDataLoad(true)
+        if (JSON.parse(e.data).type === 'teams') {
+            let dataTeams = JSON.parse(e.data)
+            setMyTeamsData(dataTeams.teamsdata)
+            setIsDataLoad(true)
+        }
     }
 }
 

@@ -52,29 +52,32 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
             })
         )
         ws.onmessage = (e: any) => {
-            let dataCollection = JSON.parse(e.data)
+            if(JSON.parse(e.data).type === "collection"){
+                let dataCollection = JSON.parse(e.data)
 
-            let dataCollectionWithUniqueItemTemp: {[pantheon: string]: string[]} = {
-                egyptian: [],
-                greek: [],
-                nordic: [],
+                let dataCollectionWithUniqueItemTemp: {[pantheon: string]: string[]} = {
+                    egyptian: [],
+                    greek: [],
+                    nordic: [],
+                }
+                let dataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
+                    egyptian: {},
+                    greek: {},
+                    nordic: {},
+                }
+                for (const pantheon in dataCollectionWithUniqueItemTemp) {
+                    dataCollection.data[pantheon].forEach((divinity: string) => {
+                        if (!dataCollectionWithUniqueItemTemp[pantheon].includes(divinity)) {
+                            dataCollectionWithUniqueItemTemp[pantheon].push(divinity)
+                            const numberOccurence = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
+                            dataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
+                        }
+                    })
+                }
+                setDataCollectionWithOccurence(dataCollectionWithOccurenceTemp)
+                setIsDataLoad(true)
             }
-            let dataCollectionWithOccurenceTemp: {[pantheon: string]: {[divinityName: string]: number}} = {
-                egyptian: {},
-                greek: {},
-                nordic: {},
-            }
-            for (const pantheon in dataCollectionWithUniqueItemTemp) {
-                dataCollection.data[pantheon].forEach((divinity: string) => {
-                    if (!dataCollectionWithUniqueItemTemp[pantheon].includes(divinity)) {
-                        dataCollectionWithUniqueItemTemp[pantheon].push(divinity)
-                        const numberOccurence = dataCollection.data[pantheon].filter((x: string) => x === divinity).length
-                        dataCollectionWithOccurenceTemp[pantheon][divinity] = numberOccurence
-                    }
-                })
-            }
-            setDataCollectionWithOccurence(dataCollectionWithOccurenceTemp)
-            setIsDataLoad(true)
+                
         }
     }
 

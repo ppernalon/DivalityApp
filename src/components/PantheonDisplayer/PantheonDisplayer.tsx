@@ -71,9 +71,9 @@ const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDat
             })
         )
         ws.onmessage = (e: any) => {
-            if (e.data === "L'utilisateur ne possède pas assez de disciples") {
+            if (JSON.parse(e.data).type === "notEnoughDisciples") {
                 setErrorBuyDisciple("Vous n'avez pas assez de disciples")
-            } else {
+            } else if(JSON.parse(e.data).type === "card") {
                 setErrorBuyDisciple('')
                 dispatch(incrementByAmount({number: -10, type: 'INCREMENT'}))
                 let newCardName: string = JSON.parse(e.data).name

@@ -42,7 +42,7 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
             })
         )
         ws.onmessage = (e: any) => {
-            if (e.data === "L'utilisateur ne possède pas assez de disciples") {
+            if (JSON.parse(e.data).type === "notEnoughDisciples") {
                 setErrorToDisplay('Vous ne possedez pas assez de disciples')
             } else if (JSON.parse(e.data).type === 'auctionHouse') {
                 dispatch(incrementByAmount({number: -(parseInt(cardInfo.price)*parseInt(formOutputQuantity)), type: 'INCREMENT'}))
@@ -90,8 +90,8 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                                 value={formOutputQuantity}
                                 right={<TextInput.Affix text={'Max ' + cardInfo.quantity} />}
                                 onChangeText={(newValue) => {
-                                    if (parseInt(newValue) > parseInt(cardInfo.quantity)) {
-                                        setFormOutputQuantity(cardInfo.quantity)
+                                    if (parseInt(newValue) > cardInfo.quantity) {
+                                        setFormOutputQuantity(cardInfo.quantity.toString())
                                     } else {
                                         setFormOutputQuantity(newValue)
                                     }
