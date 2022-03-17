@@ -17,7 +17,7 @@ const Shop = () => {
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
-
+   
     const header = [
         {name: 'Divinité', type: 'string', width: 1, nameOfTheData: 'cardName'},
         {name: 'Vendeur', type: 'string', width: 1, nameOfTheData: 'ownerName'},

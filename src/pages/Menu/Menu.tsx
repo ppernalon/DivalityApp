@@ -11,16 +11,27 @@ import {Modal, Portal} from 'react-native-paper'
 import wsService from '../../ws-services/WsService'
 import {useSelector} from 'react-redux'
 import {selectUsername} from '../../store/reducers/UsernameSlice'
+import {NavigationActions, StackActions} from 'react-navigation'
+import {CommonActions, useFocusEffect} from '@react-navigation/native'
 
 type MenuProps = {
     navigation: any
 }
+
 const widthButtons = '70%'
 const Menu = ({navigation}: MenuProps) => {
     const appState = useRef(AppState.currentState)
     const [isWaitingForQueue, setWaitingState] = useState<boolean>(false)
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
+
+    React.useEffect(
+        () =>
+            navigation.addListener('beforeRemove', (e: any) => {
+                e.preventDefault()
+            }),
+        [navigation]
+    )
 
     const startMatchmaking: Function = () => {
         setWaitingState(true)

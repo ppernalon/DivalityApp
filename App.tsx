@@ -21,19 +21,19 @@ import wsService from 'ws-services/WsService'
 import {View} from 'react-native'
 import DefyFriendModal from 'components/ModalDivality/DefyFriendModal'
 import {selectDefyFriend} from 'store/reducers/DefyFriendSlice'
+import ErrorDisplayer from 'components/ErrorDisplayer/ErrorDisplayer'
 
 const App = () => {
     const Stack = createNativeStackNavigator()
-  
+
     return (
         <Provider store={store}>
             <PaperProvider theme={paperTheme}>
                 <NavigationContainer theme={appTheme}>
-					<DefyFriendModal></DefyFriendModal>
-
+                    <DefyFriendModal></DefyFriendModal>
+                    <ErrorDisplayer></ErrorDisplayer>
                     <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
-
-                        <Stack.Screen name="SignIn" component={SignIn} />
+                        <Stack.Screen name="SignIn" component={SignIn}/>
                         <Stack.Screen name="SignUp" component={SignUp} />
                         <Stack.Screen name="Menu" component={Menu} />
                         <Stack.Screen name="TeamModification" component={TeamModification} />

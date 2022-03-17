@@ -3,6 +3,7 @@ import {initialisationOnConnection} from '../store/reducers/DisciplesSlice'
 import store from '../store/store'
 import {onModificationFriends} from '../store/reducers/FriendsSlice'
 import {onModificationDefyFriend} from 'store/reducers/DefyFriendSlice'
+import {onModificationErrorToDiplay} from 'store/reducers/ErrorToDisplaySlice'
 
 class WsService {
     WS: any = null
@@ -59,9 +60,13 @@ class WsService {
         }
 
         this.WS.onerror = (error: WebSocketErrorEvent) => {
-            console.error(error.message)
+            console.log(console.log(error), 'errrrrrrrrr')
+            store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: "error"}, type: 'NEW_ERROR'}))
         }
-        
+        this.WS.onclose = (e :any) =>{
+            console.log( e , 'oncloseeee')
+        }
+
         return this.WS
     }
 

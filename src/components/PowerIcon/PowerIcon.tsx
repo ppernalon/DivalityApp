@@ -9,8 +9,10 @@ const PowerIcon = () => {
     const ws = wsService.getWs()
     const onCloseIcon = () => {
         ws.close()
+        navigation.removeListener('beforeRemove', (e: any) => {}),
         navigation.navigate('SignIn')
     }
+   
     return (
         <TouchableOpacity onPress={onCloseIcon}>
             <Image source={require('@images/power.png')} style={powerIconStyle.powerImage} />
