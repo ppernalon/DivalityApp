@@ -31,6 +31,7 @@ const DefyFriendModal = ({}: DefyFriendModalProps) => {
     const closeModal = () => {
         setErrorToDisplay('')
         dispatch(onModificationDefyFriend({defyFriend: {stateModal: false, infoFriend: ''}, type: 'MODIFICATION_DEFY_FRIEND'}))
+        
         ws.send(
             JSON.stringify({
                 type: 'refuseChallenge',

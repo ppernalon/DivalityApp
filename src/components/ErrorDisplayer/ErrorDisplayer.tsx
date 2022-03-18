@@ -29,6 +29,7 @@ const ErrorDisplayer = ({}: ErrorDisplayerProps) => {
     }
 
     const closeModal = () => {
+        navigation.navigate('SignIn')
         dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: false, msg: ''}, type: 'NEW_ERROR'}))
     }
     return (

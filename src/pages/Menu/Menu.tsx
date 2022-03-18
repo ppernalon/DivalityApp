@@ -14,6 +14,7 @@ import {selectUsername} from '../../store/reducers/UsernameSlice'
 import {NavigationActions, StackActions} from 'react-navigation'
 import {CommonActions, useFocusEffect} from '@react-navigation/native'
 import {onModificationDeconnectionState, selectDeconnectionState} from 'store/reducers/DeconnectionStateSlice'
+import { selectErrorToDisplay } from 'store/reducers/ErrorToDisplaySlice'
 
 type MenuProps = {
     navigation: any
@@ -27,9 +28,10 @@ const Menu = ({navigation}: MenuProps) => {
     const username = useSelector(selectUsername)
     const dispatch = useDispatch()
     const deconnectionStateStore = useSelector(selectDeconnectionState)
+    const errorToDisplayStore = useSelector(selectErrorToDisplay)
 
     React.useEffect(() => {
-        if (deconnectionStateStore.stateModal == false) {
+        if (deconnectionStateStore.stateModal == false && errorToDisplayStore.stateModal == false) {
             navigation.addListener('beforeRemove', (e: any) => {
                 e.preventDefault()
                 dispatch(onModificationDeconnectionState({deconnectionState: {stateModal: true}, type: 'NEW_DECONNECTION_STATE'}))
@@ -37,7 +39,7 @@ const Menu = ({navigation}: MenuProps) => {
         }else{
             navigation.removeListener('beforeRemove', (e: any) => {})
         }
-    }, [navigation, deconnectionStateStore])
+    }, [navigation, deconnectionStateStore, errorToDisplayStore])
 
     const startMatchmaking: Function = () => {
         setWaitingState(true)

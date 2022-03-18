@@ -38,7 +38,7 @@ class WsService {
                     })
                 )
                 pingTimeout = setTimeout(() => {
-                    console.log('arreter la ws')
+                    store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner'}, type: 'NEW_ERROR'}))
                 }, 15000) //Send ping evry 15sec
             }, 7500)
         }
@@ -65,7 +65,6 @@ class WsService {
             } else if (JSON.parse(event.data).type === 'userAlreadyConnected') {
                 console.log('deja co !!!!!')
                 store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'Vous êtes déja connecté'}, type: 'NEW_ERROR'}))
-                const navigation = useNavigation()
             } else if (JSON.parse(event.data).type === 'disciples') {
                 store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(event.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
             } else if (JSON.parse(event.data).type === 'deconnectionWebSocket') {
