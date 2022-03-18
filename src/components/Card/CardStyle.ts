@@ -89,13 +89,13 @@ export const cardStyle = StyleSheet.create({
     cardAttributes: {
         flexDirection: "row",
         marginTop: 5,
-        width: 60
+        width: '50%'
     },
     cardAttributesContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: "space-between",
-        width: 175,
+        width: '80%',
         
     }
 })

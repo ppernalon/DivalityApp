@@ -10,6 +10,10 @@ const fontConfig: any = {
     medium: {
       fontFamily: 'Merienda-Bold',
       fontWeight: 'normal'
+    },
+    light: {
+      fontFamily: 'OpenSans-Light',
+      fontWeight: 'normal'
     }
   }
 }

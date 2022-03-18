@@ -2,7 +2,7 @@ import ReactIf from '@components/ReactIf'
 import React, {useEffect, useState} from 'react'
 import {View, Image} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import {ActivityIndicator, Title, Text} from 'react-native-paper'
+import {ActivityIndicator, Title, Text, useTheme} from 'react-native-paper'
 import CardServices from 'services/CardServices'
 import {colors} from './../../GlobalStyle'
 import {cardStyle} from './CardStyle'
@@ -20,9 +20,13 @@ const Card = ({name, minimal = false}: cardProps) => {
     const [power, setPower] = useState<number>(0)
     const [speed, setSpeed] = useState<number>(0)
     const [ability, setAbility] = useState<string>('')
+    const fontStyle = { 
+        fontFamily:  "OpenSans-Light",
+        fontSize: 15,
+    }
 
     useEffect(() => {
-        if (name !== '') {
+        if (name !== '' && minimal === false) {
             CardServices.getCardByName(name).then((data: any) => {
                 setLife(data.life)
                 setArmor(data.armor)
@@ -32,8 +36,10 @@ const Card = ({name, minimal = false}: cardProps) => {
                 setAbility(data.ability)
                 setIsLoading(false)
             })
-        }
-        else{
+        } else if (name !== '' && minimal === true) {
+            setImage(CardServices.getImageByName(name))
+            setIsLoading(false)
+        } else {
             setIsLoading(false)
         }
     }, [name])
@@ -76,36 +82,42 @@ const Card = ({name, minimal = false}: cardProps) => {
                         colors={[cardStyle.rarityHeadband.common.start, cardStyle.rarityHeadband.common.end]}
                         style={cardStyle.rarityHeadband}
                     />
-                    <Title style={cardStyle.name}> {name} </Title>
+                    <Title style={cardStyle.name}>{name.replace(name[0], name[0].toUpperCase())}</Title>
                     <ReactIf condition={!minimal}>
-                        <View style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 20, paddingRight: 20}}>
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <View style={cardStyle.cardAttributesContainer}>
-                                <View style={cardStyle.cardAttributes}>
-                                    <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.dot} />
+                                <View style={{flexDirection: 'row', marginVertical: 8}}>
+                                    <View style={cardStyle.cardAttributes}>
+                                        <View style={{marginRight: 15}}>
+                                            <View style={cardStyle.dot} />
+                                        </View>
+                                        <Text style={fontStyle}>Vie: {life}</Text>
                                     </View>
-                                    <Text> {life} </Text>
+                                    <View style={cardStyle.cardAttributes}>
+                                        <View style={{marginRight: 15}}>
+                                            <View style={cardStyle.square} />
+                                        </View>
+                                        <Text style={fontStyle}>Armure: {armor} </Text>
+                                    </View>
                                 </View>
-                                <View style={cardStyle.cardAttributes}>
-                                    <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.square} />
+                                <View style={{flexDirection: 'row', marginVertical: 8}}>
+                                    <View style={cardStyle.cardAttributes}>
+                                        <View style={{marginRight: 15}}>
+                                            <View style={cardStyle.arrowRight} />
+                                        </View>
+                                        <Text  style={fontStyle}>Pouvoir: {power} </Text>
                                     </View>
-                                    <Text> {armor} </Text>
-                                </View>
-                                <View style={cardStyle.cardAttributes}>
-                                    <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.arrowRight} />
+                                    <View style={cardStyle.cardAttributes}>
+                                        <View style={{marginRight: 15}}>
+                                            <View style={cardStyle.arrowUp} />
+                                        </View>
+                                        <Text style={fontStyle}>Vitesse: {speed} </Text>
                                     </View>
-                                    <Text> {power} </Text>
-                                </View>
-                                <View style={cardStyle.cardAttributes}>
-                                    <View style={{height: 40, width: 40}}>
-                                        <View style={cardStyle.arrowUp} />
-                                    </View>
-                                    <Text> {speed} </Text>
                                 </View>
                             </View>
-                            <Text> {ability} </Text>
+                            <View style={{marginTop: 5, marginHorizontal: 15, marginBottom:10}}>
+                                <Text style={fontStyle}>{ability} </Text>
+                            </View>
                         </View>
                     </ReactIf>
                 </React.Fragment>

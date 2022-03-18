@@ -29,8 +29,17 @@ CardServices.getPantheonByName = (name: string): string => {
 }
 
 CardServices.getCardByName = (name: string) => {
-    console.log("try")
+    console.log("try", name)
     const ws = wsService.getWs()
+    const cardData = {
+        pantheon: CardServices.getPantheonByName(name),
+        life: 0,
+        armor: 0,
+        power: 0,
+        speed: 0,
+        ability: "",
+        uri: CardServices.getImageByName(name)
+    }
     ws.send(JSON.stringify({
         type: "card",
         cardName: name
@@ -39,17 +48,15 @@ CardServices.getCardByName = (name: string) => {
         console.log(e, "cardData")
         if(JSON.parse(e.data).type == "card" ){
             console.log(JSON.parse(e.data))
+            const dataTemp = JSON.parse(e.data)
+            cardData.life = dataTemp.life
+            cardData.armor = dataTemp.armor
+            cardData.power = dataTemp.power
+            cardData.speed = dataTemp.speed
+            cardData.ability = dataTemp.description
         }
     }
-    const cardData = {
-        pantheon: CardServices.getPantheonByName(name),
-        life: 120,
-        armor: 12,
-        power: 40,
-        speed: 98,
-        ability: "Mommifie ses voisins directes pour leur permettre de vivre plus longtemps, +10% de vie",
-        uri: CardServices.getImageByName(name)
-    }
+
 
     return new Promise((resolve) => {
         setTimeout(() => resolve(cardData), 1000)
