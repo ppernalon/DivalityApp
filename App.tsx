@@ -22,6 +22,7 @@ import {View} from 'react-native'
 import DefyFriendModal from 'components/ModalDivality/DefyFriendModal'
 import {selectDefyFriend} from 'store/reducers/DefyFriendSlice'
 import ErrorDisplayer from 'components/ErrorDisplayer/ErrorDisplayer'
+import DeconnectionModal from 'components/ModalDivality/DeconnectionModal'
 
 const App = () => {
     const Stack = createNativeStackNavigator()
@@ -31,6 +32,7 @@ const App = () => {
             <PaperProvider theme={paperTheme}>
                 <NavigationContainer theme={appTheme}>
                     <DefyFriendModal></DefyFriendModal>
+                    <DeconnectionModal></DeconnectionModal>
                     <ErrorDisplayer></ErrorDisplayer>
                     <Stack.Navigator initialRouteName="SignIn" screenOptions={{headerShown: false}}>
                         <Stack.Screen name="SignIn" component={SignIn}/>

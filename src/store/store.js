@@ -4,6 +4,7 @@ import usernameReducer from './reducers/UsernameSlice'
 import friendsReducer from './reducers/FriendsSlice'
 import defyFriendReducer from './reducers/DefyFriendSlice'
 import errorToDisplayReducer from './reducers/ErrorToDisplaySlice'
+import deconnectionStateReducer from './reducers/DeconnectionStateSlice'
 
 
 export default configureStore({
@@ -12,6 +13,7 @@ export default configureStore({
     username: usernameReducer,
     friends: friendsReducer,
     defyFriend: defyFriendReducer,
-    errorToDisplay: errorToDisplayReducer
+    errorToDisplay: errorToDisplayReducer,
+    deconnectionState: deconnectionStateReducer
   }
 })

@@ -8,9 +8,7 @@ export const defyFriendSlice = createSlice({
     reducers: {
         onModificationDefyFriend: (state, action) =>{
             if (action.payload.type === 'MODIFICATION_DEFY_FRIEND') {
-                console.log("try modif")
                 state.value = action.payload.defyFriend
-                console.log(state.value.stateModal, 'state Modal')
             }
         },
     },

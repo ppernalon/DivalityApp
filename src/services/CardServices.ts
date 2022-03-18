@@ -29,7 +29,6 @@ CardServices.getPantheonByName = (name: string): string => {
 }
 
 CardServices.getCardByName = (name: string) => {
-    console.log("try", name)
     const ws = wsService.getWs()
     const cardData = {
         pantheon: CardServices.getPantheonByName(name),
@@ -45,9 +44,7 @@ CardServices.getCardByName = (name: string) => {
         cardName: name
     }))
     ws.onmessage = (e: any) => {
-        console.log(e, "cardData")
         if(JSON.parse(e.data).type == "card" ){
-            console.log(JSON.parse(e.data))
             const dataTemp = JSON.parse(e.data)
             cardData.life = dataTemp.life
             cardData.armor = dataTemp.armor

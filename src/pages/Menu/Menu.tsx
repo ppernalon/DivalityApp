@@ -9,10 +9,11 @@ import {menuStyle} from './MenuStyle'
 import MatchmakingLoader from '@components/MatchmakingLoader'
 import {Modal, Portal} from 'react-native-paper'
 import wsService from '../../ws-services/WsService'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {selectUsername} from '../../store/reducers/UsernameSlice'
 import {NavigationActions, StackActions} from 'react-navigation'
 import {CommonActions, useFocusEffect} from '@react-navigation/native'
+import {onModificationDeconnectionState, selectDeconnectionState} from 'store/reducers/DeconnectionStateSlice'
 
 type MenuProps = {
     navigation: any
@@ -24,14 +25,19 @@ const Menu = ({navigation}: MenuProps) => {
     const [isWaitingForQueue, setWaitingState] = useState<boolean>(false)
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
+    const dispatch = useDispatch()
+    const deconnectionStateStore = useSelector(selectDeconnectionState)
 
-    React.useEffect(
-        () =>
+    React.useEffect(() => {
+        if (deconnectionStateStore.stateModal == false) {
             navigation.addListener('beforeRemove', (e: any) => {
                 e.preventDefault()
-            }),
-        [navigation]
-    )
+                dispatch(onModificationDeconnectionState({deconnectionState: {stateModal: true}, type: 'NEW_DECONNECTION_STATE'}))
+            })
+        }else{
+            navigation.removeListener('beforeRemove', (e: any) => {})
+        }
+    }, [navigation, deconnectionStateStore])
 
     const startMatchmaking: Function = () => {
         setWaitingState(true)
@@ -65,8 +71,7 @@ const Menu = ({navigation}: MenuProps) => {
             if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
                 console.log('App foreground')
             } else if (appState.current === 'active' && nextAppState.match(/inactive|background/)) {
-                ws.close()
-                navigation.navigate('SignIn')
+                dispatch(onModificationDeconnectionState({deconnectionState: {stateModal: true}, type: 'NEW_DECONNECTION_STATE'}))
             }
         })
         return () => subscription.remove()

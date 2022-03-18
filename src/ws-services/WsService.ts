@@ -59,12 +59,20 @@ class WsService {
             })
         }
 
-        this.WS.onerror = (error: WebSocketErrorEvent) => {
-            console.log(console.log(error), 'errrrrrrrrr')
-            store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: "error"}, type: 'NEW_ERROR'}))
+        this.WS.onerror = (error: any) => {
+            console.log(error, 'onerror')
         }
-        this.WS.onclose = (e :any) =>{
-            console.log( e , 'oncloseeee')
+
+        this.WS.addEventListener('error', function (event: any) {
+            console.log('Erreur WebSocket event listener : ', event)
+            if (event.message !== null) {
+                console.log('Erreur WebSocket avec msg != null : ', event)
+                store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: event.message}, type: 'NEW_ERROR'}))
+            }
+        })
+
+        this.WS.onclose = (e: any) => {
+            console.log(e, 'oncloseeee')
         }
 
         return this.WS
