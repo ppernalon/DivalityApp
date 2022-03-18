@@ -66,8 +66,6 @@ class WsService {
                 console.log('deja co !!!!!')
                 store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'Vous êtes déja connecté'}, type: 'NEW_ERROR'}))
                 const navigation = useNavigation()
-                navigation.navigate('SignIn')
-
             } else if (JSON.parse(event.data).type === 'disciples') {
                 store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(event.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
             } else if (JSON.parse(event.data).type === 'deconnectionWebSocket') {
