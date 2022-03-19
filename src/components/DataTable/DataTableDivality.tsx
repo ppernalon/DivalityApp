@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {View} from 'react-native'
+import {View, TouchableOpacity} from 'react-native'
 import {ActivityIndicator, Button, DataTable, IconButton, Modal, Text, TextInput} from 'react-native-paper'
 import {colors} from 'GlobalStyle'
 
@@ -8,16 +8,18 @@ type DataTableDivalityProps = {
     isDataLoad: boolean
     data: []
     header: [{name: string; type: string; width: number; nameOfTheData: string; action?: Function}]
+    initialSortBy?: string[]
 }
 
-const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header}: DataTableDivalityProps) => {
+const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header, initialSortBy=['', '']}: DataTableDivalityProps) => {
     const [dataFilter, setDataFilter] = useState<[]>([])
     const [dataFilterByPage, setDataFilterByPage] = useState<[]>([])
     const [page, setPage] = useState<number>(0)
     const numberOfItemsPerPageList = [2, 5, 10]
-    const [numberOfItemsPerPage, setNumberOfItemsPerPage] = React.useState(numberOfItemsPerPageList[1])
+    const [numberOfItemsPerPage, setNumberOfItemsPerPage] = useState(numberOfItemsPerPageList[1])
     const fromPagination = page * numberOfItemsPerPage
     const toPagination = Math.min((page + 1) * numberOfItemsPerPage, dataFilter.length)
+    const [sortByInfo, setSortByInfo] = useState<string[]>(initialSortBy)
     useEffect(() => {
         filterData()
     }, [numberOfItemsPerPage, nameToFilter[0], isDataLoad, data])
@@ -28,9 +30,51 @@ const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header}: 
         if (nameToFilter[0] !== '') {
             dataFilterTemp = data.filter((item: any) => item[nameToFilter[1]].includes(nameToFilter[0]))
         }
-        setDataFilter(dataFilterTemp)
-        const dataFilterByPageTemp: any = dataFilterTemp.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage)
-        setDataFilterByPage(dataFilterByPageTemp)
+        setDataFilter(dataFilterTemp)        
+        sortData(sortByInfo, dataFilterTemp)
+    }
+
+    const sortData = (sortByInfo: string[], dataToFilter: any) => {
+        console.log("------------------------------------")
+        console.log('before sort', dataToFilter)
+        let dataSort= dataToFilter
+        console.log(sortByInfo, 'sort info')
+        if (sortByInfo[0] !== '') {
+            switch (sortByInfo[0]) {
+                case 'string':
+                    dataSort.sort(function (a: {[x: string]: number}, b: {[x: string]: number}) {
+                        if (a[sortByInfo[1]] > b[sortByInfo[1]]) {
+                            return 1
+                        }
+                        if (a[sortByInfo[1]] < b[sortByInfo[1]]) {
+                            return -1
+                        }
+                        return 0
+                    })
+
+                    break
+                case 'number':
+                    dataSort.sort(function (a: {[x: string]: number}, b: {[x: string]: number}) {
+                        return a[sortByInfo[1]] - b[sortByInfo[1]]
+                    })
+                case 'isConnected':
+                    dataSort.sort(function (a: {[x: string]: number}, b: {[x: string]: number}) {
+                        if ((a[sortByInfo[1]] === "request" || a[sortByInfo[1]] === "connected") &&  b[sortByInfo[1]] !== "request"){
+                            return -1
+                        }
+                        if (a[sortByInfo[1]] === "disconnected" &&  (b[sortByInfo[1]] === "connected" || b[sortByInfo[1]] === "request" )){
+                            return 1
+                        }
+                        return 0
+                    })
+                default:
+                    break
+            }
+        }
+        const dataFilterByPageTemp: any = dataSort.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage)
+        setDataFilter(dataSort)   
+        setDataFilterByPage(dataFilterByPageTemp)     
+        console.log('after sort', dataFilter)
     }
     const filterByPage = (page: number) => {
         setPage(page)
@@ -44,6 +88,12 @@ const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header}: 
                 {header.map((headerJSON, indexColumn) => {
                     switch (headerJSON.type) {
                         case 'string':
+                            return (
+                                <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
+                                    {rowDataJSON[headerJSON.nameOfTheData]}
+                                </DataTable.Cell>
+                            )
+                        case 'number':
                             return (
                                 <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
                                     {rowDataJSON[headerJSON.nameOfTheData]}
@@ -168,10 +218,20 @@ const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header}: 
 
     return (
         <View>
-            <DataTable style={{width: '80%'}}>
+            <DataTable style={{width: '85%'}}>
                 <DataTable.Header>
                     {header.map((headerJSON, indexHeader) => (
-                        <DataTable.Title style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexHeader}>
+                        <DataTable.Title
+                            onPress={() => {
+                                if (headerJSON.type === 'number' || headerJSON.type === 'string' || headerJSON.type === 'isConnected') {
+                                    setSortByInfo([headerJSON.type, headerJSON.nameOfTheData])
+                                    sortData([headerJSON.type, headerJSON.nameOfTheData], dataFilter)
+                                }
+                            }}
+                            style={{flex: headerJSON.width, justifyContent: 'center' }}
+                            sortDirection={sortByInfo[1] === headerJSON.nameOfTheData  ? 'ascending': ''}
+                            key={indexHeader}>
+        
                             {headerJSON.name}
                         </DataTable.Title>
                     ))}

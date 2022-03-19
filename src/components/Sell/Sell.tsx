@@ -29,8 +29,8 @@ const Sell = () => {
 
     const header = [
         {name: 'Divinités', type: 'string', width: 1, nameOfTheData: 'cardName'},
-        {name: 'Prix', type: 'string', width: 1, nameOfTheData: 'price'},
-        {name: 'Quantité', type: 'string', width: 1, nameOfTheData: 'quantity'},
+        {name: 'Prix', type: 'number', width: 1, nameOfTheData: 'price'},
+        {name: 'Quantité', type: 'number', width: 1, nameOfTheData: 'quantity'},
         {
             name: '',
             type: 'icon',

@@ -20,14 +20,14 @@ const Shop = () => {
     const [refreshing, setRefreshing] = useState<boolean>(false)
 
     const header = [
-        {name: 'Divinité', type: 'string', width: 1, nameOfTheData: 'cardName'},
-        {name: 'Vendeur', type: 'string', width: 1, nameOfTheData: 'ownerName'},
-        {name: 'Prix', type: 'string', width: 1, nameOfTheData: 'price'},
-        {name: 'Quantité', type: 'string', width: 1, nameOfTheData: 'quantity'},
+        {name: 'Divinité', type: 'string', width: 5, nameOfTheData: 'cardName'},
+        {name: 'Vendeur', type: 'string', width: 5, nameOfTheData: 'ownerName'},
+        {name: 'Prix', type: 'number', width: 4, nameOfTheData: 'price'},
+        {name: 'Quantité', type: 'number', width: 5, nameOfTheData: 'quantity'},
         {
             name: '',
             type: 'icon',
-            width: 1,
+            width: 4,
             nameOfTheData: 'cart-arrow-down',
             action: (item: any) => {
                 onShopClick(item)
@@ -110,7 +110,7 @@ const Shop = () => {
                     color={colors.blueSky}
                 />
             </View>
-            <DataTableDivality isDataLoad={isDataLoad} data={shopData} header={header} nameToFilter={[divinityNameSearch, 'cardName']}></DataTableDivality>
+            <DataTableDivality initialSortBy={['number', 'price']} isDataLoad={isDataLoad} data={shopData} header={header} nameToFilter={[divinityNameSearch, 'cardName']}></DataTableDivality>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
         </ScrollView>
     )

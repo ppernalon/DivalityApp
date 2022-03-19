@@ -1,6 +1,6 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useRef, useState} from 'react'
-import {TouchableOpacity, View, Button, Image, Keyboard} from 'react-native'
+import {TouchableOpacity, View, Button, Image, Keyboard, ScrollView, KeyboardAvoidingView, Platform} from 'react-native'
 import {ActivityIndicator, Modal, Portal, Text, TextInput} from 'react-native-paper'
 import {useDispatch, useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
@@ -193,72 +193,74 @@ const MyCommunity = ({}: MyCommunityProps) => {
     }
 
     return (
-        <View style={{height: '100%', width: '100%', marginBottom: 50}}>
-            <ContentTextured position={'header'}>
-                <Text
-                    style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        fontSize: 20,
-                    }}>
-                    MES AMIS
-                </Text>
-            </ContentTextured>
-            <View style={{flex: 1, width: '100%', paddingTop: 30, alignItems: 'center'}}>
-                <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
-                    <View>
-                        <Portal>
-                            <Modal
-                                visible={isModalDefyOpen}
-                                onDismiss={() => cancelDefy()}
-                                contentContainerStyle={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
-                                <MatchmakingLoader onCancel={cancelDefy} label={'Annuler le défi'} />
-                            </Modal>
-                        </Portal>
-                    </View>
-                    <View style={{width: '50%', marginRight: 12}}>
-                        <TextInput
-                            style={{backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 5, height: 60}}
-                            mode={'flat'}
-                            blurOnSubmit={true}
-                            theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
-                            label="Pseudo"
-                            value={formAddByUsername}
-                            onChangeText={(newValue) => {
-                                setFormAddByUsername(newValue)
-                                setAddFriendText({text: '', color: ''})
-                            }}
-                            right={
-                                <TextInput.Icon
-                                    name="magnify"
-                                    color={(isTextInputFocused: boolean) => {
-                                        if (isTextInputFocused) {
-                                            return colors.blueSky
-                                        } else return colors.blueSky
-                                    }}
-                                />
-                            }
-                        />
-                    </View>
-                    <View style={{width: '30%', justifyContent: 'center', alignItems: 'center'}}>
-                        <DivalityButtonTextured label={'Ajouter'} onSubmit={addFriend} paddingHorizontal={12} paddingVertical={7} fontSize={15} />
-                    </View>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+            <View style={{height: '100%', width: '100%', marginBottom: 50}}>
+                <ContentTextured position={'header'}>
+                    <Text
+                        style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            fontSize: 20,
+                        }}>
+                        MES AMIS
+                    </Text>
+                </ContentTextured>
+                <View>
+                    <Portal>
+                        <Modal
+                            visible={isModalDefyOpen}
+                            onDismiss={() => cancelDefy()}
+                            contentContainerStyle={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <MatchmakingLoader onCancel={cancelDefy} label={'Annuler le défi'} />
+                        </Modal>
+                    </Portal>
                 </View>
-                {addFriendText.text !== '' ? <Text style={{color: addFriendText.color, marginBottom: 30}}>{addFriendText.text}</Text> : <></>}
-                <Text style={{marginBottom: 30, fontSize: 17}}>Amis en ligne</Text>
-                {!isDataLoad ? (
-                    <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
-                ) : (
-                    <DataTableDivality isDataLoad={isDataLoad} data={dataForDataTable} header={header} />
-                )}
+                <ScrollView contentContainerStyle={{width: '100%', paddingTop: 30, alignItems: 'center', paddingBottom:20}}>
+                    <View style={{flexDirection: 'row', width: '80%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
+                        <View style={{width: '50%', marginRight: 12}}>
+                            <TextInput
+                                style={{backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 5, height: 60}}
+                                mode={'flat'}
+                                blurOnSubmit={true}
+                                theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
+                                label="Pseudo"
+                                value={formAddByUsername}
+                                onChangeText={(newValue) => {
+                                    setFormAddByUsername(newValue)
+                                    setAddFriendText({text: '', color: ''})
+                                }}
+                                right={
+                                    <TextInput.Icon
+                                        name="magnify"
+                                        color={(isTextInputFocused: boolean) => {
+                                            if (isTextInputFocused) {
+                                                return colors.blueSky
+                                            } else return colors.blueSky
+                                        }}
+                                    />
+                                }
+                            />
+                        </View>
+                        <View style={{width: '30%', justifyContent: 'center', alignItems: 'center'}}>
+                            <DivalityButtonTextured label={'Ajouter'} onSubmit={addFriend} paddingHorizontal={12} paddingVertical={7} fontSize={15} />
+                        </View>
+                    </View>
+                    {addFriendText.text !== '' ? <Text style={{color: addFriendText.color, marginBottom: 30}}>{addFriendText.text}</Text> : <></>}
+                    <Text style={{marginBottom: 30, fontSize: 17}}>Amis en ligne</Text>
+                    {!isDataLoad ? (
+                        <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
+                    ) : (
+                        <DataTableDivality isDataLoad={isDataLoad} data={dataForDataTable} header={header} initialSortBy={['isConnected', 'status']} />
+                    )}
+                </ScrollView>
+                <View style={{bottom: 0, width: '100%'}}>
+                    <ContentTextured position={'footer'} />
+                </View>
             </View>
-            <View style={{bottom: 0, width: '100%'}}>
-                <ContentTextured position={'footer'} />
-            </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

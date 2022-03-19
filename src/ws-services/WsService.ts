@@ -30,7 +30,7 @@ class WsService {
                 })
             )
             keepAliveInterval = setInterval(() => {
-                console.log('Checking if the connection is alive, sending a ping')
+              //  console.log('Checking if the connection is alive, sending a ping')
                 this.WS.send(
                     JSON.stringify({
                         type: 'ping',
@@ -50,7 +50,7 @@ class WsService {
         this.WS.addEventListener('message', function (event: any) {
             if (JSON.parse(event.data).type === 'pong') {
                 clearInterval(pingTimeout)
-                console.log('ping reçu du back')
+               // console.log('ping reçu du back')
             } else if (JSON.parse(event.data).type === 'challenge') {
                 console.log('tu as été défié')
                 store.dispatch(
@@ -82,7 +82,7 @@ class WsService {
                     })
                 )
             }
-            console.log('Voici un message du serveur', event)
+           // console.log('Voici un message du serveur', event)
         })
 
         this.WS.addEventListener('error', function (event: any) {
