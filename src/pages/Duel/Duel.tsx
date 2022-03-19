@@ -54,10 +54,6 @@ const Duel = ({route}: DuelProps) => {
     useEffect(() => {
         ws.addEventListener('message', (wsEvent: WebSocketMessageEvent) => {
             const wsAnswer = JSON.parse(wsEvent.data)
-            // console.log(wsAnswer)
-            // if (wsAnswer.type === "opponentPickedTeam") {
-            //     setOpponentTeam(wsAnswer.opponentGods)
-            // }
             if (wsAnswer.type === 'startDuel') {
                 setMyTeam(wsAnswer[username])
                 setOpponentTeam(wsAnswer[opponent])

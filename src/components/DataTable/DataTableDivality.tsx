@@ -35,10 +35,7 @@ const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header, i
     }
 
     const sortData = (sortByInfo: string[], dataToFilter: any) => {
-        console.log("------------------------------------")
-        console.log('before sort', dataToFilter)
         let dataSort= dataToFilter
-        console.log(sortByInfo, 'sort info')
         if (sortByInfo[0] !== '') {
             switch (sortByInfo[0]) {
                 case 'string':
@@ -74,7 +71,6 @@ const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header, i
         const dataFilterByPageTemp: any = dataSort.slice(page * numberOfItemsPerPage, (page + 1) * numberOfItemsPerPage)
         setDataFilter(dataSort)   
         setDataFilterByPage(dataFilterByPageTemp)     
-        console.log('after sort', dataFilter)
     }
     const filterByPage = (page: number) => {
         setPage(page)

@@ -74,15 +74,11 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
         )
         ws.onmessage = (e: any) => {
             if (JSON.parse(e.data).type === 'collection') {
-                console.log(JSON.parse(e.data))
                 const data = JSON.parse(e.data).data
                 const listDivinityName = Array.from(new Set([...data.greek, ...data.egyptian, ...data.nordic])).sort()
                 setInitialData([...data.greek, ...data.egyptian, ...data.nordic])
                 const listDivinityNameForDropdown: {label: any; value: any}[] = []
                 listDivinityName.map((divinityName) => {
-                    console.log(divinityName[0], 'nom divinité [0]')
-                    console.log(divinityName, 'nom divinité')
-                    console.log(typeof divinityName, 'nom divinité')
                     const divinityNameUpperCase = divinityName.replace(divinityName[0], divinityName[0].toUpperCase())
                     listDivinityNameForDropdown.push({
                         label: divinityNameUpperCase,

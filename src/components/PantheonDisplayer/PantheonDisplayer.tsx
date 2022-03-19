@@ -17,16 +17,14 @@ type PantheonDisplayerProps = {
     onClickCard: Function
     dataCollection: {[pantheon: string]: {[divinity: string]: number}}
     isDataLoad: boolean
-    onRefreshProps: Function
+    onRefreshProps?: Function
 }
 const PantheonDisplayer = ({
     isPrayDisponible,
     onClickCard,
     dataCollection,
     isDataLoad,
-    onRefreshProps = () => {
-        console.log('try to refresh')
-    },
+    onRefreshProps = () => {},
 }: PantheonDisplayerProps) => {
     const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
     const [isNewCardLoad, setIsNewCardLoad] = useState<boolean>(false)

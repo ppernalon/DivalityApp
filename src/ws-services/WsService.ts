@@ -4,7 +4,7 @@ import store from '../store/store'
 import {onModificationFriends} from '../store/reducers/FriendsSlice'
 import {onModificationDefyFriend} from 'store/reducers/DefyFriendSlice'
 import {onModificationErrorToDiplay} from 'store/reducers/ErrorToDisplaySlice'
-import { useNavigation } from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native'
 
 class WsService {
     WS: any = null
@@ -30,7 +30,7 @@ class WsService {
                 })
             )
             keepAliveInterval = setInterval(() => {
-              //  console.log('Checking if the connection is alive, sending a ping')
+                //  console.log('Checking if the connection is alive, sending a ping')
                 this.WS.send(
                     JSON.stringify({
                         type: 'ping',
@@ -44,15 +44,15 @@ class WsService {
         }
 
         this.WS.onerror = (error: any) => {
-            console.log(error, 'onerror')
+            store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner (' + error.message+ ')'}, type: 'NEW_ERROR'}))
+            clearInterval(keepAliveInterval)
         }
 
         this.WS.addEventListener('message', function (event: any) {
             if (JSON.parse(event.data).type === 'pong') {
                 clearInterval(pingTimeout)
-               // console.log('ping reçu du back')
+                // console.log('ping reçu du back')
             } else if (JSON.parse(event.data).type === 'challenge') {
-                console.log('tu as été défié')
                 store.dispatch(
                     onModificationDefyFriend({
                         defyFriend: {
@@ -64,6 +64,7 @@ class WsService {
                 )
             } else if (JSON.parse(event.data).type === 'userAlreadyConnected') {
                 console.log('deja co !!!!!')
+                clearInterval(keepAliveInterval)
                 store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'Vous êtes déja connecté'}, type: 'NEW_ERROR'}))
             } else if (JSON.parse(event.data).type === 'disciples') {
                 store.dispatch(initialisationOnConnection({number: parseInt(JSON.parse(event.data).disciples), type: 'INITIALISATION_DISCIPLES'}))
@@ -82,17 +83,9 @@ class WsService {
                     })
                 )
             }
-           // console.log('Voici un message du serveur', event)
+            // console.log('Voici un message du serveur', event)
         })
 
-        this.WS.addEventListener('error', function (event: any) {
-            console.log('Erreur WebSocket event listener : ', event)
-            if (event.message !== null) {
-                console.log('Erreur WebSocket avec msg != null : ', event)
-                store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: event.message}, type: 'NEW_ERROR'}))
-                clearInterval(keepAliveInterval)
-            }
-        })
 
         this.WS.onclose = (e: any) => {
             console.log(e, 'oncloseeee')
