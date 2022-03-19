@@ -58,10 +58,11 @@ const ErrorDisplayer = ({}: ErrorDisplayerProps) => {
                     />
                 </View>
 
-                <Text style={{marginBottom: 10}}>
+                <Text >
                     L'erreur suivante est survenue
-                    <Text style={{color: colors.errorRed}}> {errorToDisplay.msg}</Text>
                 </Text>
+                <Text style={{color: colors.errorRed, marginBottom: 10}}> {errorToDisplay.msg}</Text>
+
             </Modal>
         </Portal>
     )

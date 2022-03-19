@@ -82,7 +82,7 @@ const Card = ({name, minimal = false}: cardProps) => {
                         colors={[cardStyle.rarityHeadband.common.start, cardStyle.rarityHeadband.common.end]}
                         style={cardStyle.rarityHeadband}
                     />
-                    <Title style={cardStyle.name}>{name.replace(name[0], name[0].toUpperCase())}</Title>
+                    <Title style={cardStyle.name}>{name !== '' ? name.replace(name[0], name[0].toUpperCase()) : ''}</Title>
                     <ReactIf condition={!minimal}>
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <View style={cardStyle.cardAttributesContainer}>

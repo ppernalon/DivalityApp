@@ -1,6 +1,6 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
-import {View} from 'react-native'
+import {RefreshControl, ScrollView, View} from 'react-native'
 import {Text, TextInput} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
@@ -14,6 +14,8 @@ const Ranking = () => {
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const [rankingData, setRankingData] = useState<[]>([])
     const [usernameSearch, setUsernameSearch] = useState<string>('')
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+
     useEffect(() => {
         loadRanking()
     }, [ws])
@@ -49,11 +51,17 @@ const Ranking = () => {
                 }
                 setRankingData(dataTableTemp)
                 setIsDataLoad(true)
+                setRefreshing(false)
             }
         }
     }
+    const onRefresh = () => {
+        setRefreshing(true)
+        loadRanking()
+    }
+
     return (
-        <View style={{height: "100%", width: '100%'}}>
+        <View style={{height: '100%', width: '100%'}}>
             <ContentTextured position={'header'}>
                 <Text
                     style={{
@@ -64,7 +72,9 @@ const Ranking = () => {
                     CLASSEMENT
                 </Text>
             </ContentTextured>
-            <View style={{flex:1, paddingTop: 30, alignItems: 'center'}}>
+            <ScrollView
+                contentContainerStyle={{flex: 1, paddingTop: 30, alignItems: 'center'}}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
                 <View style={{width: '90%', alignItems: 'center'}}>
                     <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
                         <TextInput
@@ -89,7 +99,7 @@ const Ranking = () => {
                     </View>
                     <DataTableDivality isDataLoad={isDataLoad} data={rankingData} header={header} nameToFilter={[usernameSearch, 'username']} />
                 </View>
-            </View>
+            </ScrollView>
             <ContentTextured position={'footer'} />
         </View>
     )

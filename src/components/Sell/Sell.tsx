@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {View} from 'react-native'
+import {RefreshControl, ScrollView, View} from 'react-native'
 import {ActivityIndicator, Button, DataTable, IconButton, Modal, Portal, Text, TextInput, ToggleButton} from 'react-native-paper'
 import {colors} from 'GlobalStyle'
 import {sellStyles} from './SellStyle'
@@ -25,6 +25,7 @@ const Sell = () => {
     const [isModalDeleteVisible, setIsModalDeleteVisible] = useState<boolean>(false)
     const [sellToDelete, setSellToDelete] = useState<{cardName: string; ownerName: string; price: string}>({cardName: '', ownerName: '', price: ''})
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
+    const [refreshing, setRefreshing] = useState<boolean>(false)
 
     const header = [
         {name: 'Divinités', type: 'string', width: 1, nameOfTheData: 'cardName'},
@@ -57,6 +58,7 @@ const Sell = () => {
             if (JSON.parse(e.data).type === 'auctions') {
                 setSellData(JSON.parse(e.data).auctionsData)
                 setIsDataLoad(true)
+                setRefreshing(refreshing)
             }
         }
     }
@@ -89,8 +91,15 @@ const Sell = () => {
         }
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        loadDataSell()
+    }
+
     return (
-        <View style={{width: '100%', alignItems: 'center'}}>
+        <ScrollView
+            contentContainerStyle={{width: '100%', alignItems: 'center'}}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
             <View style={sellStyles.buttonAddSell}>
                 <DivalityButtonTextured
                     label={'Ajouter une vente'}
@@ -135,7 +144,7 @@ const Sell = () => {
             ) : (
                 <></>
             )}
-        </View>
+        </ScrollView>
     )
 }
 

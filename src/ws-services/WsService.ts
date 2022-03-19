@@ -90,6 +90,7 @@ class WsService {
             if (event.message !== null) {
                 console.log('Erreur WebSocket avec msg != null : ', event)
                 store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: event.message}, type: 'NEW_ERROR'}))
+                clearInterval(keepAliveInterval)
             }
         })
 

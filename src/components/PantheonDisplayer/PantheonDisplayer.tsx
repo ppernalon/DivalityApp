@@ -1,5 +1,5 @@
-import React, {useRef, useState} from 'react'
-import {Animated, FlatList, Image, SafeAreaView, View} from 'react-native'
+import React, {useEffect, useRef, useState} from 'react'
+import {Animated, FlatList, Image, RefreshControl, SafeAreaView, View} from 'react-native'
 import {ActivityIndicator, Text} from 'react-native-paper'
 import Disciples from 'components/Disciples/Disciples'
 import {colors} from 'GlobalStyle'
@@ -17,19 +17,33 @@ type PantheonDisplayerProps = {
     onClickCard: Function
     dataCollection: {[pantheon: string]: {[divinity: string]: number}}
     isDataLoad: boolean
+    onRefreshProps: Function
 }
-const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDataLoad}: PantheonDisplayerProps) => {
+const PantheonDisplayer = ({
+    isPrayDisponible,
+    onClickCard,
+    dataCollection,
+    isDataLoad,
+    onRefreshProps = () => {
+        console.log('try to refresh')
+    },
+}: PantheonDisplayerProps) => {
     const [currentPantheon, setCurrentPantheon] = useState<string>('egyptian')
     const [isNewCardLoad, setIsNewCardLoad] = useState<boolean>(false)
     const [newCardName, setNewCardName] = useState<string>('')
     const [isNewCardShow, setIsNewCardShow] = useState<boolean>(false)
     const username = useSelector(selectUsername)
     const [errorBuyDisciple, setErrorBuyDisciple] = useState<string>('')
+    const [refreshing, setRefreshing] = useState<boolean>(false)
 
     const dispatch = useDispatch()
     let animation = useRef<any>(new Animated.Value(0)).current
     const ws = wsService.getWs()
-
+    useEffect(() => {
+        if (refreshing) {
+            setRefreshing(!refreshing)
+        }
+    }, [dataCollection])
     const fontColor: any = {
         egyptian: colors.egyptianYellow,
         nordic: colors.nordicRed,
@@ -45,6 +59,11 @@ const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDat
 
     const onClickCardDivinity = (item: string) => {
         onClickCard(item, currentPantheon)
+    }
+
+    const onRefresh = () => {
+        setRefreshing(!refreshing)
+        onRefreshProps()
     }
 
     const renderItem = ({item}: any) => {
@@ -71,9 +90,9 @@ const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDat
             })
         )
         ws.onmessage = (e: any) => {
-            if (JSON.parse(e.data).type === "notEnoughDisciples") {
+            if (JSON.parse(e.data).type === 'notEnoughDisciples') {
                 setErrorBuyDisciple("Vous n'avez pas assez de disciples")
-            } else if(JSON.parse(e.data).type === "card") {
+            } else if (JSON.parse(e.data).type === 'card') {
                 setErrorBuyDisciple('')
                 dispatch(incrementByAmount({number: -10, type: 'INCREMENT'}))
                 let newCardName: string = JSON.parse(e.data).name
@@ -142,7 +161,7 @@ const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDat
                         <Text style={{color: fontColor[currentPantheon]}}>{-10}</Text>
                         <Image source={require('@images/icon_disciple.png')} style={myCollectionStyles.iconPray} />
                     </TouchableOpacity>
-                    {errorBuyDisciple === '' ? <></> : <Text style={{color: colors.errorRed, fontSize:12}}>{errorBuyDisciple}</Text>}
+                    {errorBuyDisciple === '' ? <></> : <Text style={{color: colors.errorRed, fontSize: 12}}>{errorBuyDisciple}</Text>}
                 </View>
             ) : (
                 <></>
@@ -152,6 +171,10 @@ const PantheonDisplayer = ({isPrayDisponible, onClickCard, dataCollection, isDat
                 {!isDataLoad ? <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} /> : <></>}
                 {Object.keys(dataCollection).length !== 0 ? (
                     <FlatList
+                        style={{width: '100%', paddingHorizontal:'12%'}}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[fontColor[currentPantheon]]} />}
+                        onRefresh={onRefresh}
+                        refreshing={refreshing}
                         data={Object.keys(dataCollection[currentPantheon])}
                         renderItem={renderItem}
                         keyExtractor={(item) => item}

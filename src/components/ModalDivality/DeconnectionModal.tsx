@@ -75,7 +75,7 @@ const DeconnectionModal = ({}: DeconnectionModalProps) => {
                             onSubmit={() => {
                                 onValidationDeco()
                             }}
-                            label={'Déconnection'}
+                            label={'Valider'}
                             fontSize={14}
                             paddingVertical={5}
                             isShadow={false}

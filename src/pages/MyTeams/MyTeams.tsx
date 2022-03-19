@@ -1,6 +1,6 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
-import {TouchableOpacity, View, Button, Image} from 'react-native'
+import {TouchableOpacity, View, Button, Image, ScrollView, RefreshControl} from 'react-native'
 import {ActivityIndicator, Text} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import CardServices from 'services/CardServices'
@@ -21,13 +21,18 @@ const MyTeams = ({navigation}: MyTeams) => {
     const [isDataLoad, setIsDataLoad] = useState<boolean>(false)
     const nberOfTeams = 3
     const isFocused = useIsFocused()
+    const [refreshing, setRefreshing] = useState<boolean>(false)
 
     useEffect(() => {
         if (isFocused) {
-            MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws, username)
+            MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws, username, setRefreshing)
         }
     }, [ws, isFocused]) //isFocused is used to reload data when come back to this screen after a team modification
 
+    const onRefresh = () => {
+        setRefreshing(!refreshing)
+        MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws, username, setRefreshing)
+    }
     const renderTeam = () => {
         let teamConstruction = []
         for (const team in myTeamsData) {
@@ -92,7 +97,9 @@ const MyTeams = ({navigation}: MyTeams) => {
                     MES ÉQUIPES
                 </Text>
             </ContentTextured>
-            <View style={{width: '100%', flex: 1, paddingTop: 5, alignItems: 'center'}}>
+            <ScrollView
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}
+                contentContainerStyle={{width: '100%', flex: 1, paddingTop: 5, alignItems: 'center'}}>
                 {!isDataLoad ? (
                     <View style={{height: '100%', justifyContent: 'center'}}>
                         <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
@@ -101,13 +108,13 @@ const MyTeams = ({navigation}: MyTeams) => {
                     <></>
                 )}
                 {isDataLoad ? renderTeam() : <></>}
-            </View>
+            </ScrollView>
             <ContentTextured position={'footer'} />
         </View>
     )
 }
 
-MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: any, username: string) => {
+MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: any, username: string, setRefreshing: Function) => {
     ws.send(
         JSON.stringify({
             type: 'teams',
@@ -119,6 +126,7 @@ MyTeams.loadDataTeams = (setMyTeamsData: Function, setIsDataLoad: Function, ws: 
             let dataTeams = JSON.parse(e.data)
             setMyTeamsData(dataTeams.teamsdata)
             setIsDataLoad(true)
+            setRefreshing(false)
         }
     }
 }

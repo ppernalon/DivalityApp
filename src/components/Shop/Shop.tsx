@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {View} from 'react-native'
+import {RefreshControl, View, ScrollView} from 'react-native'
 import {IconButton, TextInput} from 'react-native-paper'
 import {colors} from 'GlobalStyle'
 import wsService from '../../ws-services/WsService'
@@ -7,7 +7,6 @@ import {selectUsername} from 'store/reducers/UsernameSlice'
 import {useSelector} from 'react-redux'
 import AuctionHouseModal from '@components/ModalDivality/AuctionHouseModal'
 import DataTableDivality from '@components/DataTable/DataTableDivality'
-
 
 const Shop = () => {
     const [divinityNameSearch, setDivinityNameSearch] = useState<string>('')
@@ -17,7 +16,8 @@ const Shop = () => {
     const [cardInfoModal, setCardInfoModal] = useState<any>({})
     const ws = wsService.getWs()
     const username = useSelector(selectUsername)
-   
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+
     const header = [
         {name: 'Divinité', type: 'string', width: 1, nameOfTheData: 'cardName'},
         {name: 'Vendeur', type: 'string', width: 1, nameOfTheData: 'ownerName'},
@@ -49,6 +49,7 @@ const Shop = () => {
             if (JSON.parse(e.data).type === 'auctionHouse') {
                 setShopData(JSON.parse(e.data).shopData)
                 setIsDataLoad(true)
+                setRefreshing(false)
             }
         }
     }
@@ -67,8 +68,15 @@ const Shop = () => {
         loadDataShop()
     }
 
+    const onRefresh = () => {
+        setRefreshing(true)
+        loadDataShop()
+    }
+
     return (
-        <View style={{width: '100%', alignItems: 'center', height: '100%'}}>
+        <ScrollView
+            contentContainerStyle={{width: '100%', alignItems: 'center'}}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
             <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
                 <TextInput
                     style={{width: '60%', marginVertical: 20, backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 15}}
@@ -102,7 +110,7 @@ const Shop = () => {
             </View>
             <DataTableDivality isDataLoad={isDataLoad} data={shopData} header={header} nameToFilter={[divinityNameSearch, 'cardName']}></DataTableDivality>
             <AuctionHouseModal isModalVisible={isModalVisible} closeModalProps={closeModalProps} cardInfo={cardInfoModal} />
-        </View>
+        </ScrollView>
     )
 }
 

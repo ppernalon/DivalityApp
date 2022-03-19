@@ -102,6 +102,7 @@ const MyCollection = ({navigation}: MyCollectionProps) => {
                         setCardDialogPantheon(cardDialogPantheonProps)
                         onClickCardPantheon(name)
                     }}
+                    onRefreshProps= {loadDataCollection}
                 />
                 <Portal>
                     <Modal

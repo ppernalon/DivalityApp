@@ -14,7 +14,7 @@ import store from 'store/store'
 import DefyFriendModal from 'components/ModalDivality/DefyFriendModal'
 import {selectDefyFriend} from 'store/reducers/DefyFriendSlice'
 import MatchmakingLoader from 'components/MatchmakingLoader'
-import { useNavigation } from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native'
 
 type MyCommunityProps = {}
 
@@ -29,7 +29,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
     const [formAddByUsername, setFormAddByUsername] = useState<string>('')
     const [addFriendText, setAddFriendText] = useState<{text: string; color: string}>({text: '', color: ''})
     const [isModalDefyOpen, setIsModalDefyOpen] = useState<boolean>(false)
-    const [friendInfoToDefy, setFriendInfoToDefy] = useState<{rate: string, status: string, username: string}>({rate: '', status: '', username: ''})
+    const [friendInfoToDefy, setFriendInfoToDefy] = useState<{rate: string; status: string; username: string}>({rate: '', status: '', username: ''})
 
     useEffect(() => {
         onChangeFriends()
@@ -106,31 +106,27 @@ const MyCommunity = ({}: MyCommunityProps) => {
             })
         )
         ws.onmessage = (e: any) => {
-            const type = JSON.parse(e.data).type 
-            if (type === "friendChallenged" ){
+            const type = JSON.parse(e.data).type
+            if (type === 'friendChallenged') {
                 setIsModalDefyOpen(true)
-            }
-            else if (type === "userAlreadyInDuel"){
+            } else if (type === 'userAlreadyInDuel') {
                 setAddFriendText({text: friendInfo.username + ' est déjà en duel', color: colors.errorRed})
                 setIsModalDefyOpen(false)
-            }
-            else if (type === "userNotConnected"){
+            } else if (type === 'userNotConnected') {
                 setAddFriendText({text: friendInfo.username + ' est déconnecté', color: colors.errorRed})
                 setIsModalDefyOpen(false)
-            }
-            else if (type === "challengeAccepted"){
+            } else if (type === 'challengeAccepted') {
                 navigation.navigate('Duel', {opponent: friendInfo.username})
                 setIsModalDefyOpen(false)
-            }
-            else if (type === "challengeRefused"){
+            } else if (type === 'challengeRefused') {
                 setAddFriendText({text: friendInfo.username + ' a refusé votre duel', color: colors.errorRed})
                 setIsModalDefyOpen(false)
             }
         }
         setIsModalDefyOpen(true)
     }
-    
-    const cancelDefy = () =>{
+
+    const cancelDefy = () => {
         ws.send(
             JSON.stringify({
                 type: 'cancelChallenge',
@@ -161,7 +157,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
     }
 
     const addFriend = () => {
-        if (formAddByUsername !== '') {
+        if (formAddByUsername !== '' && formAddByUsername !== username) {
             ws.send(
                 JSON.stringify({
                     type: 'sendFriendRequest',
@@ -189,6 +185,11 @@ const MyCommunity = ({}: MyCommunityProps) => {
                 }
             }
         }
+        if (formAddByUsername === username) {
+            setAddFriendText({text: 'Vous ne pouvez pas vous auto-demander en ami', color: colors.errorRed})
+            setFormAddByUsername('')
+            Keyboard.dismiss()
+        }
     }
 
     return (
@@ -214,7 +215,7 @@ const MyCommunity = ({}: MyCommunityProps) => {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}>
-                                <MatchmakingLoader onCancel={cancelDefy} label={"Annuler le défi"}/>
+                                <MatchmakingLoader onCancel={cancelDefy} label={'Annuler le défi'} />
                             </Modal>
                         </Portal>
                     </View>
