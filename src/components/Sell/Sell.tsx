@@ -98,7 +98,7 @@ const Sell = () => {
 
     return (
         <ScrollView
-            contentContainerStyle={{width: '100%', alignItems: 'center'}}
+            contentContainerStyle={{width: '100%', alignItems: 'center', paddingBottom: 20}}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
             <View style={sellStyles.buttonAddSell}>
                 <DivalityButtonTextured

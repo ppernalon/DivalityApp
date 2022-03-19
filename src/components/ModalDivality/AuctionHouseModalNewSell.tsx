@@ -33,14 +33,20 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
             loadDataCollection()
         }
     }, [isModalVisible])
-
     const {fonts, colors} = useTheme()
-
     const fontStyle = {
         fontFamily: fonts.regular.fontFamily,
         color: colors.placeholder,
         fontSize: 12,
     }
+
+    DropDownPicker.addTranslation('FR', {
+        PLACEHOLDER: 'Divinité',
+        SEARCH_PLACEHOLDER: 'Tapez quelque chose...',
+        SELECTED_ITEMS_COUNT_TEXT: '{count} éléments ont été sélectionnés',
+        NOTHING_TO_SHOW: "Aucune divinité disponible!",
+    })
+    DropDownPicker.setLanguage('FR')
 
     const sellOneCard = () => {
         ws.send(
@@ -76,7 +82,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                 listDivinityName.map((divinityName) => {
                     console.log(divinityName[0], 'nom divinité [0]')
                     console.log(divinityName, 'nom divinité')
-                    console.log(typeof(divinityName), 'nom divinité')
+                    console.log(typeof divinityName, 'nom divinité')
                     const divinityNameUpperCase = divinityName.replace(divinityName[0], divinityName[0].toUpperCase())
                     listDivinityNameForDropdown.push({
                         label: divinityNameUpperCase,

@@ -10,7 +10,7 @@ type DataTableDivalityProps = {
     header: [{name: string; type: string; width: number; nameOfTheData: string; action?: Function}]
 }
 
-const DataTableDivality = ({nameToFilter = ['',''], isDataLoad, data, header}: DataTableDivalityProps) => {
+const DataTableDivality = ({nameToFilter = ['', ''], isDataLoad, data, header}: DataTableDivalityProps) => {
     const [dataFilter, setDataFilter] = useState<[]>([])
     const [dataFilterByPage, setDataFilterByPage] = useState<[]>([])
     const [page, setPage] = useState<number>(0)
@@ -77,27 +77,27 @@ const DataTableDivality = ({nameToFilter = ['',''], isDataLoad, data, header}: D
                                     )}
                                 </DataTable.Cell>
                             )
-                            case 'iconDelete':
-                                return (
-                                    <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
-                                        {rowDataJSON['status'] !== 'request' ? (
-                                            <IconButton
-                                                onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON) : () => console.log('error missing action')}
-                                                icon={headerJSON.nameOfTheData}
-                                                hasTVPreferredFocus={undefined}
-                                                tvParallaxProperties={undefined}
-                                                color={colors.blueSky}
-                                            />
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </DataTable.Cell>
-                                )
+                        case 'iconDelete':
+                            return (
+                                <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
+                                    {rowDataJSON['status'] !== 'request' ? (
+                                        <IconButton
+                                            onPress={headerJSON.action ? () => headerJSON.action(rowDataJSON) : () => console.log('error missing action')}
+                                            icon={headerJSON.nameOfTheData}
+                                            hasTVPreferredFocus={undefined}
+                                            tvParallaxProperties={undefined}
+                                            color={colors.blueSky}
+                                        />
+                                    ) : (
+                                        <></>
+                                    )}
+                                </DataTable.Cell>
+                            )
                         case 'isConnected':
                             if (rowDataJSON[headerJSON.nameOfTheData] === 'request') {
                                 return (
                                     <DataTable.Cell style={{flex: headerJSON.width, justifyContent: 'center'}} key={indexColumn}>
-                                        <View style={{flexDirection: 'row', height: '100%', width:'60%', justifyContent: "center", alignItems:'center'}}>
+                                        <View style={{flexDirection: 'row', height: '100%', width: '60%', justifyContent: 'center', alignItems: 'center'}}>
                                             <IconButton
                                                 onPress={
                                                     headerJSON.action ? () => headerJSON.action(rowDataJSON, true) : () => console.log('error missing action')
@@ -182,10 +182,15 @@ const DataTableDivality = ({nameToFilter = ['',''], isDataLoad, data, header}: D
                     page={page}
                     numberOfPages={Math.ceil(dataFilter.length / numberOfItemsPerPage)}
                     onPageChange={(page) => filterByPage(page)}
-                    label={`${page + 1} sur ${Math.ceil(dataFilter.length / numberOfItemsPerPage)}`}
+                    label={`${page + 1} sur ${
+                        Math.ceil(dataFilter.length / numberOfItemsPerPage) === 0 ? 1 : Math.ceil(dataFilter.length / numberOfItemsPerPage)
+                    }`}
                     numberOfItemsPerPageList={numberOfItemsPerPageList}
                     numberOfItemsPerPage={numberOfItemsPerPage}
-                    onItemsPerPageChange={setNumberOfItemsPerPage}
+                    onItemsPerPageChange={(value) => {
+                        setNumberOfItemsPerPage(value)
+                        filterByPage(0)
+                    }}
                     showFastPaginationControls
                     selectPageDropdownLabel={'Lignes par page'}
                 />

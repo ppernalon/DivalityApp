@@ -1,6 +1,6 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
-import {Image, TouchableOpacity, View, TextInput} from 'react-native'
+import {Image, TouchableOpacity, View, TextInput, KeyboardAvoidingView, Platform} from 'react-native'
 import {IconButton, Text, useTheme, ActivityIndicator} from 'react-native-paper'
 import CardServices from '../../services/CardServices'
 import PantheonDisplayer from 'components/PantheonDisplayer/PantheonDisplayer'
@@ -154,55 +154,56 @@ const TeamModification = ({route, navigation}: TeamModificationProps) => {
         return TeamModificationJSX
     }
     return (
-        <View style={{height: '100%', width: '100%', marginBottom: 50}}>
-            <ContentTextured position={'header'}>
-                <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-                    <TextInput
-                        onChangeText={setNameOfTeam}
-                        selectionColor={colors.primaryBlue}
-                        value={nameOfTeam}
-                        style={[
-                            {
-                                backgroundColor: 'transparent',
-                                textAlign: 'center',
-                                borderWidth: 0,
-                                borderColor: 'transparent',
-                            },
-                            fontStyle,
-                        ]}
-                    />
-                    <IconButton
-                        icon={'check-decagram'}
-                        color="white"
-                        onPress={() => {
-                            validationTeam()
-                        }}
-                        hasTVPreferredFocus={undefined}
-                        tvParallaxProperties={undefined}
-                    />
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+            <View style={{height: '100%', width: '100%', marginBottom: 50}}>
+                <ContentTextured position={'header'}>
+                    <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
+                        <TextInput
+                            onChangeText={setNameOfTeam}
+                            selectionColor={colors.primaryBlue}
+                            value={nameOfTeam}
+                            style={[
+                                {
+                                    backgroundColor: 'transparent',
+                                    textAlign: 'center',
+                                    borderWidth: 0,
+                                    borderColor: 'transparent',
+                                },
+                                fontStyle,
+                            ]}
+                        />
+                        <IconButton
+                            icon={'check-decagram'}
+                            color="white"
+                            onPress={() => {
+                                validationTeam()
+                            }}
+                            hasTVPreferredFocus={undefined}
+                            tvParallaxProperties={undefined}
+                        />
+                    </View>
+                </ContentTextured>
+                <View style={{flex: 1, width: '100%', alignItems: 'center', paddingTop: 15, paddingBottom: 25}}>
+                    <View style={{width: '100%', alignItems: 'center'}}>{displayImageDivinity(listOfDivinityTeam)}</View>
+                    <View style={{height: '72%'}}>
+                        <PantheonDisplayer
+                            isDataLoad={isDataLoad}
+                            dataCollection={dataCollectionWithOccurence}
+                            isPrayDisponible={false}
+                            onClickCard={(name: string, currentPantheon: string) => {
+                                if (dataCollectionWithOccurence[currentPantheon][name] > 0) {
+                                    const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
+                                    temporalListTeam.splice(currentIndex, 1, name)
+                                    setListOfDivinityTeam(temporalListTeam)
+                                    setCurrentDivinity(name)
+                                    changeOccurence(initialDataCollectionWithOccurence, temporalListTeam)
+                                }
+                            } } onRefreshProps={loadDataCollection}                        />
+                    </View>
                 </View>
-            </ContentTextured>
-            <View style={{flex: 1, width: '100%', alignItems: 'center', paddingTop: 15, paddingBottom: 25}}>
-                <View style={{width: '100%', alignItems: 'center'}}>{displayImageDivinity(listOfDivinityTeam)}</View>
-                <View style={{height: '72%'}}>
-                    <PantheonDisplayer
-                        isDataLoad={isDataLoad}
-                        dataCollection={dataCollectionWithOccurence}
-                        isPrayDisponible={false}
-                        onClickCard={(name: string, currentPantheon: string) => {
-                            if (dataCollectionWithOccurence[currentPantheon][name] > 0) {
-                                const temporalListTeam = JSON.parse(JSON.stringify(listOfDivinityTeam))
-                                temporalListTeam.splice(currentIndex, 1, name)
-                                setListOfDivinityTeam(temporalListTeam)
-                                setCurrentDivinity(name)
-                                changeOccurence(initialDataCollectionWithOccurence, temporalListTeam)
-                            }
-                        }}
-                    />
-                </View>
+                <ContentTextured position={'footer'} />
             </View>
-            <ContentTextured position={'footer'} />
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

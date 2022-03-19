@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {RefreshControl, View, ScrollView} from 'react-native'
+import {RefreshControl, View, ScrollView, Platform, KeyboardAvoidingView} from 'react-native'
 import {IconButton, TextInput} from 'react-native-paper'
 import {colors} from 'GlobalStyle'
 import wsService from '../../ws-services/WsService'
@@ -7,6 +7,7 @@ import {selectUsername} from 'store/reducers/UsernameSlice'
 import {useSelector} from 'react-redux'
 import AuctionHouseModal from '@components/ModalDivality/AuctionHouseModal'
 import DataTableDivality from '@components/DataTable/DataTableDivality'
+import Disciples from 'components/Disciples/Disciples'
 
 const Shop = () => {
     const [divinityNameSearch, setDivinityNameSearch] = useState<string>('')
@@ -75,11 +76,12 @@ const Shop = () => {
 
     return (
         <ScrollView
-            contentContainerStyle={{width: '100%', alignItems: 'center'}}
+            contentContainerStyle={{width: '100%', alignItems: 'center',  paddingBottom: 20}}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
+            <Disciples fontColor={colors.blueSky}></Disciples>
             <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
                 <TextInput
-                    style={{width: '60%', marginVertical: 20, backgroundColor: '#f7f7f7', fontSize: 15, marginRight: 15}}
+                    style={{width: '47%', marginVertical: 20, backgroundColor: '#f7f7f7', fontSize: 13, marginRight: 15, height: 52}}
                     label="Nom de la divinité"
                     mode={'flat'}
                     value={divinityNameSearch}

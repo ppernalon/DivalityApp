@@ -1,6 +1,6 @@
 import ContentTextured from '@components/ContentTextured/ContentTextured'
 import React, {useEffect, useState} from 'react'
-import {RefreshControl, ScrollView, View} from 'react-native'
+import {KeyboardAvoidingView, Platform, RefreshControl, ScrollView, View} from 'react-native'
 import {Text, TextInput} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import wsService from '../../ws-services/WsService'
@@ -61,47 +61,48 @@ const Ranking = () => {
     }
 
     return (
-        <View style={{height: '100%', width: '100%'}}>
-            <ContentTextured position={'header'}>
-                <Text
-                    style={{
-                        color: 'white',
-                        textAlign: 'center',
-                        fontSize: 20,
-                    }}>
-                    CLASSEMENT
-                </Text>
-            </ContentTextured>
-            <ScrollView
-                contentContainerStyle={{flex: 1, paddingTop: 30, alignItems: 'center'}}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
-                <View style={{width: '90%', alignItems: 'center'}}>
-                    <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
-                        <TextInput
-                            style={{width: '60%', marginVertical: 10, backgroundColor: '#f7f7f7', fontSize: 13, marginRight: 15, height: 60}}
-                            label="Pseudo à rechercher"
-                            mode={'flat'}
-                            value={usernameSearch}
-                            onChangeText={(username) => setUsernameSearch(username)}
-                            underlineColor={colors.blueSky}
-                            theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
-                            right={
-                                <TextInput.Icon
-                                    name="magnify"
-                                    color={(isTextInputFocused: boolean) => {
-                                        if (isTextInputFocused) {
-                                            return colors.blueSky
-                                        } else return colors.blueSky
-                                    }}
-                                />
-                            }
-                        />
-                    </View>
-                    <DataTableDivality isDataLoad={isDataLoad} data={rankingData} header={header} nameToFilter={[usernameSearch, 'username']} />
-                </View>
-            </ScrollView>
-            <ContentTextured position={'footer'} />
-        </View>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+            <View style={{height: '100%', width: '100%'}}>
+                <ContentTextured position={'header'}>
+                    <Text
+                        style={{
+                            color: 'white',
+                            textAlign: 'center',
+                            fontSize: 20,
+                        }}>
+                        CLASSEMENT
+                    </Text>
+                </ContentTextured>
+                    <ScrollView
+                        contentContainerStyle={{width: '100%', alignItems: 'center', paddingHorizontal: '5%', paddingVertical: 20}}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}>
+                        <View style={{width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
+                            <TextInput
+                                style={{width: '60%', marginVertical: 10, backgroundColor: '#f7f7f7', fontSize: 13, marginRight: 15, height: 60}}
+                                label="Pseudo à rechercher"
+                                mode={'flat'}
+                                value={usernameSearch}
+                                onChangeText={(username) => setUsernameSearch(username)}
+                                underlineColor={colors.blueSky}
+                                theme={{colors: {text: colors.blueSky, primary: colors.blueSky, placeholder: colors.blueSky}}}
+                                right={
+                                    <TextInput.Icon
+                                        name="magnify"
+                                        color={(isTextInputFocused: boolean) => {
+                                            if (isTextInputFocused) {
+                                                return colors.blueSky
+                                            } else return colors.blueSky
+                                        }}
+                                    />
+                                }
+                            />
+                        </View>
+                        <DataTableDivality isDataLoad={isDataLoad} data={rankingData} header={header} nameToFilter={[usernameSearch, 'username']} />
+                    </ScrollView>
+
+                <ContentTextured position={'footer'} />
+            </View>
+        </KeyboardAvoidingView>
     )
 }
 
