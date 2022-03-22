@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native'
 import FightingScreen from 'components/Duel/FightingScreen/FightingScreen'
 import TeamSelection from 'components/Duel/TeamSelection/TeamSelection'
+import TimeLine from 'components/Duel/TimeLine'
 import React, {useEffect, useState} from 'react'
 import {ImageBackground, View} from 'react-native'
 import {Text} from 'react-native-paper'
@@ -129,7 +130,8 @@ const Duel = ({route}: DuelProps) => {
                     />
                     <View style={{height: '10%', width: '100%'}}>
                         <ImageBackground source={require('@images/texturebouton.png')} style={{height: '100%', width: '100%'}}>
-                            <Text style={{color: 'white', fontSize: 20, textAlign: 'center'}}> prochain dieu qui attaque </Text>
+                            {/* <Text style={{color: 'white', fontSize: 20, textAlign: 'center'}}> prochain dieu qui attaque </Text> */}
+                            <TimeLine attacks={attacks} />
                         </ImageBackground>
                     </View>
                 </View>
