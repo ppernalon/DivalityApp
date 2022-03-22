@@ -80,6 +80,7 @@ const PantheonDisplayer = ({
     }
 
     const onPressPrayButton = (dataCollectionWithOccurence: {[pantheon: string]: {[divinityName: string]: number}}) => {
+        console.log('prey send message')
         ws.send(
             JSON.stringify({
                 type: 'pray',
@@ -88,6 +89,7 @@ const PantheonDisplayer = ({
             })
         )
         ws.onmessage = (e: any) => {
+            console.log('prey receive message')
             if (JSON.parse(e.data).type === 'notEnoughDisciples') {
                 setErrorBuyDisciple("Vous n'avez pas assez de disciples")
             } else if (JSON.parse(e.data).type === 'card') {

@@ -10,11 +10,13 @@ class WsService {
     WS: any = null
     pingTimeout: any = null
     keepAliveInterval: any = null
+    isWsOpen = false
 
     openWs(username: string) {
         this.WS = new WebSocket(`ws://${constants.API_URL}/connection`)
         let pingTimeout = this.pingTimeout
         let keepAliveInterval = this.keepAliveInterval
+        this.isWsOpen = true
 
         this.WS.onopen = () => {
             this.WS.send(
@@ -29,23 +31,35 @@ class WsService {
                     username: username,
                 })
             )
-            keepAliveInterval = setInterval(() => {
-                //  console.log('Checking if the connection is alive, sending a ping')
-                this.WS.send(
-                    JSON.stringify({
-                        type: 'ping',
-                        username: username,
-                    })
-                )
-                pingTimeout = setTimeout(() => {
-                    store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner'}, type: 'NEW_ERROR'}))
-                }, 15000) //Send ping evry 15sec
-            }, 7500)
+
+            if (this.isWsOpen) {
+                keepAliveInterval = setInterval(() => {
+                   // console.log('Checking if the connection is alive, sending a ping')
+                    this.WS.send(
+                        JSON.stringify({
+                            type: 'ping',
+                            username: username,
+                        })
+                    )
+                    pingTimeout = setTimeout(() => {
+                        store.dispatch(
+                            onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner'}, type: 'NEW_ERROR'})
+                        )
+                    }, 15000) //Send ping evry 15sec
+                }, 7500)
+            }
         }
 
         this.WS.onerror = (error: any) => {
-            store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner (' + error.message+ ')'}, type: 'NEW_ERROR'}))
-            console.log(error)
+            if (error.message) {
+                store.dispatch(
+                    onModificationErrorToDiplay({
+                        errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner (' + error.message + ')'},
+                        type: 'NEW_ERROR',
+                    })
+                )
+            }
+            clearInterval(pingTimeout)
             clearInterval(keepAliveInterval)
         }
 
@@ -84,13 +98,14 @@ class WsService {
                     })
                 )
             }
-            // console.log('Voici un message du serveur', event)
+         console.log('Voici un message du serveur', event)
         })
-
 
         this.WS.onclose = (e: any) => {
             console.log(e, 'oncloseeee')
+            this.isWsOpen = false
             clearInterval(keepAliveInterval)
+            clearInterval(pingTimeout)
         }
 
         return this.WS

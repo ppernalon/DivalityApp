@@ -49,7 +49,7 @@ const MyTeams = ({navigation}: MyTeams) => {
             })
             if (oneTeamConstruction.length < 6) {
                 const length = myTeamsData[team].compo.length
-                for (let pas = 0; pas < 6 - length ; pas++) {
+                for (let pas = 0; pas < 6 - length; pas++) {
                     oneTeamConstruction.push(<View style={myTeamsStyles.emptyDivinityRed} key={teamConstruction.length + oneTeamConstruction.length} />)
                     myTeamsData[team].compo.push('empty')
                 }
@@ -110,16 +110,16 @@ const MyTeams = ({navigation}: MyTeams) => {
                     MES ÉQUIPES
                 </Text>
             </ContentTextured>
-            <ScrollView
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}
-                contentContainerStyle={{width: '100%', flex: 1, paddingTop: 5, alignItems: 'center'}}>
-                {!isDataLoad ? (
+            {!isDataLoad ? (
                     <View style={{height: '100%', justifyContent: 'center'}}>
                         <ActivityIndicator animating={!false} color={colors.blueSky} size={'large'} />
                     </View>
                 ) : (
                     <></>
                 )}
+            <ScrollView
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.blueSky]} />}
+                contentContainerStyle={{width: '100%', flex:1, paddingTop: 5, alignItems: 'center'}}>
                 {isDataLoad ? renderTeam() : <></>}
             </ScrollView>
             <ContentTextured position={'footer'} />
