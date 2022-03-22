@@ -49,18 +49,20 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
     DropDownPicker.setLanguage('FR')
 
     const sellOneCard = () => {
-        ws.send(
-            JSON.stringify({
-                type: 'sellAuctionHouse',
-                username: username,
-                cardName: formOutput.cardName.toLowerCase(),
-                price: formOutput.price,
-                quantity: formOutput.quantity,
-            })
-        )
-        ws.onmessage = (e: any) => {
-            if (JSON.parse(e.data).type === 'auctionHouse') {
-                closeModal()
+        if (/^\d+$/.test(formOutput.price)){
+            ws.send(
+                JSON.stringify({
+                    type: 'sellAuctionHouse',
+                    username: username,
+                    cardName: formOutput.cardName.toLowerCase(),
+                    price: formOutput.price,
+                    quantity: formOutput.quantity,
+                })
+            )
+            ws.onmessage = (e: any) => {
+                if (JSON.parse(e.data).type === 'auctionHouse') {
+                    closeModal()
+                }
             }
         }
     }
@@ -185,7 +187,7 @@ const AuctionHouseModalNewSell = ({isModalVisible, closeModalProps}: AuctionHous
                             underlineColor={colorsGlobal.primaryBlue}
                             label="Prix"
                             value={formOutput.price}
-                            placeholder="Nom de la divinité"
+                            placeholder="Prix de vente"
                             onChangeText={(newValue) => setFormOutput({...formOutput, price: newValue})}
                         />
                     </ScrollView>

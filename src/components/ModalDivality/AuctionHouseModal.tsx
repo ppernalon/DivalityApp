@@ -29,24 +29,25 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
         }
     }, [isModalVisible])
 
-
     const buyOneCard = () => {
-        ws.send(
-            JSON.stringify({
-                type: 'buyAuctionHouse',
-                username: username,
-                cardName: cardInfo.cardName,
-                ownerName: cardInfo.ownerName,
-                price: cardInfo.price,
-                quantity: formOutputQuantity,
-            })
-        )
-        ws.onmessage = (e: any) => {
-            if (JSON.parse(e.data).type === "notEnoughDisciples") {
-                setErrorToDisplay('Vous ne possedez pas assez de disciples')
-            } else if (JSON.parse(e.data).type === 'auctionHouse') {
-                dispatch(incrementByAmount({number: -(parseInt(cardInfo.price)*parseInt(formOutputQuantity)), type: 'INCREMENT'}))
-                closeModal()
+        if (/^\d+$/.test(formOutputQuantity) && /^\d+$/.test(cardInfo.price)) {
+            ws.send(
+                JSON.stringify({
+                    type: 'buyAuctionHouse',
+                    username: username,
+                    cardName: cardInfo.cardName,
+                    ownerName: cardInfo.ownerName,
+                    price: cardInfo.price,
+                    quantity: formOutputQuantity,
+                })
+            )
+            ws.onmessage = (e: any) => {
+                if (JSON.parse(e.data).type === 'notEnoughDisciples') {
+                    setErrorToDisplay('Vous ne possedez pas assez de disciples')
+                } else if (JSON.parse(e.data).type === 'auctionHouse') {
+                    dispatch(incrementByAmount({number: -(parseInt(cardInfo.price) * parseInt(formOutputQuantity)), type: 'INCREMENT'}))
+                    closeModal()
+                }
             }
         }
     }
@@ -62,7 +63,7 @@ const AuctionHouseModal = ({isModalVisible, closeModalProps, cardInfo}: AuctionH
                     closeModal()
                 }}
                 contentContainerStyle={{backgroundColor: 'white', height: '80%', width: '80%', margin: '10%'}}>
-                <View style={{height: '100%', width: '100%', flex:1}}>
+                <View style={{height: '100%', width: '100%', flex: 1}}>
                     <IconButton
                         icon="close"
                         onPress={() => {

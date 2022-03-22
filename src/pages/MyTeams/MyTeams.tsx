@@ -25,22 +25,35 @@ const MyTeams = ({navigation}: MyTeams) => {
 
     useEffect(() => {
         if (isFocused) {
+            setIsDataLoad(false)
             MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws, username, setRefreshing)
         }
-    }, [ws, isFocused]) //isFocused is used to reload data when come back to this screen after a team modification
+    }, [isFocused]) //isFocused is used to reload data when come back to this screen after a team modification
 
     const onRefresh = () => {
-        setRefreshing(!refreshing)
+        setIsDataLoad(false)
         MyTeams.loadDataTeams(setMyTeamsData, setIsDataLoad, ws, username, setRefreshing)
+        setRefreshing(!refreshing)
     }
     const renderTeam = () => {
         let teamConstruction = []
         for (const team in myTeamsData) {
             let oneTeamConstruction: JSX.Element[] = []
             myTeamsData[team].compo.forEach((name: string) => {
-                let uri: any = CardServices.getImageByName(name)
-                oneTeamConstruction.push(<Image key={teamConstruction.length + oneTeamConstruction.length} source={uri} style={myTeamsStyles.imageDivinity} />)
+                if (name !== 'empty') {
+                    let uri: any = CardServices.getImageByName(name)
+                    oneTeamConstruction.push(
+                        <Image key={teamConstruction.length + oneTeamConstruction.length} source={uri} style={myTeamsStyles.imageDivinity} />
+                    )
+                }
             })
+            if (oneTeamConstruction.length < 6) {
+                const length = myTeamsData[team].compo.length
+                for (let pas = 0; pas < 6 - length ; pas++) {
+                    oneTeamConstruction.push(<View style={myTeamsStyles.emptyDivinityRed} key={teamConstruction.length + oneTeamConstruction.length} />)
+                    myTeamsData[team].compo.push('empty')
+                }
+            }
             teamConstruction.push(
                 <TouchableOpacity
                     onPress={() => {
@@ -51,7 +64,7 @@ const MyTeams = ({navigation}: MyTeams) => {
                     <View style={myTeamsStyles.firstRowTeamContainer}>
                         <Image source={require('@images/icon_editButton.png')} style={myTeamsStyles.editButtonImage} />
 
-                        <Text style={myTeamsStyles.teamNameText}> {myTeamsData[team].name} </Text>
+                        <Text style={[myTeamsStyles.teamNameText]}>{myTeamsData[team].name}</Text>
                     </View>
                     <View style={myTeamsStyles.secondRowTeamContainer}>{oneTeamConstruction}</View>
                 </TouchableOpacity>

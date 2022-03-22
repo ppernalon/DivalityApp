@@ -45,6 +45,7 @@ class WsService {
 
         this.WS.onerror = (error: any) => {
             store.dispatch(onModificationErrorToDiplay({errorToDisplay: {stateModal: true, msg: 'La WS a cessé de fonctionner (' + error.message+ ')'}, type: 'NEW_ERROR'}))
+            console.log(error)
             clearInterval(keepAliveInterval)
         }
 

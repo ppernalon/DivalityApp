@@ -27,6 +27,12 @@ export const myTeamsStyles = StyleSheet.create({
         width: 55,
         margin: 3
     },
+    emptyDivinityRed:{
+        backgroundColor: colors.errorRed,
+        height: 55,
+        width: 55,
+        margin: 3
+    },
     teamNameText: {
         color: colors.primaryBlue,
         fontSize: 22,
