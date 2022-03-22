@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native'
+import DivalityButtonTextured from 'components/DivalityButtonTextured/DivalityButtonTextured'
 import FightingScreen from 'components/Duel/FightingScreen/FightingScreen'
 import TeamSelection from 'components/Duel/TeamSelection/TeamSelection'
 import TimeLine from 'components/Duel/TimeLine'
 import { colors } from 'GlobalStyle'
 import React, {useEffect, useState} from 'react'
 import {ImageBackground, View} from 'react-native'
-import {Modal, Portal, Text} from 'react-native-paper'
+import {Button, Modal, Portal, Text} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import {selectUsername} from 'store/reducers/UsernameSlice'
 import wsService from 'ws-services/WsService'
@@ -41,6 +42,7 @@ const Duel = ({route}: DuelProps) => {
 
     const backToMenu = () => {
         navigation.removeListener('beforeRemove', notDefaultBehavior)
+        navigation.navigate('Menu')
         navigation.navigate('Menu')
     }
 
@@ -107,7 +109,7 @@ const Duel = ({route}: DuelProps) => {
                     pattern: attack.pattern,
                 })
                 setTimeout(() => {
-                    if (isGameOn() || index + 1 < attacks.length) {
+                    if (index + 1 < attacks.length) {
                         updateTeam(index + 1)
                     } else {
                         setTimeout(() => setEndModalVisible(true), 2000) // after 2s
@@ -141,27 +143,30 @@ const Duel = ({route}: DuelProps) => {
 
                     <Portal>  
                         <Modal visible={endModalVisible} onDismiss={backToMenu} style={{backgroundColor: 'white', marginHorizontal: "15%", marginTop: "35%", padding: 20, width: "70%", height: 250}}>
-                            <Text style={{color: colors.blueSky, fontSize: 20, textAlign: 'center'}}> Fin du duel </Text>
+                            <Text style={{color: colors.blueSky, fontSize: 35, textAlign: 'center',  marginBottom: 14}}> 
+                                Fin du duel 
+                            </Text>
                             {
                                 isPlayerAlive(myTeam) ?
                                     <>
-                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                        <Text style={{color: 'green', fontSize: 14, textAlign: 'center'}}> 
                                             Vous avez gagné !
                                         </Text>
-                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'center', marginBottom: 14}}> 
                                             + 300 disciples
                                         </Text>
                                     </>
                                     :
                                     <>
-                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                        <Text style={{color: 'red', fontSize: 14, textAlign: 'center'}}> 
                                             Vous avez perdu ...
                                         </Text>
-                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'center', marginBottom: 14}}> 
                                             + 150 disciples
                                         </Text>
                                     </>
                             }
+                            <DivalityButtonTextured onSubmit={backToMenu} label={"Retour au menu "} />
                         </Modal>
                     </Portal>
 
