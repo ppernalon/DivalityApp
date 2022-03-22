@@ -2,9 +2,10 @@ import {useNavigation} from '@react-navigation/native'
 import FightingScreen from 'components/Duel/FightingScreen/FightingScreen'
 import TeamSelection from 'components/Duel/TeamSelection/TeamSelection'
 import TimeLine from 'components/Duel/TimeLine'
+import { colors } from 'GlobalStyle'
 import React, {useEffect, useState} from 'react'
 import {ImageBackground, View} from 'react-native'
-import {Text} from 'react-native-paper'
+import {Modal, Portal, Text} from 'react-native-paper'
 import {useSelector} from 'react-redux'
 import {selectUsername} from 'store/reducers/UsernameSlice'
 import wsService from 'ws-services/WsService'
@@ -31,15 +32,24 @@ const Duel = ({route}: DuelProps) => {
         attackerPosition: -1,
         pattern: [],
     })
+    const [endModalVisible, setEndModalVisible] = useState<boolean>(false)
 
-    const timeBetweenAttack = 3000 // 3s
+    const timeBetweenAttack = 2000 // 2s
     const [waitingForAttacks, setwaitingForAttacks] = useState(true)
 
+    const notDefaultBehavior = (e: any) => e.preventDefault()
+
+    const backToMenu = () => {
+        navigation.removeListener('beforeRemove', notDefaultBehavior)
+        navigation.navigate('Menu')
+    }
+
     const isPlayerAlive = (godTeam: {god: string; maxLife: number; currentLife: number}[]) => {
+        let isAlive = false
         godTeam.forEach((god) => {
-            if (god.currentLife > 0) return true
+            if (god.currentLife > 0) isAlive = true
         })
-        return false
+        return isAlive
     }
 
     const isGameOn = () => {
@@ -47,9 +57,7 @@ const Duel = ({route}: DuelProps) => {
     }
 
     useEffect(() => {
-        navigation.addListener('beforeRemove', (e: any) => {
-            e.preventDefault()
-        })
+        navigation.addListener('beforeRemove', notDefaultBehavior)
     }, [navigation])
     
     useEffect(() => {
@@ -101,6 +109,8 @@ const Duel = ({route}: DuelProps) => {
                 setTimeout(() => {
                     if (isGameOn() || index + 1 < attacks.length) {
                         updateTeam(index + 1)
+                    } else {
+                        setTimeout(() => setEndModalVisible(true), 2000) // after 2s
                     }
                 }, timeBetweenAttack)
             }
@@ -128,6 +138,33 @@ const Duel = ({route}: DuelProps) => {
                         myTeam={myTeam}
                         opponentTeam={opponentTeam}
                     />
+
+                    <Portal>  
+                        <Modal visible={endModalVisible} onDismiss={backToMenu} style={{backgroundColor: 'white', marginHorizontal: "15%", marginTop: "35%", padding: 20, width: "70%", height: 250}}>
+                            <Text style={{color: colors.blueSky, fontSize: 20, textAlign: 'center'}}> Fin du duel </Text>
+                            {
+                                isPlayerAlive(myTeam) ?
+                                    <>
+                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                            Vous avez gagné !
+                                        </Text>
+                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                            + 300 disciples
+                                        </Text>
+                                    </>
+                                    :
+                                    <>
+                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                            Vous avez perdu ...
+                                        </Text>
+                                        <Text style={{color: colors.blueSky, fontSize: 14, textAlign: 'left'}}> 
+                                            + 150 disciples
+                                        </Text>
+                                    </>
+                            }
+                        </Modal>
+                    </Portal>
+
                     <View style={{height: '10%', width: '100%'}}>
                         <ImageBackground source={require('@images/texturebouton.png')} style={{height: '100%', width: '100%'}}>
                             {/* <Text style={{color: 'white', fontSize: 20, textAlign: 'center'}}> prochain dieu qui attaque </Text> */}
