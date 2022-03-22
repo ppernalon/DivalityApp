@@ -1,5 +1,5 @@
 import constants from './../constants'
-import {initialisationOnConnection} from '../store/reducers/DisciplesSlice'
+import {incrementByAmount, initialisationOnConnection} from '../store/reducers/DisciplesSlice'
 import store from '../store/store'
 import {onModificationFriends} from '../store/reducers/FriendsSlice'
 import {onModificationDefyFriend} from 'store/reducers/DefyFriendSlice'
@@ -98,7 +98,7 @@ class WsService {
                     })
                 )
             } else if (data.type === 'duelWinner' || data.type === 'duelLooser'){
-                store.dispatch(initialisationOnConnection({number: parseInt(data.rewards), type: 'INITIALISATION_DISCIPLES'}))
+                store.dispatch(incrementByAmount({number: parseInt(data.rewards), type: 'INCREMENT'}))
             }
          console.log('Voici un message du serveur', event)
         })
