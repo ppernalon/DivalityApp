@@ -25,7 +25,7 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
     const username = useSelector(selectUsername)
 
     const [attackerPositionComputed, setAttackerPositionComputed] = useState({x: 0, y: 0})
-    const [positions, setPositions] = useState([attackerPositionComputed])
+    const [attackedPositions, setAttackedPositions] = useState([])
 
     useEffect(() => {
         const newAttackerPosition = FightingScreen.getPosition(
@@ -35,7 +35,7 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
         )
         setAttackerPositionComputed(newAttackerPosition)
 
-        let newPositions = [newAttackerPosition]
+        let newPositions: any = []
         attackPattern.map(p => {
             const patternToIndex = FightingScreen.fromPatternToIndex(p)
             const indexToPos = FightingScreen.getPosition(
@@ -45,7 +45,7 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
             )
             newPositions.push(indexToPos)
         })
-        setPositions(newPositions)
+        setAttackedPositions(newPositions)
     }, [attackerPosition, attackPattern])
 
     return (
@@ -75,6 +75,8 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
             {
                 attackerPositionComputed.x > 0 && attackerPositionComputed.y > 0 ? (
                         <Image
+                            origin={`${attackerPositionComputed.x + rayon}, ${attackerPositionComputed.y + rayon}`}
+                            scale={1.1}
                             x={attackerPositionComputed.x - 0.25*rayon} 
                             y={attackerPositionComputed.y - 0.25*rayon}  
                             width={2.5*rayon} 
@@ -83,7 +85,7 @@ const FightingScreen = ({opponent, attackerPosition, offensivePlayer, attackPatt
                         /> 
                     ) : null
             }
-            <Spark positions={positions} rayon={rayon}/>
+            <Spark positions={attackedPositions} rayon={rayon}/>
         </Svg>
     )
 }

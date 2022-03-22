@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Polyline } from "react-native-svg"
+import { Image, Polyline } from "react-native-svg"
 
 type SparkProps = {
     positions: {x: number, y: number}[]
@@ -31,12 +31,24 @@ const Spark = ({positions, rayon}: SparkProps) => {
     }, [positions])
 
     return (
-        <Polyline
-            points={points}
-            fill="none"
-            stroke="rgb(20,100,230)"
-            strokeWidth="5"
-        />
+        <>
+            {
+                positions.map(p => {
+                    return (
+                        <Image
+                            origin={`${p.x + rayon}, ${p.y +rayon}`}
+                            scale={1.1}
+                            key={`attack_${p.x}_${p.y}`}
+                            x={p.x - 0.25*rayon} 
+                            y={p.y - 0.25*rayon}  
+                            width={2.5*rayon} 
+                            height={2.5*rayon} 
+                            href={require('@images/lightningCircle-red.png')} 
+                        /> 
+                    )
+                })
+            }
+        </>
     )
 }
 
